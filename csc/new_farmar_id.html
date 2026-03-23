@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Registration Form - Govt. of Odisha</title>
+    <style>
+        :root {
+            --border-color: #000;
+            --label-width: 160px;
+            --font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            font-family: var(--font-family);
+            font-size: 12px;
+        }
+
+        /* A4 Paper Simulation */
+        .a4-page {
+            width: 210mm;
+            /* Fixed height for screen display */
+            height: 296mm;
+            margin: 0 auto 20px auto;
+            background: white;
+            padding: 15mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border: 2px solid var(--border-color);
+            padding: 5px;
+            min-height: 75px;
+            /* Ensure enough height for logo */
+            position: relative;
+        }
+
+        .logo-placeholder {
+            width: 70px;
+            height: 70px;
+            position: absolute;
+            left: 5px;
+            top: 5px;
+        }
+
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header-titles {
+            width: 100%;
+            text-align: center;
+            padding-left: 75px;
+            /* Add padding so text doesn't overlap logo */
+            box-sizing: border-box;
+        }
+
+        .header-titles h2,
+        .header-titles h3 {
+            margin: 2px 0;
+            color: #000;
+        }
+
+        .form-title-bar {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            background-color: #000;
+            color: #fff;
+            padding: 3px 10px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Form Rows and Inputs */
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: nowrap;
+        }
+
+        .label-txt {
+            font-weight: bold;
+            min-width: var(--label-width);
+            padding-right: 10px;
+        }
+
+        /* Input styles with bold text and UPPERCASE */
+        input[type="text"],
+        select {
+            flex-grow: 1;
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            height: 25px;
+            box-sizing: border-box;
+            font-weight: bold;
+            font-family: var(--font-family);
+            text-transform: uppercase;
+            /* Ensures all input data is BLOCK LETTERS */
+        }
+
+        /* Special Input Types */
+        .char-box-container {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .char-box {
+            width: 20px;
+            height: 25px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            margin-right: -1px;
+            /* Overlap borders */
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+
+        .date-group {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .date-separator {
+            margin: 0 5px;
+        }
+
+        /* Checkbox/Radio styles for active selection */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        label.checkbox-option {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        label.checkbox-option span {
+            margin-right: 10px;
+        }
+
+        label.checkbox-option input[type="radio"] {
+            display: none;
+        }
+
+        .checkbox-box {
+            width: 15px;
+            height: 15px;
+            border: 1px solid black;
+            display: inline-block;
+        }
+
+        /* Style the box when the hidden radio preceding it is checked */
+        label.checkbox-option input[type="radio"]:checked+.checkbox-box {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22black%22%20width%3D%2218px%22%20height%3D%2218px%22%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%3Cpath%20d%3D%22M9%2016.17L4.83%2012l-1.42%201.41L9%2019%2021%207l-1.41-1.41z%22%2F%3E%3C%2Fsvg%3E');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 14px 14px;
+        }
+
+
+        /* Table Styles */
+        .family-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .family-table th,
+        .family-table td {
+            border: 1px solid var(--border-color);
+            padding: 5px;
+            text-align: center;
+        }
+
+        .family-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .family-table input {
+            border: none;
+            width: 95%;
+            outline: none;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Page 2 Specific Styles */
+        .undertaking-section {
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .undertaking-section p {
+            margin-bottom: 10px;
+        }
+
+        .signature-area {
+            text-align: right;
+            margin-top: 40px;
+            font-weight: bold;
+        }
+
+        .nb-section {
+            margin-top: 20px;
+        }
+
+        .nb-section ol {
+            margin-top: 5px;
+            padding-left: 25px;
+        }
+
+        .nb-section li {
+            margin-bottom: 5px;
+        }
+
+        /* Office Use Section - Dashed Borders */
+        .office-use-container {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .dashed-input-container {
+            display: flex;
+            flex-grow: 1;
+            border: 2px dashed #000;
+            padding: 2px;
+            height: 30px;
+            box-sizing: border-box;
+        }
+
+        .dashed-input-container input {
+            border: none;
+            border-right: 2px dashed #000;
+            height: 100%;
+            text-align: center;
+            flex-grow: 1;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .dashed-input-container input:last-child {
+            border-right: none;
+        }
+
+
+        /* Utilities */
+        .flex-grow {
+            flex-grow: 1;
+        }
+
+        .w-50 {
+            width: 50%;
+        }
+
+        .w-small {
+            width: 80px !important;
+            flex-grow: 0 !important;
+        }
+
+        .ml-20 {
+            margin-left: 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .page-footer-number {
+            position: absolute;
+            bottom: 10mm;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+        }
+
+        /* Styles for the Print Button */
+        .print-button-container {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .print-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s;
+        }
+
+        .print-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* NEW STYLES FOR PHOTO UPLOAD BOX */
+        .photo-section-container {
+            display: flex;
+            justify-content: flex-end;
+            /* Align right */
+            margin-top: 15px;
+            margin-right: 5px;
+        }
+
+        .photo-upload-box {
+            width: 3cm;
+            height: 4cm;
+            border: 2px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            background-color: #f9f9f9;
+            font-size: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #photo-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* fill box without distorting */
+            display: none;
+            /* Hidden initially */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+        /* ================= PRINT SPECIFIC STYLES ================= */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: none;
+                /* Force background colors (black highlights) to print */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .a4-page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+                height: auto;
+                min-height: 296mm;
+                width: 210mm;
+            }
+
+            .a4-page:last-of-type {
+                page-break-after: auto;
+            }
+
+            .print-button-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="print-button-container">
+        <button class="print-button" onclick="window.print()">PRINT PDF</button>
+    </div>
+
+    <div class="a4-page">
+        <div class="header-container">
+            <div class="logo-placeholder">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Seal_of_Odisha.png/1200px-Seal_of_Odisha.png"
+                    alt="Odisha Govt Logo">
+            </div>
+            <div class="header-titles">
+                <h2>Govt. of Odisha</h2>
+                <h3>Agriculture Department</h3>
+                <div class="form-title-bar">Farmer Registration Form</div>
+            </div>
+        </div>
+
+        <div class="section-header">A. Farmer Details</div>
+
+        <div class="form-row">
+            <span class="label-txt">1 Farmer Registration No</span>
+            <div class="char-box-container">
+                <input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                    maxlength="1">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">2 Dist</span>
+            <input type="text" class="flex-grow">
+            <span class="label-txt ml-20" style="min-width: auto;">3 Block/ULB</span>
+            <input type="text" class="flex-grow">
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">4 GP/ Ward</span>
+            <input type="text" class="flex-grow">
+            <span class="label-txt ml-20" style="min-width: auto;">5 Village</span>
+            <input type="text" class="flex-grow">
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">6 PINCODE</span>
+            <input type="text" class="w-50">
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">7 Head of Family Name</span>
+            <input type="text" class="flex-grow">
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">8 Gender</span>
+            <div class="checkbox-group">
+                <span class="bold" style="margin-right: 10px;">Please (√)</span>
+                <label class="checkbox-option">
+                    <span>Male</span>
+                    <input type="radio" name="gender" value="male">
+                    <div class="checkbox-box"></div>
+                </label>
+                <label class="checkbox-option">
+                    <span>Female</span>
+                    <input type="radio" name="gender" value="female">
+                    <div class="checkbox-box"></div>
+                </label>
+            </div>
+
+            <span class="label-txt" style="min-width: auto; margin-right: 10px;">9 Category -</span>
+            <div class="checkbox-group">
+                <span class="bold" style="margin-right: 5px;">Please (√)</span>
+                <label class="checkbox-option">
+                    <span>General</span>
+                    <input type="radio" name="category" value="general">
+                    <div class="checkbox-box"></div>
+                </label>
+                <label class="checkbox-option">
+                    <span>SC</span>
+                    <input type="radio" name="category" value="sc">
+                    <div class="checkbox-box"></div>
+                </label>
+                <label class="checkbox-option">
+                    <span>ST</span>
+                    <input type="radio" name="category" value="st">
+                    <div class="checkbox-box"></div>
+                </label>
+                <label class="checkbox-option">
+                    <span>OBC</span>
+                    <input type="radio" name="category" value="obc">
+                    <div class="checkbox-box"></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">10 Date of Birth</span>
+            <div style="display: flex; border: 1px solid black; padding: 2px;">
+                <div class="date-group">
+                    <input type="text" class="char-box dob-d" maxlength="1"><input type="text" class="char-box dob-d"
+                        maxlength="1">
+                    <span class="date-separator">/</span>
+                </div>
+                <div class="date-group">
+                    <input type="text" class="char-box dob-m" maxlength="1"><input type="text" class="char-box dob-m"
+                        maxlength="1">
+                    <span class="date-separator">/</span>
+                </div>
+                <div class="date-group">
+                    <input type="text" class="char-box dob-y" maxlength="1"><input type="text" class="char-box dob-y"
+                        maxlength="1"><input type="text" class="char-box dob-y" maxlength="1"><input type="text"
+                        class="char-box dob-y" maxlength="1">
+                </div>
+            </div>
+
+            <span class="label-txt ml-20" style="min-width: auto;">11 Age</span>
+            <div style="display: flex; border: 1px solid black; padding: 2px;">
+                <input type="text" id="age-digit-1" class="char-box" maxlength="1" style="width: 30px;" readonly>
+                <input type="text" id="age-digit-2" class="char-box" maxlength="1" style="width: 30px;" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <span class="label-txt">12 (Father / Husband ) Name</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt">13 Voter ID Card No</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt">14 Aadhar No</span>
+            <input type="text" id="aadhar-input" class="flex-grow" maxlength="14" placeholder="0000-0000-0000">
+            <span class="label-txt ml-20" style="min-width: auto;">15 Mobile</span>
+            <input type="text" class="flex-grow">
+        </div>
+
+        <div class="section-header" style="margin-top: 10px;">B. Family Member Details</div>
+        <div class="form-row">
+            <span class="label-txt">16 No of Family Members</span>
+            <input type="text" class="w-small">
+        </div>
+
+        <table class="family-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">S.N</th>
+                    <th>Name of Family Members</th>
+                    <th style="width: 150px;">Relation with HOF</th>
+                    <th style="width: 50px;">Age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="photo-section-container">
+            <div class="photo-upload-box" id="photo-box-trigger">
+                <span class="photo-placeholder-text">PASTE PHOTO HERE<br>(3cm x 4cm)</span>
+                <img id="photo-preview" src="" alt="Photo Preview">
+                <input type="file" id="photo-file-input" accept="image/jpeg" style="display: none;">
+            </div>
+        </div>
+
+
+        <div class="page-footer-number">1</div>
+    </div>
+
+    <div class="a4-page">
+        <div class="section-header">C. Bank Details</div>
+
+        <div class="form-row">
+            <span class="label-txt" style="min-width: 180px;">17 Name of Account Holder</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt" style="min-width: 180px;">18 Account No</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt" style="min-width: 180px;">19 Bank Name</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt" style="min-width: 180px;">20 Branch Name</span>
+            <input type="text" class="flex-grow">
+        </div>
+        <div class="form-row">
+            <span class="label-txt" style="min-width: 180px;">21 IFS Code</span>
+            <input type="text" class="w-50">
+        </div>
+
+        <div class="section-header" style="margin-top: 20px;">Undertaking -</div>
+
+        <div class="undertaking-section">
+            <p>1. ମୁଁ ଏତଦ୍ୱାରା ଘୋଷଣା କରୁଛି କି, ମୁଁ ଦେଇଥିବା ସମସ୍ତ ତଥ୍ୟ ଓ ଖବର ସତ୍ୟ ଅଟେ। ଯଦି ଭବିଷ୍ୟତରେ ଏହା ମିଥ୍ୟା ପ୍ରମାଣିତ
+                ହୁଏ, ତେବେ ମୁଁ ଆଇନତଃ ଦଣ୍ଡନୀୟ ହେବି।</p>
+            <p>2. ମୁଁ ଏହି ଫାର୍ମ ସହିତ ଦେଇଥିବା ସମସ୍ତ ଦସ୍ତାବିଜ (ଯଥା: ଆଧାର କାର୍ଡ, ଭୋଟର ଆଇଡି, ବ୍ୟାଙ୍କ ପାସ୍ବୁକ୍ ଇତ୍ୟାଦି) ର ନକଲ
+                ସତ୍ୟ ଅଟେ।</p>
+            <p>3. ମୁଁ ପୂର୍ବରୁ କୌଣସି ସରକାରୀ ଯୋଜନାରେ ପଞ୍ଜୀକୃତ ହୋଇନାହିଁ।</p>
+            <p>4. ମୁଁ ଏହି ଯୋଜନାର ସର୍ତ୍ତାବଳୀ ମାନିବାକୁ ବାଧ୍ୟ।</p>
+        </div>
+
+        <div class="signature-area">
+            ଚାଷୀଙ୍କ ସ୍ୱାକ୍ଷର ବା ଟିପ ଚିହ୍ନ
+        </div>
+
+        <div class="nb-section">
+            <span class="bold">NB</span> Please Attach the following documets along with this form
+            <ol>
+                <li>Photo copy of Voter ID Card ( Head of Family)</li>
+                <li>Photocopy of Bank Passbook (Front Page)</li>
+                <li>All the fields should be filled up in English</li>
+            </ol>
+        </div>
+
+        <div class="office-use-container">
+            <div class="section-header" style="margin-bottom: 10px;">For Office use</div>
+
+            <div class="form-row">
+                <span class="label-txt" style="min-width: 100px;">Application No.</span>
+                <div class="dashed-input-container">
+                    <input type="text"><input type="text"><input type="text"><input type="text"><input
+                        type="text"><input type="text"><input type="text"><input type="text"><input type="text"><input
+                        type="text">
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-top: 15px;">
+                <span class="label-txt" style="min-width: 100px;">Date of Receipt (DD/MM/YY)</span>
+                <div class="dashed-input-container" style="max-width: 300px;">
+                    <input type="text"><input type="text">
+                    <input type="text"><input type="text">
+                    <input type="text"><input type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer-number">2</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- AADHAR NUMBER FORMATTING ---
+            const aadharInput = document.getElementById('aadhar-input');
+            if (aadharInput) {
+                aadharInput.addEventListener('input', function (e) {
+                    let value = this.value.replace(/\D/g, '').substring(0, 12);
+                    let formattedValue = '';
+                    if (value.length > 8) {
+                        formattedValue = value.substring(0, 4) + '-' + value.substring(4, 8) + '-' + value.substring(8, 12);
+                    } else if (value.length > 4) {
+                        formattedValue = value.substring(0, 4) + '-' + value.substring(4, 8);
+                    } else {
+                        formattedValue = value;
+                    }
+                    this.value = formattedValue;
+                });
+            }
+
+            // --- AGE CALCULATION LOGIC ---
+            const ageDigit1 = document.getElementById('age-digit-1');
+            const ageDigit2 = document.getElementById('age-digit-2');
+            const dobInputs = document.querySelectorAll('.dob-d, .dob-m, .dob-y');
+
+            function calculateAge() {
+                let dayStr = ""; document.querySelectorAll('.dob-d').forEach(i => dayStr += i.value);
+                let monthStr = ""; document.querySelectorAll('.dob-m').forEach(i => monthStr += i.value);
+                let yearStr = ""; document.querySelectorAll('.dob-y').forEach(i => yearStr += i.value);
+
+                if (dayStr.length === 2 && monthStr.length === 2 && yearStr.length === 4) {
+                    const day = parseInt(dayStr, 10);
+                    const month = parseInt(monthStr, 10);
+                    const year = parseInt(yearStr, 10);
+                    const birthDate = new Date(year, month - 1, day);
+                    const today = new Date();
+
+                    if (birthDate.getFullYear() !== year || birthDate.getMonth() + 1 !== month || birthDate.getDate() !== day) {
+                        ageDigit1.value = ""; ageDigit2.value = ""; return;
+                    }
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+
+                    if (age >= 0 && age < 150) {
+                        const ageStr = age.toString().padStart(2, '0');
+                        ageDigit1.value = ageStr.charAt(0); ageDigit2.value = ageStr.charAt(1);
+                    } else { ageDigit1.value = ""; ageDigit2.value = ""; }
+                } else { ageDigit1.value = ""; ageDigit2.value = ""; }
+            }
+
+            for (let i = 0; i < dobInputs.length; i++) {
+                const input = dobInputs[i];
+                input.addEventListener('input', function () {
+                    calculateAge();
+                    if (this.value.length === this.maxLength && i + 1 < dobInputs.length) { dobInputs[i + 1].focus(); }
+                });
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Backspace' && this.value.length === 0 && i - 1 >= 0) { dobInputs[i - 1].focus(); }
+                });
+            }
+
+            // --- PHOTO UPLOAD FUNCTIONALITY ---
+            const photoBoxTrigger = document.getElementById('photo-box-trigger');
+            const photoFileInput = document.getElementById('photo-file-input');
+            const photoPreview = document.getElementById('photo-preview');
+            const placeholderText = document.querySelector('.photo-placeholder-text');
+
+            if (photoBoxTrigger && photoFileInput && photoPreview) {
+                // Trigger file input click when box is clicked
+                photoBoxTrigger.addEventListener('click', function () {
+                    photoFileInput.click();
+                });
+
+                // Handle file selection
+                photoFileInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    // Check if file is selected and is a JPEG image
+                    if (file && file.type === 'image/jpeg') {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            // Set image source to the loaded file data
+                            photoPreview.src = event.target.result;
+                            // Show image, hide placeholder text
+                            photoPreview.style.display = 'block';
+                            placeholderText.style.display = 'none';
+                        }
+                        reader.readAsDataURL(file);
+                    } else if (file) {
+                        alert("Please select a valid .jpeg file.");
+                        photoFileInput.value = ''; // Clear invalid selection
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

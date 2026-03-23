@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC VLE Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Noto+Sans+Oriya:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Ionicons for beautiful icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- ===== WELCOME POPUP STYLES ===== -->
+    <style>
+        #welcomePopupOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: popupFadeIn 0.4s ease;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        #welcomePopupBox {
+            background: linear-gradient(135deg, #0d1b2e 0%, #1e3a5f 100%);
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            border-radius: 14px;
+            box-shadow: 0 0 28px rgba(245, 158, 11, 0.3), 0 14px 36px rgba(0, 0, 0, 0.7);
+            padding: 20px 22px 18px;
+            max-width: 320px;
+            width: 86%;
+            text-align: center;
+            position: relative;
+            animation: popupSlideUp 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes popupSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px) scale(0.93)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        #welcomePopupBox .popup-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        #welcomePopupBox h2 {
+            font-size: 13px;
+            font-weight: 800;
+            color: #f59e0b;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+        }
+
+        #welcomePopupBox p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            margin-bottom: 13px;
+        }
+
+        #welcomePopupBox .popup-divider {
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+            margin: 0 0 12px;
+            border-radius: 2px;
+        }
+
+        #closeWelcomePopup {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+        }
+
+        #closeWelcomePopup:hover {
+            transform: scale(1.07);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.65);
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        #adminPanelOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 99998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #adminPanelOverlay.open {
+            display: flex;
+            animation: popupFadeIn 0.3s ease;
+        }
+
+        #adminPanelBox {
+            background: linear-gradient(135deg, #060d18 0%, #0d1b2e 100%);
+            border: 2px solid rgba(245, 158, 11, 0.65);
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.3), 0 20px 50px rgba(0, 0, 0, 0.8);
+            padding: 26px 28px 22px;
+            width: 92%;
+            max-width: 390px;
+            color: #fff;
+            animation: popupSlideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #adminPanelBox h3 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #f59e0b;
+            text-align: center;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #adminPanelBox .adm-divider {
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+            margin: 10px 0 16px;
+            border-radius: 2px;
+        }
+
+        .adm-field {
+            margin-bottom: 12px;
+        }
+
+        .adm-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #f59e0b;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .adm-field input[type="text"],
+        .adm-field textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1.5px solid rgba(245, 158, 11, 0.35);
+            border-radius: 8px;
+            padding: 7px 10px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color .2s;
+            box-sizing: border-box;
+        }
+
+        .adm-field textarea {
+            height: 64px;
+            resize: vertical;
+        }
+
+        .adm-field input[type="text"]:focus,
+        .adm-field textarea:focus {
+            border-color: #f59e0b;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .adm-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 11px;
+            background: rgba(245, 158, 11, 0.06);
+            border: 1.5px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+        }
+
+        .adm-toggle-row span {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .adm-switch {
+            position: relative;
+            width: 42px;
+            height: 22px;
+        }
+
+        .adm-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .adm-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #374151;
+            border-radius: 22px;
+            transition: .3s;
+        }
+
+        .adm-slider:before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        .adm-switch input:checked+.adm-slider {
+            background: #f59e0b;
+        }
+
+        .adm-switch input:checked+.adm-slider:before {
+            transform: translateX(20px);
+        }
+
+        #adminLogoPreview {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #f59e0b;
+            display: block;
+            margin: 5px auto 0;
+        }
+
+        .adm-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .adm-btn-save,
+        .adm-btn-cancel {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .18s;
+        }
+
+        .adm-btn-save {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: #fff;
+            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.35);
+        }
+
+        .adm-btn-save:hover {
+            transform: scale(1.04);
+        }
+
+        .adm-btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1.5px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .adm-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        #openAdminPanelBtn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 9px 12px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1.5px solid rgba(239, 68, 68, 0.35);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            transition: all .25s;
+            margin-top: 4px;
+        }
+
+        #openAdminPanelBtn:hover {
+            background: rgba(239, 68, 68, 0.28);
+            border-color: #ef4444;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
+            transform: translateX(3px);
+        }
+
+        /* --- Live Badge Styling --- */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            height: 30px;
+            /* Scaled down */
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            margin-left: 15px;
+        }
+
+        .play-circle {
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border: 3px solid #ff1f1f;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .play-triangle {
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 9px solid #ff1f1f;
+            margin-left: 2px;
+            animation: liveBlink 1.2s infinite;
+        }
+
+        .live-label {
+            background-color: #ff1f1f;
+            height: 24px;
+            /* Slightly shorter than circle */
+            padding: 0 12px 0 20px;
+            margin-left: -15px;
+            /* Pull behind circle */
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+            z-index: 1;
+        }
+
+        @keyframes liveBlink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== WELCOME POPUP ===== -->
+    <!-- Removed -->
+
+    <div class="app-container">
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header"
+                style="display:flex; align-items:center; gap:10px; padding:14px 14px; flex-wrap:nowrap;">
+                <!-- Round Logo -->
+                <div class="logo-box" style="
+                    width: 42px; height: 42px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    flex-shrink: 0;
+                    border: 2px solid rgba(245,158,11,0.6);
+                    box-shadow: 0 0 10px rgba(245,158,11,0.3);
+                    background: #fff;
+                ">
+                    <img src="new-logo.jpg" alt="Logo"
+                        style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                </div>
+                <!-- Title -->
+                <h2 id="sidebarAppTitle" style="
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: #ffffff;
+                    flex: 1;
+                    line-height: 1.3;
+                    letter-spacing: 0.5px;
+                    text-align: center;
+                    margin: 0;
+                ">GRAPHIC<br>DIGITAL SERVICES</h2>
+                <!-- Toggle Button -->
+                <button id="sidebarToggle" title="Minimize / Maximize Sidebar" style="
+                    background: rgba(245,158,11,0.15);
+                    border: 1.5px solid rgba(245,158,11,0.45);
+                    border-radius: 8px;
+                    width: 34px; height: 34px;
+                    display: flex; align-items: center; justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.25s;
+                    flex-shrink: 0;
+                    color: #f59e0b;
+                    padding: 0;
+                " onmouseover="this.style.background='rgba(245,158,11,0.35)';this.style.transform='scale(1.1)'"
+                    onmouseout="this.style.background='rgba(245,158,11,0.15)';this.style.transform='scale(1)'">
+                    <ion-icon name="menu-outline"
+                        style="font-size: 20px; color: #f59e0b; pointer-events: none;"></ion-icon>
+                </button>
+            </div>
+
+            <div class="search-sidebar" style="position: relative;">
+                <img src="new-logo.jpg" class="search-logo" alt="Jan Seva Logo">
+                <input type="text" placeholder="Search web or services..." id="sidebarSearch" autocomplete="off">
+                <ul id="sidebarSearchDropdown" class="search-dropdown" style="z-index: 4000;"></ul>
+            </div>
+
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active" id="btnSidebarHome" style="text-decoration: none; margin: 10px 0;">
+                    <ion-icon name="home" style="font-size: 22px; margin-left: 10px; color: var(--primary);"></ion-icon>
+                    <span style="margin-left: 12px; font-weight: bold; color: #ffffff;">Home</span>
+                </a>
+
+                <a href="pdf_form.html" class="menu-item" style="text-decoration: none; margin: 10px 0;">
+                    <ion-icon name="document-attach-outline"
+                        style="font-size: 22px; margin-left: 10px; color: var(--primary);"></ion-icon>
+                    <span style="margin-left: 12px; font-weight: bold; color: #ffffff;">PDF FORM</span>
+                </a>
+
+                <a href="#" class="menu-item" id="btnSidebarAll" style="text-decoration: none; margin: 10px 0;">
+                    <ion-icon name="apps" style="font-size: 22px; margin-left: 10px; color: var(--primary);"></ion-icon>
+                    <span style="margin-left: 12px; font-weight: bold; color: #ffffff;">All Services</span>
+                </a>
+
+                <div class="dropdown-wrapper">
+                    <a href="#" class="menu-item category-toggle-btn" id="btnCategoriesToggle"
+                        style="text-decoration: none; margin: 10px 0 0 0;">
+                        <ion-icon name="grid"
+                            style="font-size: 22px; margin-left: 10px; color: var(--primary);"></ion-icon>
+                        <span style="margin-left: 12px; font-weight: bold; color: #ffffff;">Categories</span>
+                        <ion-icon name="chevron-forward-outline" class="toggle-arrow"
+                            style="margin-left: auto; margin-right: 10px; font-size: 16px; transition: transform 0.3s;"></ion-icon>
+                    </a>
+                    <div class="menu-section" id="categoriesSectionWrapper" style="display: none;">
+                        <ul class="section-list" id="categoryList">
+                            <!-- Categories populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="https://connect.csc.gov.in/account/authorize?response_type=code&client_id=0f8ca686-5a31-46b8-bb51-d9834ba9fa9d&redirect_uri=https%3A%2F%2Fdigitalseva.csc.gov.in%2Fauth%2Fcallback%2F&state=85997"
+                    class="menu-item" style="text-decoration: none;">
+                    <div class="avatar"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmRQV982vDFH9Mgp4-V4Ffw9x-u0HxxSCeNQ&s"
+                            alt="User"></div>
+                    <span style="font-weight: bold; color: #ffffff;">CSC WORK SPACE</span>
+                </a>
+
+                <a href="id-card-generator.html" class="menu-item" style="text-decoration: none; margin: 10px 0;">
+                    <ion-icon name="id-card-outline"
+                        style="font-size: 22px; margin-left: 10px; color: var(--primary);"></ion-icon>
+                    <span style="margin-left: 12px; font-weight: bold; color: #ffffff;">Pro ID-STUDIO 2.0</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="GST_BILL.html" target="_blank" class="register-btn active"
+                    style="background: rgba(245, 158, 11, 0.22); border-color: #f59e0b; color: #f59e0b;">
+                    <ion-icon name="receipt"></ion-icon> <span>MY GST BILL</span>
+                </a>
+                <a href="https://locator.csccloud.in/" target="_blank" class="register-btn">
+                    <ion-icon name="location"></ion-icon> <span>CSC Locator</span>
+                </a>
+                <a href="https://jaankari.csccloud.in/" target="_blank" class="register-btn">
+                    <ion-icon name="information-circle"></ion-icon> <span>About Us</span>
+                </a>
+                <a href="https://jansevakendra.org/services/" target="_blank" class="register-btn">
+                    <ion-icon name="list-circle-outline"></ion-icon> <span>About Services</span>
+                </a>
+                <a href="https://register.csc.gov.in/" target="_blank" class="register-btn">
+                    <ion-icon name="document-text"></ion-icon> <span>CSC Register</span>
+                </a>
+
+                <!-- ADMIN POPUP BUTTON -->
+                <!-- Removed -->
+
+            </div>
+        </aside>
+
+        <!-- ===== ADMIN PANEL MODAL ===== -->
+        <!-- Removed -->
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="mobileSidebarToggle" class="mobile-toggle-btn" title="Open Menu">
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </button>
+                    <h1 style="display: flex; align-items: center; gap: 8px;">
+                        <a href="https://share.google/cU3TLcKi4KgWKTe82" target="_blank" title="View Location"
+                            style="display: flex; align-items: center;">
+                            <ion-icon name="location"
+                                style="color: #e65100; font-size: 24px; cursor: pointer;"></ion-icon>
+                        </a>
+                        <a href="master_customer_form.html" target="_blank" class="social-icon-btn"
+                            title="Master Customer Data Entry Form"
+                            style="background-color: transparent; border: none; margin-left: 5px;">
+                            <img src="https://e7.pngegg.com/pngimages/783/513/png-clipart-computer-icons-form-organization-internet-email-ticket-miscellaneous-text.png"
+                                alt="Master Form"
+                                style="width: 32px; height: 32px; border-radius: 5px; object-fit: cover; display: block;">
+                        </a>
+
+                        <span id="headerTitle"
+                            style="color: #ffffff; font-family: 'Poppins', sans-serif; font-weight: 800; letter-spacing: 1px; text-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                            ALL SERVICES IN ONE PLACE </span>
+                    </h1>
+                    <div class="view-toggles">
+                        <button class="view-btn" id="btnTableView"><ion-icon name="list-outline"></ion-icon> Table
+                            view</button>
+                        <button class="view-btn active" id="btnKanbanView"><ion-icon
+                                name="file-tray-stacked-outline"></ion-icon> Canvas
+                            view</button>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <a href="news_blog.html" target="_blank"
+                        style="background-color: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 5px; margin-right: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid #dc2626;">
+                        <ion-icon name="newspaper-outline"></ion-icon> NEWS BLOG
+                    </a>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/OdishaSpv/" target="_blank" class="social-icon-btn fb"
+                            title="Facebook">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                        <a href="https://x.com/OdishaSpv" target="_blank" class="social-icon-btn x-twitter"
+                            title="X (Twitter)">
+                            <ion-icon name="logo-twitter"></ion-icon>
+                        </a>
+                    </div>
+
+                    <div class="language-toggle">
+                        <button id="lang-en" class="active">EN</button>
+                        <button id="lang-or">OR</button>
+                    </div>
+
+                    <!-- Blinking LIVE Icon -->
+                    <div class="live-badge">
+                        <div class="play-circle">
+                            <div class="play-triangle"></div>
+                        </div>
+                        <div class="live-label">LIVE</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrolling Notification Ribbon -->
+            <style>
+                @keyframes blinkRed {
+                    0% {
+                        opacity: 1;
+                        text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+                    }
+
+                    50% {
+                        opacity: 0;
+                        text-shadow: none;
+                    }
+
+                    100% {
+                        opacity: 1;
+                        text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+                    }
+                }
+
+                .blink-red {
+                    color: #ef4444;
+                    font-weight: 800;
+                    margin-left: 20px;
+                    animation: blinkRed 1.2s infinite;
+                }
+            </style>
+            <div class="notification-ribbon">
+                <div class="ribbon-text" id="runningRibbonText">
+                    🔔 Welcome to the CSC VLE Dashboard! Stay updated with the latest government services, CSC
+                    guidelines, and new platform announcements. Keep serving citizens efficiently!
+                    <span class="blink-red">PRO ID - STUDIO v2.0 ( for Single or Multi ID card Process )</span>
+                </div>
+            </div>
+
+            <!-- Animated Banner -->
+            <div class="animated-banner-container" id="textBanner" style="display: none;">
+                <div class="animated-banner">
+                    <div class="banner-content">
+                        <h2>Welcome to Digital India CSC Portal 🇮🇳</h2>
+                        <p>Access all Government and Common Services instantly. Fast, Secure, and Efficient workflow.
+                        </p>
+                    </div>
+                    <div class="banner-content">
+                        <h2>ଆପଣଙ୍କୁ ଡିଜିଟାଲ୍ ଇଣ୍ଡିଆ CSC କୁ ସ୍ୱାଗତ 🙏</h2>
+                        <p>ଗୋଟିଏ ସ୍ଥାନରେ ସମସ୍ତ ସରକାରୀ ଏବଂ ସାଧାରଣ ସେବା ପ୍ରାପ୍ତ କରନ୍ତୁ |</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home Dashboard View -->
+            <div class="home-view" id="homeView">
+                <!-- ═══ FUTURISTIC BANNER SLIDESHOW ═══ -->
+                <div class="ftr-slider" id="ftrSlider">
+
+                    <!-- Slides -->
+                    <div class="ftr-slide active" style="--bg: url('banner1.jpg')">
+                        <div class="ftr-bg"></div>
+                        <div class="ftr-scanline"></div>
+                        <div class="ftr-overlay"></div>
+                        <div class="ftr-content">
+                            <span class="ftr-badge">🇮🇳 Digital India</span>
+                            <h1 class="ftr-title">CSC VLE SERVICES<br><span>DASHBOARD</span></h1>
+                            <p class="ftr-sub">Your Gateway to All Government &amp; Citizen Services</p>
+                            <div class="ftr-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="ftr-slide" style="--bg: url('banner2.jpg')">
+                        <div class="ftr-bg"></div>
+                        <div class="ftr-scanline"></div>
+                        <div class="ftr-overlay"></div>
+                        <div class="ftr-content">
+                            <span class="ftr-badge">⚡ All in One Portal</span>
+                            <h1 class="ftr-title">EMPOWER YOUR<br><span>COMMUNITY</span></h1>
+                            <p class="ftr-sub">Bridging Citizens with Government Services Seamlessly</p>
+                            <div class="ftr-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="ftr-slide" style="--bg: url('banner3.jpg')">
+                        <div class="ftr-bg"></div>
+                        <div class="ftr-scanline"></div>
+                        <div class="ftr-overlay"></div>
+                        <div class="ftr-content">
+                            <span class="ftr-badge">🏆 Jana Seba Kendra</span>
+                            <h1 class="ftr-title">TRUSTED KIOSK<br><span>FOR ALL</span></h1>
+                            <p class="ftr-sub">G2C &amp; B2C Services — Fast, Secure &amp; Reliable</p>
+                            <div class="ftr-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="ftr-slide" style="--bg: url('banner4.jpg')">
+                        <div class="ftr-bg"></div>
+                        <div class="ftr-scanline"></div>
+                        <div class="ftr-overlay"></div>
+                        <div class="ftr-content">
+                            <span class="ftr-badge">🌐 CSC 2.0</span>
+                            <h1 class="ftr-title">SERVE INDIA<br><span>DIGITALLY</span></h1>
+                            <p class="ftr-sub">Connecting Rural India with the Digital Revolution</p>
+                            <div class="ftr-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- Prev / Next Arrows -->
+                    <button class="ftr-arrow ftr-prev" id="ftrPrev" aria-label="Previous">
+                        <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                    <button class="ftr-arrow ftr-next" id="ftrNext" aria-label="Next">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+
+                    <!-- Dot Navigation -->
+                    <div class="ftr-dots" id="ftrDots">
+                        <span class="ftr-dot active" data-i="0"></span>
+                        <span class="ftr-dot" data-i="1"></span>
+                        <span class="ftr-dot" data-i="2"></span>
+                        <span class="ftr-dot" data-i="3"></span>
+                    </div>
+
+                    <!-- Slide Counter -->
+                    <div class="ftr-counter"><span id="ftrCurrent">1</span> / 4</div>
+                </div>
+
+                <!-- Banner CSS + JS injected inline for self-containment -->
+                <style>
+                    .ftr-slider {
+                        position: relative;
+                        width: 100%;
+                        height: 360px;
+                        overflow: hidden;
+                        background: #000;
+                        border-bottom: 3px solid rgba(245, 158, 11, 0.5);
+                    }
+
+                    .ftr-slide {
+                        position: absolute;
+                        inset: 0;
+                        opacity: 0;
+                        transition: opacity 1s ease;
+                        pointer-events: none;
+                    }
+
+                    .ftr-slide.active {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+
+                    /* Ken Burns background */
+                    .ftr-bg {
+                        position: absolute;
+                        inset: -8%;
+                        background: var(--bg) center/cover no-repeat;
+                        animation: ftrKenBurns 12s ease-in-out infinite alternate;
+                        will-change: transform;
+                    }
+
+                    .ftr-slide.active .ftr-bg {
+                        animation: ftrKenBurns 12s ease-in-out infinite alternate;
+                    }
+
+                    @keyframes ftrKenBurns {
+                        0% {
+                            transform: scale(1.0) translate(0%, 0%);
+                        }
+
+                        33% {
+                            transform: scale(1.08) translate(-1.5%, 1%);
+                        }
+
+                        66% {
+                            transform: scale(1.05) translate(1.5%, -1%);
+                        }
+
+                        100% {
+                            transform: scale(1.1) translate(0%, 2%);
+                        }
+                    }
+
+                    /* Dark gradient overlay */
+                    .ftr-overlay {
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(135deg,
+                                rgba(0, 0, 0, 0.72) 0%,
+                                rgba(13, 27, 46, 0.65) 50%,
+                                rgba(0, 0, 0, 0.80) 100%);
+                    }
+
+                    /* Scanline texture */
+                    .ftr-scanline {
+                        position: absolute;
+                        inset: 0;
+                        background: repeating-linear-gradient(0deg,
+                                transparent,
+                                transparent 3px,
+                                rgba(0, 0, 0, 0.07) 3px,
+                                rgba(0, 0, 0, 0.07) 4px);
+                        pointer-events: none;
+                        z-index: 1;
+                    }
+
+                    /* Content */
+                    .ftr-content {
+                        position: absolute;
+                        inset: 0;
+                        z-index: 2;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: flex-start;
+                        padding: 40px 60px;
+                    }
+
+                    .ftr-slide.active .ftr-badge {
+                        animation: ftrSlideUp 0.6s 0.2s both ease-out;
+                    }
+
+                    .ftr-slide.active .ftr-title {
+                        animation: ftrSlideUp 0.7s 0.4s both ease-out;
+                    }
+
+                    .ftr-slide.active .ftr-sub {
+                        animation: ftrSlideUp 0.7s 0.6s both ease-out;
+                    }
+
+                    .ftr-slide.active .ftr-line {
+                        animation: ftrExpand 0.8s 0.8s both ease-out;
+                    }
+
+                    @keyframes ftrSlideUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(28px);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+
+                    @keyframes ftrExpand {
+                        from {
+                            width: 0;
+                            opacity: 0;
+                        }
+
+                        to {
+                            width: 80px;
+                            opacity: 1;
+                        }
+                    }
+
+                    .ftr-badge {
+                        display: inline-block;
+                        background: rgba(245, 158, 11, 0.18);
+                        border: 1px solid rgba(245, 158, 11, 0.55);
+                        color: #f59e0b;
+                        font-size: 12px;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        padding: 5px 14px;
+                        border-radius: 20px;
+                        margin-bottom: 14px;
+                        text-transform: uppercase;
+                        backdrop-filter: blur(4px);
+                        box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+                    }
+
+                    .ftr-title {
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 38px;
+                        font-weight: 800;
+                        color: #ffffff;
+                        line-height: 1.15;
+                        margin: 0 0 12px;
+                        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+                        letter-spacing: 1px;
+                    }
+
+                    .ftr-title span {
+                        color: #f59e0b;
+                        display: block;
+                        text-shadow: 0 0 30px rgba(245, 158, 11, 0.45);
+                    }
+
+                    .ftr-sub {
+                        font-size: 14px;
+                        color: rgba(255, 255, 255, 0.82);
+                        font-weight: 400;
+                        margin-bottom: 18px;
+                        max-width: 420px;
+                        line-height: 1.65;
+                        letter-spacing: 0.4px;
+                    }
+
+                    .ftr-line {
+                        height: 3px;
+                        width: 80px;
+                        background: linear-gradient(90deg, #f59e0b, #ef4444);
+                        border-radius: 3px;
+                        box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+                    }
+
+                    /* Arrows */
+                    .ftr-arrow {
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        z-index: 10;
+                        background: rgba(245, 158, 11, 0.15);
+                        border: 1.5px solid rgba(245, 158, 11, 0.4);
+                        color: #f59e0b;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 20px;
+                        cursor: pointer;
+                        transition: all 0.25s;
+                        backdrop-filter: blur(6px);
+                    }
+
+                    .ftr-arrow:hover {
+                        background: rgba(245, 158, 11, 0.45);
+                        transform: translateY(-50%) scale(1.12);
+                        box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+                    }
+
+                    .ftr-prev {
+                        left: 16px;
+                    }
+
+                    .ftr-next {
+                        right: 16px;
+                    }
+
+                    /* Dots */
+                    .ftr-dots {
+                        position: absolute;
+                        bottom: 16px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: flex;
+                        gap: 8px;
+                        z-index: 10;
+                    }
+
+                    .ftr-dot {
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.35);
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        border: 1px solid rgba(255, 255, 255, 0.4);
+                    }
+
+                    .ftr-dot.active {
+                        background: #f59e0b;
+                        width: 24px;
+                        border-radius: 4px;
+                        box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+                        border-color: #f59e0b;
+                    }
+
+                    /* Counter */
+                    .ftr-counter {
+                        position: absolute;
+                        top: 16px;
+                        right: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: rgba(255, 255, 255, 0.55);
+                        letter-spacing: 2px;
+                        z-index: 10;
+                    }
+
+                    #ftrCurrent {
+                        color: #f59e0b;
+                    }
+
+                    @media (max-width: 600px) {
+                        .ftr-slider {
+                            height: 240px;
+                        }
+
+                        .ftr-title {
+                            font-size: 22px;
+                        }
+
+                        .ftr-content {
+                            padding: 24px 22px;
+                        }
+
+                        .ftr-sub {
+                            font-size: 12px;
+                        }
+                    }
+                </style>
+                <script>
+                    (function () {
+                        const slider = document.getElementById('ftrSlider');
+                        if (!slider) return;
+                        const slides = slider.querySelectorAll('.ftr-slide');
+                        const dots = slider.querySelectorAll('.ftr-dot');
+                        const counter = document.getElementById('ftrCurrent');
+                        let cur = 0, timer;
+
+                        function goTo(n) {
+                            slides[cur].classList.remove('active');
+                            dots[cur].classList.remove('active');
+                            cur = (n + slides.length) % slides.length;
+                            slides[cur].classList.add('active');
+                            dots[cur].classList.add('active');
+                            if (counter) counter.textContent = cur + 1;
+                        }
+
+                        function startAuto() {
+                            timer = setInterval(() => goTo(cur + 1), 5000);
+                        }
+                        function stopAuto() { clearInterval(timer); }
+
+                        document.getElementById('ftrPrev').addEventListener('click', () => { stopAuto(); goTo(cur - 1); startAuto(); });
+                        document.getElementById('ftrNext').addEventListener('click', () => { stopAuto(); goTo(cur + 1); startAuto(); });
+                        dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.i); startAuto(); }));
+
+                        startAuto();
+                    })();
+                </script>
+
+
+
+                <!-- Trusted Kiosk Info Block -->
+                <div class="kiosk-info-section">
+                    <h2 class="kiosk-heading-primary">Your Trusted Neighbourhood Kiosk</h2>
+                    <h2 class="kiosk-heading-secondary">for All Digital Services</h2>
+                    <p class="kiosk-paragraph">Common Services Centres are the access points for delivery of
+                        Government-to-Citizen (G2C) and Business to Citizen (B2C) e-Services within the reach of the
+                        citizen.</p>
+                    <ul class="kiosk-list">
+                        <li><ion-icon name="pointing-right"></ion-icon> Government to Citizen Services (G2C)</li>
+                        <li><ion-icon name="pointing-right"></ion-icon> Business to Citizen Services (B2C)</li>
+                    </ul>
+                </div>
+
+                <!-- CSC Vision Story Section -->
+                <div class="csc-story-section">
+                    <div class="story-block">
+                        <h3>Vision of CSC SPV</h3>
+                        <p>To develop CSCs as a dependable, reliable, and ubiquitous IT-enabled network of citizen
+                            service points connecting local population with government departments, business
+                            establishments, banks, insurance companies, and educational institutions, with an impact on
+                            primary, secondary, and tertiary sectors of the country's economy.</p>
+                    </div>
+
+                    <div class="story-block">
+                        <h3>CSC 2.O Scheme</h3>
+                        <p>The CSC 2.0 Scheme was initiated in August 2015 to improve access to technology and digital
+                            services for citizens in rural and remote areas of the country. It proposes expansion of
+                            self-sustaining CSC network till Gram Panchayats by setting up more than 2.5 lakh CSCs
+                            within next four years; at least one CSC in every Gram Panchayat.</p>
+                    </div>
+
+                    <div class="story-block features-block">
+                        <h3>Key Features of CSC 2.O</h3>
+                        <ul>
+                            <li>Establish a self-sustaining network of 2.5 lakh CSC centres in Gram Panchayats under
+                                Pillar 3 of Digital India Programme.</li>
+                            <li>CSC 2.0 is envisaged as a transaction and service delivery based model delivering
+                                e-services through a single platform.</li>
+                            <li>Strengthen CSC network by standardizing services and building capacity of all
+                                stakeholders.</li>
+                            <li>Provide manpower to SDAs and DeGS for coordination and monitoring of project execution.
+                            </li>
+                            <li>Increase sustainability of VLEs and encourage women as VLEs.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="home-services-wrapper">
+                    <div class="hs-tabs" id="homeTabs">
+                        <button class="hs-tab active" data-target="central">Central Government Services</button>
+                        <button class="hs-tab" data-target="state">State Government Services</button>
+                        <button class="hs-tab" data-target="other">ONLINE JOB INQUARI</button>
+                    </div>
+
+                    <div id="homeServicesContent">
+                        <div class="hs-grid" id="centralServicesGrid">
+                            <a class="hs-card" href="https://uidai.gov.in/en/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png"
+                                        alt="Aadhaar" style="object-fit: contain;"></div>
+                                <span class="hs-title">Aadhaar</span>
+                            </a>
+                            <a class="hs-card" href="https://beneficiary.nha.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://images.seeklogo.com/logo-png/61/1/ayushman-bharat-english-logo-png_seeklogo-615864.png"
+                                        alt="Ayushman" style="object-fit: contain;"></div>
+                                <span class="hs-title">Ayushman</span>
+                            </a>
+                            <a class="hs-card" href="https://jeevanpramaan.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://play-lh.googleusercontent.com/_vZP5w_PUzmQfyS828rI3KMGA-7EaD47ujnXxcGjzLKEPUsPmiBUTOEMpxiJXnh9wBPt=w600-h300-pc0xffffff-pd"
+                                        alt="Jeevan Pramaan" style="object-fit: contain; border-radius: 50%;"></div>
+                                <span class="hs-title">Jeevan Pramaan</span>
+                            </a>
+                            <a class="hs-card" href="https://pmuy.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.uxdt.nic.in/wp-content/uploads/2020/06/Ujjwala-Yojna_Preview.png"
+                                        alt="PM Ujjwala Yojana" style="object-fit: contain;"></div>
+                                <span class="hs-title">PM Ujjwala Yojana</span>
+                            </a>
+                            <a class="hs-card" href="https://myhpgas.in/myhpgas/hpgas.aspx" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.iitbbs.ac.in/wp-content/uploads/2023/07/hpgas-1024x1024.jpg"
+                                        alt="HP Gas" style="object-fit: contain;"></div>
+                                <span class="hs-title">HP Gas</span>
+                            </a>
+                            <a class="hs-card" href="https://enps.nsdl.com/eNPS/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.icicidirect.com/Content/images/nps-banner.svg" alt="NPS"
+                                        style="object-fit: contain;">
+                                </div>
+                                <span class="hs-title">NPS</span>
+                            </a>
+                            <a class="hs-card" href="https://www.myutiitsl.com/panonlineservices/CSCLogin"
+                                target="_blank" style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://i.pinimg.com/736x/cf/32/ed/cf32edd713afc4e278d7e046d092eb43.jpg"
+                                        alt="PAN" style="object-fit: contain; background: white; border-radius: 50%;">
+                                </div>
+                                <span class="hs-title">PAN</span>
+                            </a>
+                            <a class="hs-card" href="https://www.passportindia.gov.in/psp" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=passportindia.gov.in&sz=128"
+                                        alt="Passport"></div>
+                                <span class="hs-title">Passport</span>
+                            </a>
+                            <a class="hs-card" href="https://eshram.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=eshram.gov.in&sz=128"
+                                        alt="e-Shram"></div>
+                                <span class="hs-title">e-Shram</span>
+                            </a>
+                            <a class="hs-card" href="https://maandhan.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://media.assettype.com/english-sentinelassam%2Fimport%2Fwp-content%2Fuploads%2F2019%2F12%2FPMSYM.jpg?w=480&dpr=2&auto=format%2Ccompress&fit=max&q=85"
+                                        alt="PM-Shram Yogi Maandhan Yojana" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">PM-Shram Yogi<br>Maandhan Yojana</span>
+                            </a>
+                            <a class="hs-card" href="https://maandhan.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://static.pw.live/5eb393ee95fab7468a79d189/GLOBAL_CMS_BLOGS/462bd10f-3be5-451b-b746-79546cebc96d.png"
+                                        alt="PM-Kisan Maandhan Yojana" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">PM-Kisan Maandhan<br>Yojana</span>
+                            </a>
+                            <a class="hs-card" href="https://pmkisan.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeVPhKwmig4a2f-BvCE3Xx68xo-j7a3H1a4g&s"
+                                        alt="PM-KISAN" style="object-fit: contain; border-radius: 50%;"></div>
+                                <span class="hs-title">PM-KISAN</span>
+                            </a>
+                            <a class="hs-card" href="https://pmsvanidhi.mohua.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.iasexam.com/wp-content/uploads/PM-SVANidhi-scheme_banner.jpg"
+                                        alt="PM-SVANidhi" style="object-fit: contain;"></div>
+                                <span class="hs-title">PM-SVANidhi</span>
+                            </a>
+                            <a class="hs-card" href="https://pmvishwakarma.gov.in/" target="_blank"
+                                style="grid-column: 2; text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://pmvishwakarma.gov.in/Resources/images/pm_vishwakarma_logo.svg"
+                                        alt="PM-Vishwakarma" style="object-fit: contain;"></div>
+                                <span class="hs-title">PM-Vishwakarma</span>
+                            </a>
+                            <a class="hs-card" href="https://pmfby.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://images.hindustantimes.com/img/2021/06/30/1600x900/c3ac2bfa-d9d4-11eb-a5ce-a68058c7c394_1625079441804.png"
+                                        alt="PM Fasal Bima Yojana" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">PM Fasal Bima<br>Yojana</span>
+                            </a>
+                            <a class="hs-card" href="https://udyamregistration.gov.in/UdyamRegistration.aspx"
+                                target="_blank" style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://4.imimg.com/data4/AC/PH/ANDROID-14909429/product-500x500.jpeg"
+                                        alt="Udyam Services" style="object-fit: contain;"></div>
+                                <span class="hs-title">Udyam Services</span>
+                            </a>
+                            <a class="hs-card" href="https://www.gst.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://freepngimg.com/save/34749-gst-photos/946x714" alt="GST Portal"
+                                        style="object-fit: contain;"></div>
+                                <span class="hs-title">GST Portal</span>
+                            </a>
+                            <a class="hs-card" href="https://web.umang.gov.in/landing/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=umang.gov.in&sz=128"
+                                        alt="UMANG Portal" style="object-fit: contain;"></div>
+                                <span class="hs-title">UMANG Portal</span>
+                            </a>
+                        </div>
+
+                        <!-- State Services Grid (Replaces Broken Iframe) -->
+                        <div class="hs-grid" id="stateServicesGrid" style="display: none;">
+                            <a class="hs-card" href="https://www.odishaone.gov.in/citizen/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://play-lh.googleusercontent.com/pwMPujycKwQhaUup0Re1yW3c-3pfhBUrrs-4-WTP5zPWf8QXMbR43YcH0OWJN4FIC-g=w240-h480-rw"
+                                        alt="Odisha One" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 13px;">Odisha One<br>(Citizen Services)</span>
+                            </a>
+                            <a class="hs-card" href="https://citizenportal-op.gov.in/Citizen/Login.aspx" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://services-op.odisha.gov.in/Citizen/Chatbot/assets/Odisha_Police_Logo.png"
+                                        alt="Odisha Citizen Portal" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 12px;">Odisha Police<br>Citizen Portal</span>
+                            </a>
+                            <a class="hs-card" href="https://bhulekh.ori.nic.in/RoRView.aspx" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://play-lh.googleusercontent.com/yzAuaBeFOVXRMoISN0sYNsXc6aCct3BrvTHiyk1XGoOqbI3DJzzS0WWyHMp7V9qGag"
+                                        alt="Bhulekh Odisha" style="object-fit: contain; border-radius: 50%;"></div>
+                                <span class="hs-title">Bhulekh Odisha</span>
+                            </a>
+                            <a class="hs-card" href="https://edistrict.odisha.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://edistrict.odisha.gov.in/resources/homePage/21/img/logo2.jpg"
+                                        alt="e-District Odisha" style="object-fit: contain;"></div>
+                                <span class="hs-title">e-District Odisha</span>
+                            </a>
+                            <a class="hs-card" href="https://www.odisha.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Seal_of_Odisha.png/1200px-Seal_of_Odisha.png"
+                                        alt="Odisha Govt Portal"
+                                        style="object-fit: contain; background: white; border-radius: 50%;"></div>
+                                <span class="hs-title" style="font-size: 12px;">Odisha Govt Main<br>Portal</span>
+                            </a>
+                            <a class="hs-card" href="https://subhadra.odisha.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxt2YwVipQCVKQ_I75JvisMnqt04fW_bfpLA&s"
+                                        alt="Subhadra Yojana" style="object-fit: contain; border-radius: 50%;"></div>
+                                <span class="hs-title">Subhadra Yojana</span>
+                            </a>
+                            <a class="hs-card" href="https://gjay.odisha.gov.in/home" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://gjay.odisha.gov.in/application/storage/app/uploads/68061edad896a1745231578.png"
+                                        alt="Gopabandhu Jan Arogya" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">Gopabandhu Jan<br>Arogya</span>
+                            </a>
+                            <a class="hs-card" href="https://empmission.odisha.gov.in/Exchange/employment.jsp"
+                                target="_blank" style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://img.icons8.com/color/512/find-matching-job.png"
+                                        alt="District Employment Registrar" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">District Employment<br>Registrar</span>
+                            </a>
+                            <a class="hs-card" href="https://www.samsodisha.gov.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=samsodisha.gov.in&sz=128"
+                                        alt="SAMS Odisha" style="object-fit: contain;"></div>
+                                <span class="hs-title">SAMS Odisha</span>
+                            </a>
+                            <a class="hs-card" href="https://odisha.indiaresults.com/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=indiaresults.com&sz=128"
+                                        alt="Odisha Results" style="object-fit: contain;"></div>
+                                <span class="hs-title">Odisha Results</span>
+                            </a>
+                            <a class="hs-card" href="https://chseodisha.nic.in/" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=chseodisha.nic.in&sz=128"
+                                        alt="CHSC Odisha" style="object-fit: contain;"></div>
+                                <span class="hs-title">CHSC Odisha</span>
+                            </a>
+                            <a class="hs-card" href="https://cuo.ac.in/academic_results.asp" target="_blank"
+                                style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=cuo.ac.in&sz=128"
+                                        alt="Odisha Kendriya Bidyalay" style="object-fit: contain;"></div>
+                                <span class="hs-title" style="font-size: 11px;">Odisha Kendriya<br>Bidyalay</span>
+                            </a>
+                            <a class="hs-card"
+                                href="https://nregastrep.nic.in/netnrega/homestciti.aspx?state_code=24&state_name=ODISHA&lflag=eng&labels=labels"
+                                target="_blank" style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=nregastrep.nic.in&sz=128"
+                                        alt="Job Card Odisha" style="object-fit: contain;"></div>
+                                <span class="hs-title">Job Card Odisha</span>
+                            </a>
+                            <a class="hs-card"
+                                href="https://nregastrep.nic.in/netnrega/loginframegp.aspx?page=C&state_code=24"
+                                target="_blank" style="text-decoration: none;">
+                                <div class="hs-icon-wrap"><img
+                                        src="https://www.google.com/s2/favicons?domain=nregastrep.nic.in&sz=128"
+                                        alt="MGNREGA" style="object-fit: contain;"></div>
+                                <span class="hs-title">MGNREGA</span>
+                            </a>
+                        </div>
+
+                        <!-- Other Services Container -->
+                        <div id="otherServicesContainer" style="display: none; padding: 40px 20px; text-align: center;">
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                                <a href="https://odishajobsphere.in/" target="_blank" class="blink-btn"
+                                    title="Odisha Job Sphere">
+                                    Odisha Job Sphere
+                                </a>
+                                <a href="https://www.nuaodisha.com/viewjoblist.aspx" target="_blank"
+                                    class="blink-btn blink-btn-nuaa" title="Nuaa Odisha">
+                                    NUAA ODISHA
+                                </a>
+                                <a href="https://www.freejobalert.com/odisha-government-jobs/" target="_blank"
+                                    class="blink-btn blink-btn-free" title="Free Job Alert">
+                                    Free Job Alert
+                                </a>
+                                <a href="https://odishajobsdesk.in/" target="_blank" class="blink-btn blink-btn-desk"
+                                    title="Odisha Job Desk">
+                                    ODISHA JOB DISK
+                                </a>
+                                <a href="https://www.odishagovtjob.in/" target="_blank" class="blink-btn blink-btn-govt"
+                                    title="Odisha Govt Job">
+                                    ODISHA Govt. JOB
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extended Footer -->
+                <div class="extended-footer">
+                    <div class="footer-column">
+                        <h3>Information</h3>
+                        <ul>
+                            <li><a href="https://digitalseva.csc.gov.in/web/about" target="_blank">About Us</a></li>
+                            <li><a href="https://digitalseva.csc.gov.in/web/services" target="_blank">CSC Related
+                                    Sites</a></li>
+                            <li><a href="https://digitalseva.csc.gov.in/web/home/policy" target="_blank">Privacy
+                                    Policy</a></li>
+                            <li><a href="https://digitalseva.csc.gov.in/web/home/terms" target="_blank">Terms &
+                                    Condition</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="https://cscregister.csccloud.in/" target="_blank">Registration</a></li>
+                            <li><a href="https://digipay.csccloud.in/" target="_blank">DigiPay</a></li>
+                            <li><a href="https://www.csc.gov.in/" target="_blank">CSC Gov</a></li>
+                            <li><a href="https://cscspv.in/" target="_blank">CSCSPV</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Help</h3>
+                        <ul>
+                            <li><a href="https://digitalseva.csc.gov.in/web/home/requirement" target="_blank">System
+                                    Requirement</a></li>
+                            <li><a href="https://jaankari.csccloud.in/" target="_blank">Jaankari Suvidha Portal</a></li>
+                            <li><a href="https://jaankari.csccloud.in/common-branding.html" target="_blank">Download
+                                    Common Branding Design</a></li>
+                            <li><a href="#">FAQS</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Quick Connect</h3>
+                        <ul>
+                            <li>Helpdesk 14599 (Citizen and VLE)</li>
+                            <li><a href="https://cscprod.my.site.com/citizenlogin" target="_blank">Log/Track Your Issue
+                                    Grievance<br>Redressal Portal</a></li>
+                            <li class="footer-socials">
+                                <span>Follow US :</span>
+                                <a href="https://www.youtube.com/user/CSCSCHEME" target="_blank"><ion-icon
+                                        name="logo-youtube"></ion-icon></a>
+                                <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                                <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                                <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                        viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                                    </svg>
+                                </a>
+                                <a href="#"><ion-icon name="logo-skype"></ion-icon></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="kanban-board" id="kanbanBoard">
+                <!-- Columns injected by JS -->
+            </div>
+
+            <!-- Table View -->
+            <div class="table-view" id="tableView" style="display: none;">
+                <table class="services-table">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Table rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Copyright Notice -->
+            <footer class="main-footer">
+                <p>&copy; 2026 Digital India CSC-VLE Services in One Place . All rights reserved Mr. Deepk Kumar Prdhan
+                </p>
+            </footer>
+
+        </main>
+    </div>
+    <!-- AI Assistant Floating Video Logo -->
+    <div class="assistant-logo-container" id="aiAssistantBtn" title="Chat with Disha">
+        <video autoplay loop muted playsinline>
+            <source src="Photo_to_D_Motion_Creation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <span class="ai-badge">1</span>
+    </div>
+
+    <!-- AI Chat Window -->
+    <div class="ai-chat-window" id="aiChatWindow">
+        <div class="ai-chat-header">
+            <div class="ai-header-info">
+                <img src="https://cdn-icons-png.flaticon.com/512/8649/8649605.png" alt="Disha">
+                <div class="ai-header-text">
+                    <h4>Disha</h4>
+                    <span>AI Assistant - Online</span>
+                </div>
+            </div>
+            <button class="ai-close-btn" id="aiCloseBtn"><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-message bot">
+                <img src="https://cdn-icons-png.flaticon.com/512/8649/8649605.png" class="msg-avatar" alt="Bot">
+                <div class="msg-content">Hello! I am Disha, your digital assistant. How can I help you today?</div>
+            </div>
+        </div>
+        <div class="ai-chat-footer">
+            <input type="text" id="aiChatInput" placeholder="Type your message here..." autocomplete="off">
+            <button id="aiSendBtn"><ion-icon name="send"></ion-icon></button>
+        </div>
+    </div>
+
+    <!-- ===== RIBBON EDITOR MODAL ===== -->
+    <div id="ribbonAdminOverlay" style="
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+        display: none; justify-content: center; align-items: center;
+        z-index: 9999; opacity: 0; transition: opacity 0.3s ease;
+    ">
+        <div style="
+            background: #1e293b; border: 1.5px solid #f59e0b;
+            border-radius: 12px; padding: 25px; width: 90%; max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: left;
+            transform: translateY(20px); transition: transform 0.3s ease;
+        " id="ribbonAdminBox">
+            <h3
+                style="color:#f59e0b; font-size:18px; margin-bottom:15px; border-bottom:1px solid rgba(245,158,11,0.2); padding-bottom:10px;">
+                📝 Edit Running Ribbon
+            </h3>
+
+            <label style="display:block; color:#94a3b8; font-size:13px; margin-bottom:8px;">Running Ribbon Text
+                (Supports HTML):</label>
+            <textarea id="admRibbonText" rows="5" style="
+                width: 100%; padding: 10px; border-radius: 8px;
+                background: rgba(15,23,42,0.6); color: #fff;
+                border: 1px solid rgba(245,158,11,0.3); font-family: inherit;
+                font-size: 13px; resize: vertical; margin-bottom: 20px;
+            "></textarea>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button id="ribbonCancelBtn" style="
+                    background: transparent; color: #ef4444; border: 1px solid #ef4444;
+                    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+                ">✖ Cancel</button>
+                <button id="ribbonSaveBtn" style="
+                    background: #f59e0b; color: #0f172a; border: none;
+                    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+                ">✔ Save &amp; Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== RIBBON EDITOR SCRIPT ===== -->
+    <script>
+        (function () {
+            var RIBBON_LS = 'cscRibbonText';
+            var defaultRibbonHTML = '🔔 Welcome to the CSC VLE Dashboard! Stay updated with the latest government services, CSC guidelines, and new platform announcements. Keep serving citizens efficiently! <span class="blink-red">PRO ID - STUDIO v2.0 ( for Single or Multi ID card Process )</span>';
+            var API_URL = 'https://script.google.com/macros/s/AKfycbxDwpCNdheU-ovPoZedGxoO3iUgBICSzO7QpH9l0dGFaNr7iLGAJVYMS03xpks7GyOL/exec';
+
+            var ribbonTextEl = document.getElementById('runningRibbonText');
+            var openBtn = document.getElementById('openRibbonEditorBtn');
+            var overlay = document.getElementById('ribbonAdminOverlay');
+            var box = document.getElementById('ribbonAdminBox');
+            var textarea = document.getElementById('admRibbonText');
+            var saveBtn = document.getElementById('ribbonSaveBtn');
+            var cancelBtn = document.getElementById('ribbonCancelBtn');
+
+            // 1. Fetch live text from Google Apps Script (or fallback to LS/default)
+            function loadRibbonText() {
+                var lsText = localStorage.getItem(RIBBON_LS);
+                if (lsText !== null && ribbonTextEl) ribbonTextEl.innerHTML = lsText; // instant local load initially
+
+                fetch(API_URL)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.text) {
+                            localStorage.setItem(RIBBON_LS, data.text);
+                            if (ribbonTextEl) ribbonTextEl.innerHTML = data.text;
+                        }
+                    })
+                    .catch(err => console.log("Ribbon Sync Error:", err)); // Keep local text if offline/error
+            }
+            loadRibbonText();
+
+            // 2. Open Modal
+            if (openBtn) {
+                openBtn.addEventListener('click', function () {
+                    var pwd = prompt("Enter Admin Password to edit Ribbon:");
+                    if (pwd === "Pradhan@1987") {
+                        textarea.value = (localStorage.getItem(RIBBON_LS) !== null)
+                            ? localStorage.getItem(RIBBON_LS)
+                            : (ribbonTextEl ? ribbonTextEl.innerHTML.trim() : defaultRibbonHTML);
+
+                        overlay.style.display = 'flex';
+                        setTimeout(function () {
+                            overlay.style.opacity = '1';
+                            box.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else if (pwd !== null) {
+                        alert("Access Denied. Incorrect Password.");
+                    }
+                });
+            }
+
+            // 3. Close Modal
+            function closeRibbonModal() {
+                if (!overlay) return;
+                overlay.style.opacity = '0';
+                box.style.transform = 'translateY(20px)';
+                setTimeout(function () { overlay.style.display = 'none'; }, 300);
+            }
+            if (cancelBtn) cancelBtn.addEventListener('click', closeRibbonModal);
+
+            // 4. Save & Apply (POST to GAS API)
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function () {
+                    var newText = textarea.value.trim();
+                    if (!newText) newText = defaultRibbonHTML;
+
+                    var oldBtnText = saveBtn.innerHTML;
+                    saveBtn.innerHTML = "⏳ Saving...";
+                    saveBtn.disabled = true;
+
+                    // Update DOM & LocalStorage instantly for responsive UI
+                    localStorage.setItem(RIBBON_LS, newText);
+                    if (ribbonTextEl) ribbonTextEl.innerHTML = newText;
+
+                    // Push to Cloud
+                    fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ text: newText })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            saveBtn.innerHTML = oldBtnText;
+                            saveBtn.disabled = false;
+                            closeRibbonModal();
+                        })
+                        .catch(err => {
+                            console.log("Failed to sync to cloud:", err);
+                            alert("Saved locally, but could not sync to cloud yet. Are you offline or is the Apps Script misconfigured?");
+                            saveBtn.innerHTML = oldBtnText;
+                            saveBtn.disabled = false;
+                            closeRibbonModal();
+                        });
+                });
+            }
+        })();
+    </script>
+
+
+    <script src="script.js"></script>
+
+    <!-- ===== WELCOME POPUP + ADMIN PANEL SCRIPTS ===== -->
+    <script>
+        (function () {
+            var LS = 'cscAdminPopup'; // localStorage key
+            var ADMIN_API_URL = 'https://script.google.com/macros/s/AKfycbx2rUiNUXcg2jIxdF6ytT7K2Dj34sos5iYYz8g1GBpBcfBVH7D2g7KwyGPbHt3cP8R3/exec';
+
+            /* ---- Element refs ---- */
+            var overlay = document.getElementById('welcomePopupOverlay');
+            var closeBtn = document.getElementById('closeWelcomePopup');
+            var popupH2 = overlay ? overlay.querySelector('h2') : null;
+            var popupP = overlay ? overlay.querySelector('p') : null;
+
+            var adminOverlay = document.getElementById('adminPanelOverlay');
+            var openAdmBtn = document.getElementById('openAdminPanelBtn');
+            var admSave = document.getElementById('admSaveBtn');
+            var admCancel = document.getElementById('admCancelBtn');
+            var admToggle = document.getElementById('admTogglePopup');
+            var admSubject = document.getElementById('admSubject');
+            var admMsg = document.getElementById('admMessage');
+            var admHeader = document.getElementById('admHeader');
+            var admLogoUrl = document.getElementById('admLogoUrl');
+            var admLogoFile = document.getElementById('admLogoFile');
+            var admLogoPrev = document.getElementById('adminLogoPreview');
+            var headerTitle = document.getElementById('headerTitle');
+            var sidebarLogo = document.querySelector('.logo-box img');
+
+            /* ---- Load saved settings ---- */
+            function loadSettings() {
+                try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) { return {}; }
+            }
+
+            /* ---- Apply Settings Helper ---- */
+            function applySettingsToDOM(s) {
+                if (!s) return;
+
+                // Always update popup content text (regardless of visibility)
+                if (popupH2 && s.subject) popupH2.textContent = s.subject;
+                if (popupP && s.message) popupP.innerHTML = s.message;
+
+                // Update header title
+                // if (headerTitle && s.header) headerTitle.textContent = s.header; // Disabled dynamic header overwrite
+
+                // Update logo (both sidebar logo and search-bar logo)
+                if (s.logo) {
+                    if (sidebarLogo) sidebarLogo.src = s.logo;
+                    var searchLogo = document.querySelector('.search-logo');
+                    if (searchLogo) searchLogo.src = s.logo;
+                }
+
+                // Control popup visibility ONLY if popupOn is explicitly set
+                if (overlay && 'popupOn' in s) {
+                    if (s.popupOn === true) {
+                        overlay.style.display = 'flex';
+                        overlay.style.opacity = '1';
+                    } else {
+                        overlay.style.display = 'none';
+                    }
+                }
+            }
+
+            /* ---- Apply saved settings on page load (Cloud + Local) ---- */
+            (function applyOnLoad() {
+                // 1. Instantly load local settings (if any)
+                var local = loadSettings();
+                if (Object.keys(local).length > 0) {
+                    applySettingsToDOM(local);
+                }
+
+                // 2. Fetch live settings from Cloud
+                fetch(ADMIN_API_URL)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Only apply if cloud returned non-empty data
+                        if (data && Object.keys(data).length > 0) {
+                            localStorage.setItem(LS, JSON.stringify(data));
+                            applySettingsToDOM(data);
+                        }
+                    })
+                    .catch(e => console.log('Admin Cloud Sync Error:', e));
+            })();
+
+            /* ---- Close welcome popup ---- */
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function () {
+                    if (!overlay) return;
+                    overlay.style.transition = 'opacity 0.32s ease';
+                    overlay.style.opacity = '0';
+                    setTimeout(function () { overlay.style.display = 'none'; }, 330);
+                });
+            }
+
+            /* ---- Pre-fill admin fields ---- */
+            function fillAdminFields() {
+                var s = loadSettings();
+                if (admSubject) admSubject.value = s.subject || (popupH2 ? popupH2.textContent : '');
+                if (admMsg) admMsg.value = s.message || (popupP ? popupP.innerHTML : '');
+                if (admHeader) admHeader.value = s.header || (headerTitle ? headerTitle.textContent : '');
+                if (admLogoUrl) admLogoUrl.value = s.logo || (sidebarLogo ? sidebarLogo.src : '');
+                if (admLogoPrev && admLogoUrl && admLogoUrl.value) admLogoPrev.src = admLogoUrl.value;
+                if (admToggle) admToggle.checked = (s.popupOn === true);
+            }
+
+            /* ---- Open admin panel (password protected) ---- */
+            if (openAdmBtn) {
+                openAdmBtn.addEventListener('click', function () {
+                    var pwd = window.prompt('🔐 Enter Admin Password:', '');
+                    if (pwd === null) return;
+                    if (pwd === 'Pradhan@1987') {
+                        fillAdminFields();
+                        adminOverlay.classList.add('open');
+                    } else {
+                        alert('❌ Incorrect password. Access denied.');
+                    }
+                });
+            }
+
+            /* ---- Cancel ---- */
+            if (admCancel) {
+                admCancel.addEventListener('click', function () {
+                    adminOverlay.classList.remove('open');
+                });
+            }
+
+            /* ---- Logo file upload preview ---- */
+            if (admLogoFile) {
+                admLogoFile.addEventListener('change', function () {
+                    var file = admLogoFile.files[0];
+                    if (!file) return;
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (admLogoPrev) admLogoPrev.src = e.target.result;
+                        if (admLogoUrl) admLogoUrl.value = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            /* ---- Logo URL live preview ---- */
+            if (admLogoUrl) {
+                admLogoUrl.addEventListener('input', function () {
+                    if (admLogoPrev && admLogoUrl.value.trim())
+                        admLogoPrev.src = admLogoUrl.value.trim();
+                });
+            }
+
+            /* ---- Save & Apply ---- */
+            if (admSave) {
+                admSave.addEventListener('click', function () {
+                    var popupOn = admToggle ? admToggle.checked : false;
+                    var subject = admSubject ? admSubject.value.trim() : '';
+                    var message = admMsg ? admMsg.value.trim() : '';
+                    var header = admHeader ? admHeader.value.trim() : '';
+                    var logo = admLogoUrl ? admLogoUrl.value.trim() : '';
+
+                    var newSettings = {
+                        popupOn: popupOn,
+                        subject: subject,
+                        message: message,
+                        header: header,
+                        logo: logo
+                    };
+
+                    var oldBtnText = admSave.innerHTML;
+                    admSave.innerHTML = "⏳ Saving...";
+                    admSave.disabled = true;
+
+                    /* Save to localStorage and apply immediately */
+                    try { localStorage.setItem(LS, JSON.stringify(newSettings)); } catch (e) { }
+                    applySettingsToDOM(newSettings);
+
+                    /* Push to Cloud API */
+                    fetch(ADMIN_API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(newSettings)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            admSave.innerHTML = oldBtnText;
+                            admSave.disabled = false;
+                            adminOverlay.classList.remove('open');
+                        })
+                        .catch(err => {
+                            console.log("Failed to sync Admin Settings to cloud:", err);
+                            alert("Saved locally, but could not sync to cloud yet. Code may be broken or offline.");
+                            admSave.innerHTML = oldBtnText;
+                            admSave.disabled = false;
+                            adminOverlay.classList.remove('open');
+                        });
+                });
+            }
+
+            /* ---- Click outside admin box to close ---- */
+            if (adminOverlay) {
+                adminOverlay.addEventListener('click', function (e) {
+                    if (e.target === adminOverlay) adminOverlay.classList.remove('open');
+                });
+            }
+        })();
+    </script>
+
+</body>
+
+</html>

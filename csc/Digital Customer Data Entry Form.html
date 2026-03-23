@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)file:///C:/Users/Windows%2011/Desktop/New%20folder%20(4)/MASTER%20CUSTOMER%20form.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Digital Customer Data Entry Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 13px; line-height: 1.4; color: #000; background: #525659; padding: 20px 0; display: flex; flex-direction: column; align-items: center; margin: 0; }
+        .container { width: 794px; height: 1122px; background: #fff; padding: 30px 40px; box-sizing: border-box; border: 2px solid #000; position: relative; margin: 0 auto; }
+        
+        /* Header with Logo/Barcode */
+        .header-section { display: flex; align-items: flex-start; margin-bottom: 20px; }
+        /* Barcode SVG styling to replace logo */
+        .header-logo { width: 150px; height: 70px; margin-right: 20px; display: block; }
+        .header-title { flex-grow: 1; }
+        h2 { text-align: center; margin: 0; font-size: 20px; text-decoration: underline; }
+        .header-info { display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; width: 100%; }
+
+        .section { margin-bottom: 12px; }
+        .section-title { font-weight: bold; font-size: 13px; background-color: #e0e0e0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px 8px; border: 1px solid #000; text-transform: uppercase; margin-bottom: 8px; }
+        .line { display: flex; margin: 6px 0; align-items: center; }
+        .label { font-weight: bold; margin-right: 8px; white-space: nowrap; }
+        input[type="text"], input[type="date"], input[type="number"] { flex-grow: 1; border: none; border-bottom: 1px solid #000; background: transparent; font-size: 13px; font-family: inherit; padding: 2px 5px; outline: none; color: #000; }
+        @media screen { input[type="text"], input[type="date"], input[type="number"] { background-color: #fcfcfc; } input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus { background-color: #eef7ff; border-bottom: 2px solid #007bff; } }
+        .options { display: flex; gap: 10px; align-items: center; }
+        .options label { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        input[type="checkbox"], input[type="radio"] { cursor: pointer; width: 13px; height: 13px; margin: 0; }
+        .footer { position: absolute; bottom: 30px; left: 40px; right: 40px; }
+        .footer p { margin-bottom: 30px; font-size: 12px; }
+        .sig-line { display: flex; justify-content: space-between; }
+        .sig-box { width: 40%; text-align: center; border-top: 1px solid #000; padding-top: 5px; font-weight: bold; }
+        .action-buttons { text-align: center; margin-bottom: 20px; }
+        button { padding: 10px 20px; font-size: 15px; margin: 0 10px; cursor: pointer; border: none; color: white; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-print { background-color: #28a745; } .btn-print:hover { background-color: #218838; } .btn-save { background-color: #007bff; } .btn-save:hover { background-color: #0069d9; } .btn-clear { background-color: #dc3545; } .btn-clear:hover { background-color: #c82333; }
+        @media print { .no-print { display: none !important; } body { background: #fff; padding: 0; margin: 0; display: block; } @page { size: A4 portrait; margin: 0; } .container { margin: 0 auto !important; box-shadow: none; } input[type="text"], input[type="date"], input[type="number"] { background: transparent !important; } }
+        
+        /* Style for the automatic read-only Ref No */
+        #refNo[readonly] { background-color: #f0f0f0; color: #555; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="action-buttons no-print">
+        <button class="btn-print" onclick="window.print()">🖨️ Print Form</button>
+        <button class="btn-save" onclick="downloadPDF()">💾 Save as PDF</button>
+        <button class="btn-clear" onclick="clearData()">🗑️ Clear Data</button>
+    </div>
+    <div class="container" id="form-content">
+        <form id="customerForm">
+            <div class="header-section">
+                <svg id="barcode" class="header-logo" width="177px" height="62px" x="0px" y="0px" viewBox="0 0 177 62" xmlns="http://www.w3.org/2000/svg" version="1.1" style="transform: translate(0,0)"><rect x="0" y="0" width="177" height="62" style="fill:#ffffff;"></rect><g transform="translate(5, 5)" style="fill:#000;"><rect x="0" y="0" width="2" height="40"></rect><rect x="3" y="0" width="1" height="40"></rect><rect x="6" y="0" width="1" height="40"></rect><rect x="11" y="0" width="1" height="40"></rect><rect x="13" y="0" width="2" height="40"></rect><rect x="18" y="0" width="1" height="40"></rect><rect x="22" y="0" width="1" height="40"></rect><rect x="24" y="0" width="1" height="40"></rect><rect x="28" y="0" width="2" height="40"></rect><rect x="33" y="0" width="2" height="40"></rect><rect x="36" y="0" width="3" height="40"></rect><rect x="42" y="0" width="1" height="40"></rect><rect x="44" y="0" width="1" height="40"></rect><rect x="46" y="0" width="1" height="40"></rect><rect x="50" y="0" width="2" height="40"></rect><rect x="55" y="0" width="1" height="40"></rect><rect x="58" y="0" width="2" height="40"></rect><rect x="61" y="0" width="3" height="40"></rect><rect x="66" y="0" width="3" height="40"></rect><rect x="70" y="0" width="3" height="40"></rect><rect x="74" y="0" width="2" height="40"></rect><rect x="77" y="0" width="1" height="40"></rect><rect x="81" y="0" width="2" height="40"></rect><rect x="84" y="0" width="1" height="40"></rect><rect x="88" y="0" width="1" height="40"></rect><rect x="90" y="0" width="3" height="40"></rect><rect x="96" y="0" width="2" height="40"></rect><rect x="99" y="0" width="1" height="40"></rect><rect x="101" y="0" width="2" height="40"></rect><rect x="106" y="0" width="1" height="40"></rect><rect x="110" y="0" width="2" height="40"></rect><rect x="115" y="0" width="1" height="40"></rect><rect x="119" y="0" width="1" height="40"></rect><rect x="121" y="0" width="1" height="40"></rect><rect x="123" y="0" width="3" height="40"></rect><rect x="129" y="0" width="2" height="40"></rect><rect x="132" y="0" width="2" height="40"></rect><rect x="135" y="0" width="1" height="40"></rect><rect x="139" y="0" width="1" height="40"></rect><rect x="143" y="0" width="1" height="40"></rect><rect x="145" y="0" width="1" height="40"></rect><rect x="147" y="0" width="4" height="40"></rect><rect x="154" y="0" width="2" height="40"></rect><rect x="159" y="0" width="3" height="40"></rect><rect x="163" y="0" width="1" height="40"></rect><rect x="165" y="0" width="2" height="40"></rect><text style="font: 10px monospace" text-anchor="middle" x="83.5" y="52">DATA-PENDING</text></g></svg>
+                <div class="header-title">
+                    <h2>MASTER CUSTOMER DATA ENTRY FORM</h2>
+                    <div class="header-info">
+                        <div class="line" style="width: 45%; margin: 0;"><span class="label">Date:</span><input type="date" id="currentDate" onchange="generateAutoRefNo()"></div>
+                        <div class="line" style="width: 45%; margin: 0;"><span class="label">Token / Ref No:</span><input type="text" id="refNo" readonly="" placeholder="Auto-generated"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">1. Personal Details</div>
+                <div class="line"><span class="label">Full Name of Applicant:</span><input type="text" placeholder="Enter Full Name"></div>
+                <div class="line"><span class="label">Father's / Husband's Name:</span><input type="text" placeholder="Enter Father/Husband Name"></div>
+                <div class="line"><span class="label">Mother's Name:</span><input type="text" placeholder="Enter Mother Name"></div>
+                <div class="line">
+                    <span class="label">Date of Birth:</span><input type="date" id="dob" style="max-width: 130px;" onchange="generateAutoRefNo()">
+                    <span class="label" style="margin-left: 15px;">Gender:</span>
+                    <div class="options">
+                        <label><input type="radio" name="gender" value="Male"> Male</label>
+                        <label><input type="radio" name="gender" value="Female"> Female</label>
+                        <label><input type="radio" name="gender" value="Transgender"> Transgender</label>
+                    </div>
+                </div>
+                <div class="line">
+                    <span class="label">Category:</span>
+                    <div class="options">
+                        <label><input type="radio" name="category" value="GEN"> GEN</label>
+                        <label><input type="radio" name="category" value="OBC"> OBC</label>
+                        <label><input type="radio" name="category" value="SC"> SC</label>
+                        <label><input type="radio" name="category" value="ST"> ST</label>
+                        <label><input type="radio" name="category" value="Minority"> Minority</label>
+                    </div>
+                    <span class="label" style="margin-left: 15px;">Marital Status:</span>
+                    <div class="options">
+                        <label><input type="radio" name="marital" value="Single"> Single</label>
+                        <label><input type="radio" name="marital" value="Married"> Married</label>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">2. Contact &amp; Address Details</div>
+                <div class="line">
+                    <span class="label">Mobile Number 1:</span><input type="number" id="mobileNo" placeholder="10-digit number" oninput="generateAutoRefNo()">
+                    <span class="label" style="margin-left: 10px;">Mobile 2 / WhatsApp:</span><input type="number">
+                </div>
+                <div class="line"><span class="label">Email Address:</span><input type="text" placeholder="example@email.com"></div>
+                <div class="line"><span class="label">Village / Town / City:</span><input type="text"></div>
+                <div class="line"><span class="label">Gram Panchayat (GP) / Ward:</span><input type="text"></div>
+                <div class="line">
+                    <span class="label">Post Office (PO):</span><input type="text">
+                    <span class="label" style="margin-left: 10px;">Police Station (PS):</span><input type="text">
+                </div>
+                <div class="line">
+                    <span class="label">District:</span><input type="text">
+                    <span class="label" style="margin-left: 10px;">State:</span><input type="text" value="Odisha">
+                    <span class="label" style="margin-left: 10px;">PIN Code:</span><input type="number" style="max-width: 90px;">
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">3. Identity &amp; Document Numbers</div>
+                <div class="line"><span class="label">Aadhaar Number:</span><input type="text" id="aadhaarNo" placeholder="XXXX - XXXX - XXXX" style="letter-spacing: 2px; font-family: monospace; font-size: 14px;" oninput="generateBarcode()"></div>
+                <div class="line">
+                    <span class="label">PAN Number:</span><input type="text" style="text-transform: uppercase;">
+                    <span class="label" style="margin-left: 15px;">Voter ID (EPIC) No:</span><input type="text" style="text-transform: uppercase;">
+                </div>
+                <div class="line">
+                    <span class="label">Ration Card Number:</span><input type="text">
+                    <span class="label" style="margin-left: 15px;">Driving License / Passport:</span><input type="text">
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">4. Bank Account Details</div>
+                <div class="line"><span class="label">Bank Name:</span><input type="text"></div>
+                <div class="line"><span class="label">Branch Name:</span><input type="text"></div>
+                <div class="line">
+                    <span class="label">Account Number:</span><input type="text">
+                    <span class="label" style="margin-left: 15px;">IFSC Code:</span><input type="text" style="text-transform: uppercase;">
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">5. Service Requested &amp; Office Use</div>
+                <div class="line"><span class="label">Name of Service / Application:</span><input type="text"></div>
+                <div class="line" style="margin-top: 10px;">
+                    <span class="label">Documents Collected:</span>
+                    <div class="options" style="flex-wrap: wrap;">
+                        <label><input type="checkbox"> Aadhaar</label>
+                        <label><input type="checkbox"> PAN</label>
+                        <label><input type="checkbox"> Passport Photo</label>
+                        <label><input type="checkbox"> Bank Passbook</label>
+                        <label><input type="checkbox"> Ration Card</label>
+                        <label><input type="checkbox"> Voter ID</label>
+                    </div>
+                </div>
+                <div class="line"><span class="label">Other Document(s):</span><input type="text"></div>
+                <div class="line" style="margin-top: 10px;">
+                    <span class="label">Total Fees Received (Rs.):</span><input type="number">
+                    <span class="label" style="margin-left: 15px;">Balance Due (Rs.):</span><input type="number">
+                </div>
+            </div>
+            <div class="footer">
+                <p><strong>DECLARATION:</strong> I hereby declare that all the information and documents provided above are true and correct to the best of my knowledge. I consent to the use of these details for the requested application/service.</p>
+                <div class="sig-line">
+                    <div class="sig-box">Date &amp; Place</div>
+                    <div class="sig-box">Customer Signature / Thumb Impression</div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        // Function to automatically generate Ref No based on Mobile(last 4) + Year + DOB(day)
+        function generateAutoRefNo() {
+            const mobileInput = document.getElementById('mobileNo').value || '';
+            const dateInput = document.getElementById('currentDate').value;
+            const dobInput = document.getElementById('dob').value;
+
+            // 1. Get last 4 digits of mobile number
+            let mobilePart = '';
+            if(mobileInput.length > 4) {
+                mobilePart = mobileInput.slice(-4);
+            } else {
+                mobilePart = mobileInput;
+            }
+            
+            // 2. Get Year from current date
+            let yearPart = '';
+            if (dateInput) {
+                yearPart = new Date(dateInput).getFullYear().toString();
+            }
+
+            // 3. Get Day (DD) from DOB
+            let dobDayPart = '';
+            if (dobInput) {
+                // getDate returns the day (1-31). padStart adds a leading zero if needed (e.g., '5' -> '05')
+                dobDayPart = String(new Date(dobInput).getDate()).padStart(2, '0');
+            }
+
+            // Combine parts. Only add hyphen if parts exist to avoid weird strings like "-"
+            let finalRef = '';
+            if(mobilePart || yearPart || dobDayPart) {
+                finalRef = `${mobilePart}${yearPart}${dobDayPart}`;
+            }
+
+            // Update the Ref No field
+            document.getElementById('refNo').value = finalRef;
+
+            // Update the barcode based on the new Ref No
+            generateBarcode();
+        }
+
+        function generateBarcode() {
+            // Get values and provide defaults if empty
+            const aadhaar = document.getElementById('aadhaarNo').value || '';
+            const refNo = document.getElementById('refNo').value || '';
+            
+            // Combine them for the barcode data. Using a placeholder if both are empty.
+            // If RefNo is empty, we don't want a trailing hyphen, so we check.
+            let barcodeValue = aadhaar || 'AADHAAR';
+            if(refNo) {
+                barcodeValue += '-' + refNo;
+            } else if (!aadhaar) {
+                 barcodeValue = 'DATA-PENDING'; // Default if absolutely nothing is entered
+            }
+
+            JsBarcode("#barcode", barcodeValue, {
+                format: "CODE128",
+                lineColor: "#000",
+                width: 1,
+                height: 40,
+                displayValue: true, // Show the text below the barcode
+                fontSize: 10,
+                margin: 5
+            });
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            generateAutoRefNo(); // This will also call generateBarcode
+        };
+
+        function clearData() { 
+            document.getElementById('customerForm').reset(); 
+            generateAutoRefNo(); // Re-calculate RefNo (which will be empty) and update barcode
+        }
+
+        function downloadPDF() {
+            window.scrollTo(0, 0);
+            var inputs = document.querySelectorAll('input');
+            inputs.forEach(function(input) {
+                if(input.type === 'text' || input.type === 'number' || input.type === 'date') { input.setAttribute('value', input.value); }
+                if(input.type === 'checkbox' || input.type === 'radio') { if(input.checked) input.setAttribute('checked', 'checked'); else input.removeAttribute('checked'); }
+            });
+            var element = document.getElementById('form-content');
+            var opt = { margin: 0, filename: 'Customer_Data_Entry.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+
+</body></html>

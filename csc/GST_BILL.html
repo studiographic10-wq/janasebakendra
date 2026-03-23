@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Tax Invoice Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* A4 Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            font-size: 11px;
+            min-height: 100vh;
+        }
+
+        /* Login Overlay Styles */
+        .login-overlay {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1.5px solid rgba(245, 158, 11, 0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 340px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-6px);
+            border-color: #f59e0b;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(145deg, #1e3a5f, #1e293b);
+        }
+
+        .login-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .login-card:hover .login-logo {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
+            border-color: #f59e0b;
+            transform: scale(1.1);
+        }
+
+        .login-logo ion-icon {
+            font-size: 34px;
+            color: #f59e0b;
+        }
+
+        .login-card h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #f59e0b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .login-card p {
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .login-input {
+            padding: 12px;
+            width: 100%;
+            font-size: 15px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .login-input:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: #64748b;
+        }
+
+        .login-btn {
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .overlay-back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .overlay-back-link:hover {
+            color: #f59e0b;
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #f59e0b;
+            transform: translateX(-4px);
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: auto;
+            background: white;
+            padding: 12mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Typography & Inputs */
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            margin: 0;
+            padding: 2px 0;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px dashed #ccc;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 2px;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border: 1px solid #000;
+            background: #fdfdfd;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* Layout Grids */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-grid {
+            display: flex;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .info-section {
+            flex: 1;
+            border-right: 1px solid #000;
+            padding: 5px;
+        }
+
+        .info-section:last-child {
+            border-right: none;
+        }
+
+        .grid-row {
+            display: flex;
+            margin-bottom: 4px;
+            align-items: center;
+        }
+
+        .grid-label {
+            width: 90px;
+            font-weight: bold;
+        }
+
+        .grid-input {
+            flex: 1;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        td input,
+        td select {
+            text-align: center;
+        }
+
+        td input.text-left {
+            text-align: left;
+        }
+
+        td input.text-right {
+            text-align: right;
+        }
+
+        /* Footer Sections */
+        .footer-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-left {
+            width: 60%;
+        }
+
+        .footer-right {
+            width: 38%;
+        }
+
+        .bank-terms {
+            border: 1px solid #000;
+            padding: 5px;
+            margin-top: 10px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            text-align: right;
+            padding: 4px;
+        }
+
+        /* UI Buttons */
+        .no-print {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-green {
+            background-color: #28a745;
+        }
+
+        .btn-green:hover {
+            background-color: #218838;
+        }
+
+        .btn-blue {
+            background-color: #17a2b8;
+        }
+
+        .btn-blue:hover {
+            background-color: #138496;
+        }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                width: 100%;
+                height: auto;
+                padding: 10mm;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            input,
+            textarea,
+            select {
+                border: none !important;
+                resize: none;
+                overflow: hidden;
+                appearance: none;
+                -webkit-appearance: none;
+            }
+
+            .login-overlay {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="margin: 0;">
+
+    <div id="loginOverlay" class="login-overlay">
+        <a href="index.html" class="overlay-back-link"><ion-icon name="arrow-back-outline"></ion-icon> <span>Back to
+                Home</span></a>
+        <div class="login-card">
+            <div class="login-logo"><ion-icon name="lock-closed-outline"></ion-icon></div>
+            <h2>Secure Access</h2>
+            <p>Please enter the password to open the GST invoice generator.</p>
+            <input type="password" id="pwdInput" class="login-input" placeholder="Password"
+                onkeypress="if(event.key === 'Enter') checkPwd()">
+            <button onclick="checkPwd()" class="login-btn"><ion-icon name="key-outline"></ion-icon>
+                <span>Unlock</span></button>
+            <p id="pwdError"
+                style="color: #ef4444; font-size: 13px; display: none; margin-top: 15px; font-weight: 600;">Incorrect
+                Password!</p>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display: none;">
+        <div class="no-print">
+            <button class="btn-green" onclick="generateAutoDetails(true)">🔄 Generate New Invoice</button>
+            <button onclick="addRow()">+ Add Item Row</button>
+            <button class="btn-blue" onclick="shareViaMail()">📧 Share in Mail</button>
+            <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </div>
+
+        <div class="page">
+            <div class="header">
+                <div>
+                    <h2>GRAPHIC DIGITAL STUDIO</h2>
+                    <p>All Digital Services & Computer Sels,Services</p>
+                    <p>Infront of S.R.High SchoolParuliachhal,</p>
+                    <p>Baliapal,Baleswar,Odisha - 756026</p>
+                    <p>Tel: 9937744314 | Phon No - 06781291147</p>
+                    <p>Email: studiographic10@gmail.com</p>
+                    <p><b>PAN:</b> <input type="text" value="BHKPP4310G" style="width: 150px;"></p>
+                    <p><b>GST:</b> <input type="text" value="21BHKPP4310G1ZQ" style="width: 150px;"></p>
+                </div>
+                <div style="text-align: center; display: flex; justify-content: center; align-items: center;">
+                    <img src="GST_LOGO.png" alt="GST Logo" style="height: 100px;">
+                </div>
+                <div class="text-right">
+                    <h2>TAX INVOICE</h2>
+                    <p><b>ORIGINAL FOR RECIPIENT</b></p>
+                    <svg id="barcode" style="margin-top: 8px;"></svg>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-section">
+                    <h4>Customer Detail</h4>
+                    <div class="grid-row">
+                        <div class="grid-label">Name/Address:</div>
+                        <div class="grid-input"><textarea id="custAddress" rows="3"></textarea></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Phone:</div>
+                        <div class="grid-input"><input type="text" id="custPhone" value="" oninput="updateBarcode()">
+                        </div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">GSTIN:</div>
+                        <div class="grid-input"><input type="text" id="custGstin" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Delivery Place:</div>
+                        <div class="grid-input"><input type="text" id="custPlace" value=""></div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="grid-row">
+                        <div class="grid-label">Invoice No:</div>
+                        <div class="grid-input"><input type="text" id="invoiceNo" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Challan No:</div>
+                        <div class="grid-input"><input type="text" id="challanNo" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">E-Way Bill:</div>
+                        <div class="grid-input"><input type="text" id="ewayBill" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Transport:</div>
+                        <div class="grid-input"><input type="text" id="transport" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label" style="color: #0056b3;">Tax Type:</div>
+                        <div class="grid-input">
+                            <select id="taxType" onchange="toggleTaxColumns(); calculate();"
+                                style="font-weight: bold; border-color: #0056b3;">
+                                <option value="local">Local Sale (CGST + SGST)</option>
+                                <option value="interstate" selected>Interstate Sale (IGST)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="grid-row">
+                        <div class="grid-label">Invoice Date:</div>
+                        <div class="grid-input"><input type="text" id="invoiceDate" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Delivery Date:</div>
+                        <div class="grid-input"><input type="text" id="challanDate" value=""></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-label">Transport ID:</div>
+                        <div class="grid-input"><input type="text" id="transportId" value=""></div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="items-table" id="invoiceTable">
+                <thead>
+                    <tr>
+                        <th width="4%">Sr.</th>
+                        <th width="26%">Name of Product/Service</th>
+                        <th width="8%">HSN/SAC</th>
+                        <th width="5%">Qty</th>
+                        <th width="5%">Unit</th>
+                        <th width="8%">Rate</th>
+                        <th width="10%">Taxable</th>
+                        <th width="6%">Tax %</th>
+                        <th id="th-cgst" width="8%">CGST</th>
+                        <th id="th-sgst" width="8%">SGST</th>
+                        <th id="th-igst" width="8%">IGST</th>
+                        <th width="10%">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="itemBody">
+                </tbody>
+                <tfoot>
+                    <tr class="bold bg-light">
+                        <td colspan="3" class="text-right">Total</td>
+                        <td id="totalQty">0</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" id="totalTaxable">0.00</td>
+                        <td></td>
+                        <td class="text-right" id="totalCgst">0.00</td>
+                        <td class="text-right" id="totalSgst">0.00</td>
+                        <td class="text-right" id="totalIgst">0.00</td>
+                        <td class="text-right" id="grandTotal">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="footer-flex">
+                <div class="footer-left">
+                    <p><b>Total in words:</b> <span id="amountWords">ZERO RUPEES ONLY</span></p>
+
+                    <div class="bank-terms">
+                        <h4 style="margin-bottom: 4px;">Bank Details</h4>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="flex: 1;">
+                                <div class="grid-row">
+                                    <div class="grid-label">Proprietor:</div>
+                                    <div class="grid-input"><input type="text" id="proprietorName"
+                                            value="Deepak Kumar Pradhan" oninput="updateQRCode()"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-label">Bank:</div>
+                                    <div class="grid-input"><input type="text" value="CANARA BANK"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-label">Branch:</div>
+                                    <div class="grid-input"><input type="text" value="BALIAPAL"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-label">Acc No:</div>
+                                    <div class="grid-input"><input type="text" value="4925101000386"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-label">IFSC:</div>
+                                    <div class="grid-input"><input type="text" value="CNRB0004925"></div>
+                                </div>
+                                <div class="grid-row">
+                                    <div class="grid-label">UPI ID:</div>
+                                    <div class="grid-input"><input type="text" id="upiId" value="studiographic10@ybl"
+                                            oninput="updateQRCode()"></div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-left: 10px; width: 85px;">
+                                <div id="qrcode"
+                                    style="border: 1px solid #000; padding: 3px; background: white; margin: 0 auto;">
+                                </div>
+                                <div style="font-size: 9px; font-weight: bold; margin-top: 3px;">SCAN TO PAY</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bank-terms">
+                        <h4>Terms and Conditions</h4>
+                        <ol style="margin: 0; padding-left: 20px;">
+                            <li>Subject to Baleswar Jurisdiction.</li>
+                            <li>Warranty on computer hardware is subject to manufacturer terms.</li>
+                            <li>Fees for digital services (online applications, broadband) are non-refundable.</li>
+                            <li>We are not responsible for data loss during repairs; please back up data.</li>
+                            <li>Goods once sold will not be taken back or exchanged.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="footer-right">
+                    <table class="summary-table">
+                        <tr>
+                            <td>Taxable Amount</td>
+                            <td width="40%"><input type="text" id="sumTaxable" class="text-right bold" readonly></td>
+                        </tr>
+                        <tr id="sumRowCgst">
+                            <td>Add: CGST</td>
+                            <td><input type="text" id="sumCgst" class="text-right bold" readonly></td>
+                        </tr>
+                        <tr id="sumRowSgst">
+                            <td>Add: SGST</td>
+                            <td><input type="text" id="sumSgst" class="text-right bold" readonly></td>
+                        </tr>
+                        <tr id="sumRowIgst">
+                            <td>Add: IGST</td>
+                            <td><input type="text" id="sumIgst" class="text-right bold" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Total Tax</td>
+                            <td><input type="text" id="sumTax" class="text-right bold" readonly></td>
+                        </tr>
+                        <tr>
+                            <td><b>Total Amount After Tax</b><br>(E & O.E.)</td>
+                            <td><input type="text" id="sumFinal" class="text-right bold" readonly
+                                    style="font-size: 14px;"></td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-top: 40px; text-align: center;">
+                        <p>Certified that the particulars given above are true and correct.</p>
+                        <h3 style="margin-top: 20px; font-family: 'darlington-font', cursive; margin-bottom: 2px;">
+                            Deepak Kumar Pradhan</h3>
+                        <h4 style="margin-top: 0;">For Graphic Digital Studio</h4>
+                        <div style="height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <img src="sig.png" alt="Signature" style="max-height: 100%; max-width: 100%;">
+                        </div>
+                        <p style="margin-bottom: 2px;">Authorised Signatory</p>
+                        <p style="color: #28a745; font-weight: bold; font-size: 11px; margin-top: 0;">&#10004; e-Signed
+                            Verified</p>
+                        <p style="font-size: 9px; margin-top: 5px;">This is a computer generated invoice no signature
+                            required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tbody = document.getElementById('itemBody');
+
+        // === PASSWORD AUTHENTICATION LOGIC ===
+        function checkPwd() {
+            const input = document.getElementById('pwdInput').value;
+            if (input === 'Pradhan@1987') {
+                // Hide login, Show App
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                // Restore body padding now that overlay is gone
+                document.body.style.padding = '20px';
+                // Initialize the invoice form
+                initTable();
+            } else {
+                // Show Error
+                document.getElementById('pwdError').style.display = 'block';
+            }
+        }
+
+        function shareViaMail() {
+            const element = document.querySelector('.page');
+            const invoiceNo = document.getElementById('invoiceNo').value || 'Invoice';
+
+            const opt = {
+                margin: 0,
+                filename: `${invoiceNo}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                const subject = encodeURIComponent(`Invoice: ${invoiceNo} from Graphic Digital Studio`);
+                const body = encodeURIComponent(`Dear Customer,\n\nThank you for choosing Graphic Digital Studio. \n\nPlease find your generated invoice attached to this email.\n(Note: Please attach the downloaded ${invoiceNo}.pdf file here before sending).\n\nThank you for your business!\n\nBest Regards,\nDeepak Kumar Pradhan\nGraphic Digital Studio`);
+
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            });
+        }
+
+        function updateQRCode() {
+            if (typeof QRCode === 'undefined') return;
+
+            const upiId = document.getElementById('upiId').value.trim();
+            const name = document.getElementById('proprietorName').value.trim();
+
+            const upiString = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}`;
+
+            document.getElementById('qrcode').innerHTML = "";
+
+            new QRCode(document.getElementById('qrcode'), {
+                text: upiString,
+                width: 75,
+                height: 75,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }
+
+        function updateBarcode() {
+            if (typeof JsBarcode === 'undefined') return;
+
+            const invStr = document.getElementById('invoiceNo').value;
+            const invNum = invStr.includes('/') ? invStr.split('/').pop() : "";
+            const dateStr = document.getElementById('invoiceDate').value;
+            const phoneStr = document.getElementById('custPhone').value.trim();
+            const phoneLast5 = phoneStr.length >= 5 ? phoneStr.slice(-5) : phoneStr;
+
+            const barcodeData = `${invNum}-${dateStr}${phoneLast5 ? '-' + phoneLast5 : ''}`;
+
+            try {
+                JsBarcode("#barcode", barcodeData, {
+                    format: "CODE128",
+                    width: 1.1,
+                    height: 28,
+                    displayValue: true,
+                    fontSize: 11,
+                    fontOptions: "bold",
+                    margin: 2,
+                    textMargin: 4
+                });
+            } catch (e) {
+                console.error("Barcode generation failed", e);
+            }
+        }
+
+        function toggleTaxColumns() {
+            const taxType = document.getElementById('taxType').value;
+            const isLocal = taxType === 'local';
+
+            document.getElementById('th-cgst').style.display = isLocal ? 'table-cell' : 'none';
+            document.getElementById('th-sgst').style.display = isLocal ? 'table-cell' : 'none';
+            document.getElementById('th-igst').style.display = isLocal ? 'none' : 'table-cell';
+
+            document.getElementById('totalCgst').style.display = isLocal ? 'table-cell' : 'none';
+            document.getElementById('totalSgst').style.display = isLocal ? 'table-cell' : 'none';
+            document.getElementById('totalIgst').style.display = isLocal ? 'none' : 'table-cell';
+
+            const cgstCells = document.querySelectorAll('.col-cgst');
+            const sgstCells = document.querySelectorAll('.col-sgst');
+            const igstCells = document.querySelectorAll('.col-igst');
+
+            cgstCells.forEach(cell => cell.style.display = isLocal ? 'table-cell' : 'none');
+            sgstCells.forEach(cell => cell.style.display = isLocal ? 'table-cell' : 'none');
+            igstCells.forEach(cell => cell.style.display = isLocal ? 'none' : 'table-cell');
+
+            document.getElementById('sumRowCgst').style.display = isLocal ? 'table-row' : 'none';
+            document.getElementById('sumRowSgst').style.display = isLocal ? 'table-row' : 'none';
+            document.getElementById('sumRowIgst').style.display = isLocal ? 'none' : 'table-row';
+        }
+
+        function generateAutoDetails(isNewClick = false) {
+            const today = new Date();
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = months[today.getMonth()];
+            const year = today.getFullYear();
+            const formattedDate = `${day}-${month}-${year}`;
+
+            let currentCounter = parseInt(localStorage.getItem('gdsInvoiceCounter')) || 1;
+
+            if (isNewClick) {
+                currentCounter++;
+                if (currentCounter > 1000000) {
+                    currentCounter = 1;
+                }
+                localStorage.setItem('gdsInvoiceCounter', currentCounter);
+            } else {
+                localStorage.setItem('gdsInvoiceCounter', currentCounter);
+            }
+
+            const formattedCounter = String(currentCounter).padStart(7, '0');
+            const autoInvoiceNo = `GDS-${year}/${formattedCounter}`;
+
+            document.getElementById('invoiceNo').value = autoInvoiceNo;
+            document.getElementById('invoiceDate').value = formattedDate;
+
+            document.getElementById('custAddress').value = "";
+            document.getElementById('custPhone').value = "";
+            document.getElementById('custGstin').value = "";
+            document.getElementById('custPlace').value = "";
+            document.getElementById('challanNo').value = "";
+            document.getElementById('ewayBill').value = "";
+            document.getElementById('transport').value = "";
+            document.getElementById('transportId').value = "";
+            document.getElementById('challanDate').value = "";
+
+            if (isNewClick) {
+                tbody.innerHTML = '';
+                addRow();
+                calculate();
+            }
+
+            updateBarcode();
+        }
+
+        function createRow(index, data = { name: "", hsn: "", qty: 1, rate: 0, taxPct: 18 }) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td>${index}</td>
+            <td><input type="text" class="text-left" value="${data.name}"></td>
+            <td><input type="text" value="${data.hsn}"></td>
+            <td><input type="number" class="qty" value="${data.qty}" oninput="calculate()"></td>
+            <td>
+                <select class="unit" style="padding: 2px; width: 100%; border: 1px dashed #ccc; background: transparent; font-family: inherit; font-size: inherit;">
+                    <option value="Pic">Pic</option>
+                    <option value="Month">Month</option>
+                    <option value="Year">Year</option>
+                    <option value="Unit">Unit</option>
+                    <option value="Pecag">Pecag</option>
+                    <option value="Miter">Miter</option>
+                    <option value="Box">Box</option>
+                    <option value="Set">Set</option>
+                </select>
+            </td>
+            <td><input type="number" class="rate" value="${data.rate}" oninput="calculate()"></td>
+            <td><input type="text" class="taxable text-right" readonly></td>
+            <td><input type="number" class="taxPct" value="${data.taxPct}" oninput="calculate()"></td>
+            <td class="col-cgst"><input type="text" class="cgstAmt text-right" readonly></td>
+            <td class="col-sgst"><input type="text" class="sgstAmt text-right" readonly></td>
+            <td class="col-igst"><input type="text" class="igstAmt text-right" readonly></td>
+            <td><input type="text" class="rowTotal text-right" readonly></td>
+        `;
+            return tr;
+        }
+
+        function initTable() {
+            generateAutoDetails(false);
+            tbody.innerHTML = '';
+            addRow();
+            toggleTaxColumns();
+            calculate();
+
+            setTimeout(() => {
+                updateBarcode();
+                updateQRCode();
+            }, 100);
+        }
+
+        function addRow() {
+            const rowCount = tbody.children.length + 1;
+            tbody.appendChild(createRow(rowCount));
+            toggleTaxColumns();
+            calculate();
+        }
+
+        function calculate() {
+            let totalQty = 0, totalTaxable = 0;
+            let sumCgst = 0, sumSgst = 0, sumIgst = 0, grandTotal = 0;
+            const rows = tbody.querySelectorAll('tr');
+            const taxType = document.getElementById('taxType').value;
+
+            rows.forEach((row, index) => {
+                row.cells[0].innerText = index + 1;
+
+                const qty = parseFloat(row.querySelector('.qty').value) || 0;
+                const rate = parseFloat(row.querySelector('.rate').value) || 0;
+                const taxPct = parseFloat(row.querySelector('.taxPct').value) || 0;
+
+                const taxable = qty * rate;
+                let cgst = 0, sgst = 0, igst = 0;
+
+                if (taxType === 'local') {
+                    cgst = taxable * ((taxPct / 2) / 100);
+                    sgst = taxable * ((taxPct / 2) / 100);
+                    igst = 0;
+                } else {
+                    cgst = 0;
+                    sgst = 0;
+                    igst = taxable * (taxPct / 100);
+                }
+
+                const rowTotal = taxable + cgst + sgst + igst;
+
+                row.querySelector('.taxable').value = taxable.toFixed(2);
+                row.querySelector('.cgstAmt').value = cgst.toFixed(2);
+                row.querySelector('.sgstAmt').value = sgst.toFixed(2);
+                row.querySelector('.igstAmt').value = igst.toFixed(2);
+                row.querySelector('.rowTotal').value = rowTotal.toFixed(2);
+
+                totalQty += qty;
+                totalTaxable += taxable;
+                sumCgst += cgst;
+                sumSgst += sgst;
+                sumIgst += igst;
+                grandTotal += rowTotal;
+            });
+
+            document.getElementById('totalQty').innerText = totalQty;
+            document.getElementById('totalTaxable').innerText = totalTaxable.toFixed(2);
+            document.getElementById('totalCgst').innerText = sumCgst.toFixed(2);
+            document.getElementById('totalSgst').innerText = sumSgst.toFixed(2);
+            document.getElementById('totalIgst').innerText = sumIgst.toFixed(2);
+            document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+
+            document.getElementById('sumTaxable').value = totalTaxable.toFixed(2);
+            document.getElementById('sumCgst').value = sumCgst.toFixed(2);
+            document.getElementById('sumSgst').value = sumSgst.toFixed(2);
+            document.getElementById('sumIgst').value = sumIgst.toFixed(2);
+            document.getElementById('sumTax').value = (sumCgst + sumSgst + sumIgst).toFixed(2);
+
+            let roundedFinal = Math.round(grandTotal);
+            document.getElementById('sumFinal').value = roundedFinal.toFixed(2);
+
+            document.getElementById('amountWords').innerText = numberToWords(roundedFinal) + " RUPEES ONLY";
+        }
+
+        function numberToWords(num) {
+            if (num === 0) return "ZERO";
+            const a = ['', 'ONE ', 'TWO ', 'THREE ', 'FOUR ', 'FIVE ', 'SIX ', 'SEVEN ', 'EIGHT ', 'NINE ', 'TEN ', 'ELEVEN ', 'TWELVE ', 'THIRTEEN ', 'FOURTEEN ', 'FIFTEEN ', 'SIXTEEN ', 'SEVENTEEN ', 'EIGHTEEN ', 'NINETEEN '];
+            const b = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
+            if ((num = num.toString()).length > 9) return 'overflow';
+            let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return; let str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'CRORE ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'LAKH ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'THOUSAND ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'HUNDRED ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'AND ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+            return str.trim();
+        }
+    </script>
+</body>
+
+</html>

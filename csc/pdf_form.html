@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF FORM - CSC VLE Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(90deg, #1e3a5f 0%, #0d2137 100%);
+            border-bottom: 3px solid #f59e0b;
+            padding: 18px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1.5px solid #f59e0b;
+            color: #f59e0b;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .back-btn:hover {
+            background: #f59e0b;
+            color: #0f172a;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f59e0b;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .page-title span {
+            color: #fff;
+            font-weight: 400;
+            font-size: 14px;
+            display: block;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .header-logo img {
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        /* Hero Banner */
+        .hero-section {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
+            padding: 40px 30px 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .hero-section h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .hero-section h1 span {
+            color: #f59e0b;
+        }
+
+        .hero-section p {
+            font-size: 15px;
+            color: #94a3b8;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 52px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Running Ad Strip */
+        .running-strip-container {
+            width: 100%;
+            background: linear-gradient(to right, #1e293b, #0f172a);
+            color: #ffffff;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .running-strip-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollStrip 25s linear infinite;
+        }
+
+        .running-strip-text:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollStrip {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Forms Grid */
+        .forms-section {
+            padding: 40px 30px 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f59e0b;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.4), transparent);
+        }
+
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .form-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1.5px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 28px 18px 22px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .form-card:hover {
+            transform: translateY(-6px);
+            border-color: #f59e0b;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(145deg, #1e3a5f, #1e293b);
+        }
+
+        .form-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .form-icon-wrap {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .form-card:hover .form-icon-wrap {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
+            border-color: #f59e0b;
+            transform: scale(1.1);
+        }
+
+        .form-icon-wrap ion-icon {
+            font-size: 34px;
+            color: #f59e0b;
+        }
+
+        .form-number {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .form-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.45;
+            transition: color 0.3s;
+        }
+
+        .form-card:hover .form-name {
+            color: #f59e0b;
+        }
+
+        .form-link-label {
+            font-size: 11px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.3s;
+        }
+
+        .form-card:hover .form-link-label {
+            color: #94a3b8;
+        }
+
+        .form-link-label ion-icon {
+            font-size: 13px;
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 20px;
+            color: #475569;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 600px) {
+            .forms-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .hero-section h1 {
+                font-size: 22px;
+            }
+        }
+
+        /* Login Overlay Styles */
+        .login-overlay {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1.5px solid rgba(245, 158, 11, 0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 340px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-6px);
+            border-color: #f59e0b;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(145deg, #1e3a5f, #1e293b);
+        }
+
+        .login-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .login-card:hover .login-logo {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
+            border-color: #f59e0b;
+            transform: scale(1.1);
+        }
+
+        .login-logo ion-icon {
+            font-size: 34px;
+            color: #f59e0b;
+        }
+
+        .login-card h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #f59e0b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .login-card p {
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .login-input {
+            padding: 12px;
+            width: 100%;
+            font-size: 15px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .login-input:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: #64748b;
+        }
+
+        .login-btn {
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .overlay-back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .overlay-back-link:hover {
+            color: #f59e0b;
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #f59e0b;
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginOverlay" class="login-overlay">
+        <a href="index.html" class="overlay-back-link"><ion-icon name="arrow-back-outline"></ion-icon> <span>Back to
+                Home</span></a>
+        <div class="login-card">
+            <div class="login-logo"><ion-icon name="lock-closed-outline"></ion-icon></div>
+            <h2>Secure Access</h2>
+            <p>Please enter the 4-digit PIN to open the PDF Forms Library.</p>
+            <input type="password" id="pinInput" class="login-input" placeholder="4-Digit PIN" pattern="\d{4}"
+                maxlength="4" onkeypress="if(event.key === 'Enter') checkPwd()">
+            <button onclick="checkPwd()" class="login-btn"><ion-icon name="key-outline"></ion-icon>
+                <span>Unlock</span></button>
+            <p id="pwdError"
+                style="color: #ef4444; font-size: 13px; display: none; margin-top: 15px; font-weight: 600;">Incorrect
+                PIN!</p>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display: none;">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <a href="index.html" class="back-btn" data-lang="back-btn">
+                    <ion-icon name="arrow-back-outline"></ion-icon> Back
+                </a>
+                <div>
+                    <div class="page-title">📄 PDF FORM</div>
+                    <div style="font-size:12px; color:#94a3b8; margin-top:2px;">All Forms in One Place</div>
+                </div>
+            </div>
+            <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+                <a href="news_blog.html" target="_blank"
+                    style="background-color: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid #dc2626;">
+                    <ion-icon name="newspaper-outline"></ion-icon> NEWS BLOG
+                </a>
+                <div class="header-logo">
+                    <img src="new-logo.jpg" alt="Logo">
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Banner -->
+        <div class="hero-section"
+            style="padding: 0; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+            <img src="formbener.jpg" alt="PDF Forms Banner"
+                style="width: 100%; height: auto; display: block; object-fit: cover;">
+        </div>
+
+        <!-- Running Ad Strip -->
+        <div class="running-strip-container">
+            <div class="running-strip-text">
+                📢 Welcome to the PDF Forms Library! Browse through "All Services" or check the "User Guide" to help you
+                select and download the correct form to work on. Keep serving citizens efficiently!
+            </div>
+        </div>
+
+        <!-- Forms Grid -->
+        <div class="forms-section">
+            <div class="section-label">Available Forms</div>
+            <div class="forms-grid">
+
+                <!-- 01 -->
+                <a class="form-card"
+                    href="https://drive.google.com/file/d/1O2pZqa4_C8M5Bh8UqKqnJIhTZDCn95j7/view?usp=drive_link"
+                    target="_blank">
+                    <span class="form-number">01</span>
+                    <div class="form-icon-wrap"><ion-icon name="document-text-outline"></ion-icon></div>
+                    <div class="form-name">Madhu Babu Pension Form</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 02 -->
+                <a class="form-card"
+                    href="https://drive.google.com/file/d/1-YyOVoX7TyzAPPci-wqt6WEhx3r_E46v/view?usp=drive_link"
+                    target="_blank">
+                    <span class="form-number">02</span>
+                    <div class="form-icon-wrap"><ion-icon name="document-text-outline"></ion-icon></div>
+                    <div class="form-name">Panchayat Permission Form</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 03 -->
+                <a class="form-card"
+                    href="https://drive.google.com/file/d/1ugDPxWF68pzTAVFOK-EsAgaT4hKC2UN8/view?usp=drive_link"
+                    target="_blank">
+                    <span class="form-number">03</span>
+                    <div class="form-icon-wrap"><ion-icon name="document-text-outline"></ion-icon></div>
+                    <div class="form-name">SUBHADRA FORM</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 04 -->
+                <a class="form-card"
+                    href="https://docs.google.com/document/d/1U0R42yTG4pNqckLixBgvHFBA_sq2T56u/edit?usp=drive_link&ouid=114351147938480335992&rtpof=true&sd=true"
+                    target="_blank">
+                    <span class="form-number">04</span>
+                    <div class="form-icon-wrap"><ion-icon name="document-text-outline"></ion-icon></div>
+                    <div class="form-name">LPG MOU</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 05 -->
+                <a class="form-card" href="FARMAR%20FORM3.html" target="_blank">
+                    <span class="form-number">05</span>
+                    <div class="form-icon-wrap"><ion-icon name="leaf-outline"></ion-icon></div>
+                    <div class="form-name">FARMAR ID-FORM</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 06 -->
+                <a class="form-card" href="master_customer_form.html" target="_blank">
+                    <span class="form-number">06</span>
+                    <div class="form-icon-wrap"><ion-icon name="people-outline"></ion-icon></div>
+                    <div class="form-name">Master Customer Data Entry Form</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 07 -->
+                <a class="form-card" href="birth_certificate_form.html" target="_blank">
+                    <span class="form-number">07</span>
+                    <div class="form-icon-wrap"><ion-icon name="happy-outline"></ion-icon></div>
+                    <div class="form-name">Birth Application Form</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 08 -->
+                <a class="form-card" href="bill2.html" target="_blank">
+                    <span class="form-number">08</span>
+                    <div class="form-icon-wrap"><ion-icon name="cash-outline"></ion-icon></div>
+                    <div class="form-name">VLE Money Receive</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 09 -->
+                <a class="form-card" href="9-BIO-DATA FORM.html" target="_blank">
+                    <span class="form-number">09</span>
+                    <div class="form-icon-wrap"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="form-name">BIO-DATA FORM</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 10 -->
+                <a class="form-card" href="new_farmar_id.html" target="_blank">
+                    <span class="form-number">10</span>
+                    <div class="form-icon-wrap"><ion-icon name="id-card-outline"></ion-icon></div>
+                    <div class="form-name">NEW FARMAR ID</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 11 -->
+                <a class="form-card" href="GST_BILL.html" target="_blank">
+                    <span class="form-number">11</span>
+                    <div class="form-icon-wrap"><ion-icon name="receipt-outline"></ion-icon></div>
+                    <div class="form-name">GST BILL</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+                <!-- 12 -->
+                <a class="form-card" href="ration_application_form.html" target="_blank">
+                    <span class="form-number">12</span>
+                    <div class="form-icon-wrap"><ion-icon name="document-text-outline"></ion-icon></div>
+                    <div class="form-name">Ration Application Form</div>
+                    <div class="form-link-label"><ion-icon name="open-outline"></ion-icon> Open Form</div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        &copy; 2026 Digital India CSC-VLE Services &mdash; Jana Seba Kendra
+    </footer>
+    <script>
+        function checkPwd() {
+            const input = document.getElementById('pinInput').value;
+            // PDF Form PIN
+            if (input === '4314') {
+                // Hide login overlay, show main application
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+            } else {
+                // Show Error
+                document.getElementById('pwdError').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

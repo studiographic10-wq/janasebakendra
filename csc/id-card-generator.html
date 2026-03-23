@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro ID Card Studio</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:ital,wght@0,300;0,400;0,700;1,400&family=Montserrat:wght@400;600;700;800&family=Oswald:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* ============================================================
+   ROOT & RESET
+   ============================================================ */
+        :root {
+            --app-bg: #0f1117;
+            --panel-bg: #1a1d27;
+            --panel-border: #2a2d3a;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #475569;
+            --input-bg: #0d1018;
+            --input-border: #2d3148;
+            --input-focus: #6366f1;
+            --success: #22c55e;
+            --warning: #f59e0b;
+
+            /* Card theming (user-adjustable) */
+            --card-header-color: #4f46e5;
+            --card-header-color2: #818cf8;
+            --card-text-color: #111827;
+            --card-sub-color: #4f46e5;
+            --card-border-color: #ffffff;
+            --card-bg-color: #ffffff;
+            --card-font: 'Inter', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--app-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ============================================================
+   TOP NAV BAR
+   ============================================================ */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 2rem;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--panel-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-brand span.accent {
+            color: var(--accent);
+        }
+
+        .topbar-badge {
+            background: var(--accent);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 99px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* ============================================================
+   BUTTON SYSTEM
+   ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 0 0 var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 16px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--panel-border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--panel-border);
+            color: var(--text-primary);
+        }
+
+        .btn-lg {
+            padding: 0.85rem 2rem;
+            font-size: 1rem;
+            border-radius: 0.65rem;
+            width: 100%;
+            justify-content: center;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        /* ============================================================
+   MAIN LAYOUT (3 cols: tabs panel / card canvas / preview info)
+   ============================================================ */
+        .studio {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ============================================================
+   LEFT SIDE PANEL
+   ============================================================ */
+        .side-panel {
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--panel-border);
+            padding: 0.5rem 0.5rem 0;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.65rem 0.3rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-secondary);
+        }
+
+        .tab-panels {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .tab-panels::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .tab-panels::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tab-panels::-webkit-scrollbar-thumb {
+            background: var(--input-border);
+            border-radius: 99px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: contents;
+        }
+
+        /* Section Headers inside panel */
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 0.4rem 0 0.2rem;
+            border-bottom: 1px solid var(--panel-border);
+            margin-bottom: 0.4rem;
+        }
+
+        /* ============================================================
+   FORM CONTROLS
+   ============================================================ */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .field label {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .field input[type="text"],
+        .field select,
+        .field input[type="range"] {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 0.4rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.875rem;
+            padding: 0.55rem 0.8rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .field input[type="text"]:focus,
+        .field select:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .field select {
+            cursor: pointer;
+        }
+
+        .field input[type="range"] {
+            padding: 0.3rem 0;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .field input[type="color"] {
+            width: 100%;
+            height: 38px;
+            border: 1px solid var(--input-border);
+            border-radius: 0.4rem;
+            background: var(--input-bg);
+            cursor: pointer;
+            outline: none;
+            padding: 2px;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        /* File Upload */
+        .file-drop {
+            position: relative;
+            border: 1.5px dashed var(--input-border);
+            border-radius: 0.5rem;
+            background: var(--input-bg);
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            overflow: hidden;
+        }
+
+        .file-drop:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .file-drop input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-drop-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .file-drop-label .filename {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Shape Selector Pills */
+        .shape-pills {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .shape-pill {
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 0.35rem 0.7rem;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+        .shape-pill:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .shape-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        /* Color Swatch Row */
+        .swatch-row {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2.5px solid transparent;
+            transition: transform 0.12s, border-color 0.12s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.2);
+        }
+
+        .color-swatch.active {
+            border-color: white;
+            transform: scale(1.15);
+        }
+
+        /* ============================================================
+   PREVIEW AREA (right side)
+   ============================================================ */
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2.5rem;
+            background: radial-gradient(ellipse at 50% 50%, #1a1d2e 0%, #0f1117 70%);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .preview-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .card-shadow-wrap {
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 30px rgba(99, 102, 241, 0.2));
+        }
+
+        /* ============================================================
+   THE ID CARD ― fixed 260×420
+   ============================================================ */
+        #id-card {
+            width: 260px;
+            height: 440px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            background: var(--card-bg-color);
+            font-family: var(--card-font);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background layer */
+        #card-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            display: none;
+            transition: filter 0.3s;
+        }
+
+        /* Overlay shape layer */
+        #card-shape-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Header */
+        #card-header {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, var(--card-header-color), var(--card-header-color2));
+            color: white;
+            text-align: center;
+            padding: 1.4rem 0.5rem 3rem;
+            transition: clip-path 0.3s, background 0.3s;
+            clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+        }
+
+        #card-org-name {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 0.2rem;
+        }
+
+        #card-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Body */
+        #card-body {
+            position: relative;
+            z-index: 3;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1rem 0.75rem;
+            margin-top: -1.8rem;
+        }
+
+        /* Profile photo */
+        #card-photo-ring {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: var(--card-border-color);
+            padding: 3px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            margin-bottom: 0.75rem;
+            flex-shrink: 0;
+            transition: background 0.3s;
+        }
+
+        #card-photo-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #e5e7eb;
+            display: block;
+        }
+
+        /* Name / role */
+        #card-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-align: center;
+            color: var(--card-text-color);
+            line-height: 1.2;
+            margin-bottom: 0.15rem;
+            word-break: break-word;
+            width: 100%;
+            transition: color 0.2s, font-family 0.2s;
+        }
+
+        #card-designation {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--card-sub-color);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        /* Info grid */
+        .card-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .card-info-row {
+            display: flex;
+            font-size: 0.65rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+            padding-bottom: 0.25rem;
+            gap: 0.4rem;
+        }
+
+        .ci-label {
+            font-weight: 700;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            min-width: 55px;
+        }
+
+        .ci-value {
+            font-weight: 600;
+            color: var(--card-text-color);
+            flex: 1;
+            transition: color 0.2s;
+        }
+
+        /* Barcode section */
+        #card-barcode-wrap {
+            width: 100%;
+            margin-top: 0.6rem;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 5px;
+            padding: 4px 6px 2px;
+            text-align: center;
+        }
+
+        #card-barcode-wrap svg {
+            width: 100%;
+            max-height: 32px;
+        }
+
+        .barcode-label {
+            font-size: 0.45rem;
+            color: #6b7280;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 1px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        #card-footer {
+            position: relative;
+            z-index: 3;
+            background: rgba(17, 24, 39, 0.88);
+            color: white;
+            text-align: center;
+            padding: 0.55rem;
+            font-size: 0.55rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+   DOWNLOAD BAR
+   ============================================================ */
+        .download-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 260px;
+        }
+
+        .quality-choice {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .quality-btn {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1.5px solid var(--panel-border);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.4rem 0;
+            border-radius: 0.4rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+        }
+
+        .quality-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quality-btn:hover:not(.active) {
+            border-color: var(--text-muted);
+            color: var(--text-secondary);
+        }
+
+        /* ============================================================
+   BATCH FEATURE STYLES
+   ============================================================ */
+        .variables-table {
+            width: 100%;
+            border: 1px solid var(--panel-border);
+            border-radius: 0.4rem;
+            overflow: hidden;
+            font-size: 0.72rem;
+        }
+
+        .var-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 0.35rem 0.6rem;
+            border-bottom: 1px solid var(--panel-border);
+            gap: 0.5rem;
+        }
+
+        .var-row:last-child {
+            border-bottom: none;
+        }
+
+        .var-row.var-header {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .var-col {
+            font-family: 'Courier New', monospace;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .var-field {
+            color: var(--text-secondary);
+        }
+
+        #csvPreviewTable th {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent);
+            padding: 4px 8px;
+            text-align: left;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            position: sticky;
+            top: 0;
+        }
+
+        #csvPreviewTable td {
+            padding: 3px 8px;
+            border-bottom: 1px solid var(--panel-border);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        #csvPreviewTable tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* ============================================================
+   RESPONSIVE
+   ============================================================ */
+        @media (max-width: 900px) {
+            .studio {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-area {
+                min-height: 80vh;
+            }
+
+            .side-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--panel-border);
+                max-height: 60vh;
+            }
+        }
+
+        /* Login Overlay Styles */
+        .login-overlay {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1.5px solid rgba(245, 158, 11, 0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 340px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-6px);
+            border-color: #f59e0b;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
+            background: linear-gradient(145deg, #1e3a5f, #1e293b);
+        }
+
+        .login-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .login-card:hover .login-logo {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
+            border-color: #f59e0b;
+            transform: scale(1.1);
+        }
+
+        .login-logo ion-icon {
+            font-size: 34px;
+            color: #f59e0b;
+        }
+
+        .login-card h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #f59e0b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .login-card p {
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .login-input {
+            padding: 12px;
+            width: 100%;
+            font-size: 15px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .login-input:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: #64748b;
+        }
+
+        .login-btn {
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .overlay-back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .overlay-back-link:hover {
+            color: #f59e0b;
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #f59e0b;
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginOverlay" class="login-overlay">
+        <a href="index.html" class="overlay-back-link"><ion-icon name="arrow-back-outline"></ion-icon> <span>Back to
+                Home</span></a>
+        <div class="login-card">
+            <div class="login-logo"><ion-icon name="lock-closed-outline"></ion-icon></div>
+            <h2>Secure Access</h2>
+            <p>Please enter the 4-digit PIN to open the Pro ID Studio.</p>
+            <input type="password" id="pinInput" class="login-input" placeholder="4-Digit PIN" pattern="\d{4}"
+                maxlength="4" onkeypress="if(event.key === 'Enter') checkPwd()">
+            <button onclick="checkPwd()" class="login-btn"><ion-icon name="key-outline"></ion-icon>
+                <span>Unlock</span></button>
+            <p id="pwdError"
+                style="color: #ef4444; font-size: 13px; display: none; margin-top: 15px; font-weight: 600;">Incorrect
+                PIN!</p>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display: none; flex-direction: column; flex: 1; width: 100%;">
+
+        <!-- ─── TOP BAR ─── -->
+        <nav class="topbar">
+            <div class="topbar-brand">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
+                    style="color:var(--accent)">
+                    <rect x="2" y="5" width="20" height="14" rx="3" />
+                    <circle cx="8.5" cy="11" r="2.5" />
+                    <path stroke-linecap="round" d="M13 9.5h5M13 12.5h5M6 17c0-1.657 1.12-3 2.5-3s2.5 1.343 2.5 3" />
+                </svg>
+                Pro ID <span class="accent">Studio</span>
+                <span class="topbar-badge">v2.0</span>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-ghost" onclick="resetAll()">↺ Reset</button>
+                <button class="btn btn-primary" id="downloadBtn" onclick="downloadCard()">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3" />
+                    </svg>
+                    Download Card
+                </button>
+            </div>
+        </nav>
+
+        <!-- ─── STUDIO ─── -->
+        <div class="studio">
+
+            <!-- ═══════════════════════════════════
+       LEFT PANEL
+  ═══════════════════════════════════ -->
+            <aside class="side-panel">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="details">Details</button>
+                    <button class="tab-btn" data-tab="media">Media</button>
+                    <button class="tab-btn" data-tab="design">Design</button>
+                    <button class="tab-btn" data-tab="fonts">Fonts</button>
+                    <button class="tab-btn" data-tab="batch" style="color:#f59e0b;">⚡ Batch</button>
+                </div>
+
+                <div class="tab-panels">
+
+                    <!-- ── TAB: Details ── -->
+                    <div class="tab-panel active" id="tab-details">
+                        <div class="section-label">Organization</div>
+                        <div class="field">
+                            <label>Organization / Company Name</label>
+                            <input type="text" id="inpOrg" placeholder="e.g. XYZ Corporation"
+                                oninput="sync('inpOrg','card-org-name')">
+                        </div>
+                        <div class="field">
+                            <label>Card Title</label>
+                            <input type="text" id="inpTitle" placeholder="e.g. IDENTITY CARD"
+                                oninput="sync('inpTitle','card-title')" value="IDENTITY CARD">
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Personal Information</div>
+                        <div class="field">
+                            <label>Full Name</label>
+                            <input type="text" id="inpName" placeholder="e.g. Deepak Kumar"
+                                oninput="sync('inpName','card-name')">
+                        </div>
+                        <div class="field">
+                            <label>Designation / Role</label>
+                            <input type="text" id="inpDesig" placeholder="e.g. Senior Officer"
+                                oninput="sync('inpDesig','card-designation')">
+                        </div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>ID Number</label>
+                                <input type="text" id="inpCardNo" placeholder="EMP-2026"
+                                    oninput="syncInfo('inpCardNo','ci-idno'); updateBarcode();">
+                            </div>
+                            <div class="field">
+                                <label>Blood Group</label>
+                                <input type="text" id="inpBlood" placeholder="O+"
+                                    oninput="syncInfo('inpBlood','ci-blood')">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Mobile Number</label>
+                            <input type="text" id="inpPhone" placeholder="+91 98765 43210"
+                                oninput="syncInfo('inpPhone','ci-phone'); updateBarcode();">
+                        </div>
+                        <div class="field">
+                            <label>Address / Department</label>
+                            <input type="text" id="inpAddr" placeholder="e.g. HR - Block A"
+                                oninput="syncInfo('inpAddr','ci-addr')">
+                        </div>
+                        <div class="field">
+                            <label>Footer Text</label>
+                            <input type="text" id="inpFooter" placeholder="Authorised Signature"
+                                oninput="sync('inpFooter','card-footer')" value="Authorised Signature">
+                        </div>
+                    </div>
+
+                    <!-- ── TAB: Media ── -->
+                    <div class="tab-panel" id="tab-media">
+                        <div class="section-label">Profile Photo</div>
+                        <div class="file-drop" id="dropPhoto">
+                            <input type="file" id="inpPhoto" accept="image/*"
+                                onchange="loadImage(this,'card-photo','dropPhoto')">
+                            <div class="file-drop-label">📷 Click to upload <span class="filename">profile photo</span>
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Background Image</div>
+                        <div class="file-drop" id="dropBg">
+                            <input type="file" id="inpBg" accept="image/*" onchange="loadBg(this)">
+                            <div class="file-drop-label">🖼️ Click to upload <span class="filename">background
+                                    image</span>
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Background Filter</div>
+                        <div class="shape-pills" id="filterPills">
+                            <span class="shape-pill active" data-filter="none">None</span>
+                            <span class="shape-pill" data-filter="blur(3px)">Blur S</span>
+                            <span class="shape-pill" data-filter="blur(8px)">Blur L</span>
+                            <span class="shape-pill" data-filter="grayscale(100%)">Gray</span>
+                            <span class="shape-pill" data-filter="brightness(0.5)">Dark</span>
+                            <span class="shape-pill" data-filter="sepia(80%)">Sepia</span>
+                            <span class="shape-pill" data-filter="saturate(200%)">Vivid</span>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Card Overlay Pattern</div>
+                        <div class="shape-pills" id="overlayPills">
+                            <span class="shape-pill active" data-overlay="none">None</span>
+                            <span class="shape-pill" data-overlay="hexgrid">Hexagons</span>
+                            <span class="shape-pill" data-overlay="dots">Dots</span>
+                            <span class="shape-pill" data-overlay="waves">Waves</span>
+                            <span class="shape-pill" data-overlay="circles">Circles</span>
+                            <span class="shape-pill" data-overlay="stripes">Stripes</span>
+                        </div>
+                    </div>
+
+                    <!-- ── TAB: Design ── -->
+                    <div class="tab-panel" id="tab-design">
+
+                        <div class="section-label">Header Visibility</div>
+                        <div
+                            style="display:flex; align-items:center; gap:0.75rem; background:var(--input-bg); border:1px solid var(--input-border); border-radius:0.4rem; padding:0.5rem 0.8rem;">
+                            <label for="toggleHeader"
+                                style="font-size:0.8rem; color:var(--text-secondary); flex:1; cursor:pointer;">Show Card
+                                Header</label>
+                            <label style="position:relative; display:inline-block; width:40px; height:22px;">
+                                <input type="checkbox" id="toggleHeader" checked onchange="toggleHeader(this)"
+                                    style="opacity:0; width:0; height:0;">
+                                <span id="toggleSlider"
+                                    style="position:absolute; cursor:pointer; inset:0; background:#334155; border-radius:22px; transition:0.25s;"><span
+                                        style="position:absolute; height:16px; width:16px; left:3px; bottom:3px; background:white; border-radius:50%; transition:0.25s; display:block;"
+                                        id="toggleKnob"></span></span>
+                            </label>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Header Style</div>
+                        <div class="shape-pills" id="headerShapePills">
+                            <span class="shape-pill active" data-hshape="angled">Angled</span>
+                            <span class="shape-pill" data-hshape="curve">Curved</span>
+                            <span class="shape-pill" data-hshape="wave">Wave</span>
+                            <span class="shape-pill" data-hshape="zigzag">Zigzag</span>
+                            <span class="shape-pill" data-hshape="straight">Straight</span>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Header Colors</div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>Color 1</label>
+                                <input type="color" id="inpHdrC1" value="#4f46e5" oninput="applyColors()">
+                            </div>
+                            <div class="field">
+                                <label>Color 2 (Gradient)</label>
+                                <input type="color" id="inpHdrC2" value="#818cf8" oninput="applyColors()">
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Quick Header Presets</div>
+                        <div class="swatch-row" id="headerPresets">
+                            <div class="color-swatch active" data-c1="#4f46e5" data-c2="#818cf8"
+                                style="background: linear-gradient(135deg,#4f46e5,#818cf8);" title="Indigo"></div>
+                            <div class="color-swatch" data-c1="#0ea5e9" data-c2="#38bdf8"
+                                style="background: linear-gradient(135deg,#0ea5e9,#38bdf8);" title="Sky"></div>
+                            <div class="color-swatch" data-c1="#10b981" data-c2="#6ee7b7"
+                                style="background: linear-gradient(135deg,#10b981,#6ee7b7);" title="Emerald"></div>
+                            <div class="color-swatch" data-c1="#f59e0b" data-c2="#fcd34d"
+                                style="background: linear-gradient(135deg,#f59e0b,#fcd34d);" title="Amber"></div>
+                            <div class="color-swatch" data-c1="#ef4444" data-c2="#fca5a5"
+                                style="background: linear-gradient(135deg,#ef4444,#fca5a5);" title="Red"></div>
+                            <div class="color-swatch" data-c1="#8b5cf6" data-c2="#c4b5fd"
+                                style="background: linear-gradient(135deg,#8b5cf6,#c4b5fd);" title="Violet"></div>
+                            <div class="color-swatch" data-c1="#ec4899" data-c2="#f9a8d4"
+                                style="background: linear-gradient(135deg,#ec4899,#f9a8d4);" title="Pink"></div>
+                            <div class="color-swatch" data-c1="#1e293b" data-c2="#475569"
+                                style="background: linear-gradient(135deg,#1e293b,#475569);" title="Slate"></div>
+                            <div class="color-swatch" data-c1="#b45309" data-c2="#d97706"
+                                style="background: linear-gradient(135deg,#b45309,#d97706);" title="Bronze"></div>
+                            <div class="color-swatch" data-c1="#065f46" data-c2="#059669"
+                                style="background: linear-gradient(135deg,#065f46,#059669);" title="Forest"></div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Text & Border Colors</div>
+                        <div class="row-3">
+                            <div class="field">
+                                <label>Main Text</label>
+                                <input type="color" id="inpTextColor" value="#111827" oninput="applyColors()">
+                            </div>
+                            <div class="field">
+                                <label>Role / Sub</label>
+                                <input type="color" id="inpSubColor" value="#4f46e5" oninput="applyColors()">
+                            </div>
+                            <div class="field">
+                                <label>Photo Ring</label>
+                                <input type="color" id="inpBorderColor" value="#ffffff" oninput="applyColors()">
+                            </div>
+                        </div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>Card Background</label>
+                                <input type="color" id="inpCardBg" value="#ffffff" oninput="applyColors()">
+                            </div>
+                            <div class="field">
+                                <label>Footer Opacity</label>
+                                <input type="range" id="inpFooterOpacity" min="0" max="100" value="88"
+                                    oninput="applyColors()">
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Quick Background Colors</div>
+                        <div class="swatch-row" id="cardBgPresets">
+                            <div class="color-swatch active" data-bg="#ffffff"
+                                style="background:#ffffff; border:1px solid #ccc;" title="White"></div>
+                            <div class="color-swatch" data-bg="#f8fafc"
+                                style="background:#f8fafc; border:1px solid #ccc;" title="Snow"></div>
+                            <div class="color-swatch" data-bg="#fef9ef" style="background:#fef9ef;" title="Cream"></div>
+                            <div class="color-swatch" data-bg="#f0f4ff" style="background:#f0f4ff;" title="Lavender">
+                            </div>
+                            <div class="color-swatch" data-bg="#ecfdf5" style="background:#ecfdf5;" title="Mint"></div>
+                            <div class="color-swatch" data-bg="#fff7ed" style="background:#fff7ed;" title="Peach"></div>
+                            <div class="color-swatch" data-bg="#1e293b" style="background:#1e293b;" title="Dark Slate">
+                            </div>
+                            <div class="color-swatch" data-bg="#0f172a" style="background:#0f172a;" title="Navy"></div>
+                            <div class="color-swatch" data-bg="#1a1a2e" style="background:#1a1a2e;" title="Midnight">
+                            </div>
+                            <div class="color-swatch" data-bg="#111827" style="background:#111827;" title="Charcoal">
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Info Row Styling</div>
+                        <div class="row-3">
+                            <div class="field">
+                                <label>Label Color</label>
+                                <input type="color" id="inpLabelColor" value="#9ca3af" oninput="applyInfoStyle()">
+                            </div>
+                            <div class="field">
+                                <label>Value Color</label>
+                                <input type="color" id="inpValueColor" value="#111827" oninput="applyInfoStyle()">
+                            </div>
+                            <div class="field">
+                                <label>Row Divider</label>
+                                <input type="color" id="inpRowDivider" value="#e5e7eb" oninput="applyInfoStyle()">
+                            </div>
+                        </div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>Info Font Size <span id="infoSizeVal">10px</span></label>
+                                <input type="range" id="inpInfoSize" min="8" max="14" value="10"
+                                    oninput="applyInfoStyle(); document.getElementById('infoSizeVal').textContent=this.value+'px';">
+                            </div>
+                            <div class="field">
+                                <label>Info Row Design</label>
+                                <select id="inpInfoDesign" onchange="applyInfoStyle()">
+                                    <option value="line">Divider Line</option>
+                                    <option value="bg">Alternating BG</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── TAB: Fonts ── -->
+                    <div class="tab-panel" id="tab-fonts">
+                        <div class="section-label">Font Family</div>
+                        <div class="shape-pills" id="fontPills">
+                            <span class="shape-pill active" data-font="'Inter',sans-serif">Inter</span>
+                            <span class="shape-pill" data-font="'Roboto',sans-serif">Roboto</span>
+                            <span class="shape-pill" data-font="'Montserrat',sans-serif">Montserrat</span>
+                            <span class="shape-pill" data-font="'Poppins',sans-serif">Poppins</span>
+                            <span class="shape-pill" data-font="'Oswald',sans-serif">Oswald</span>
+                            <span class="shape-pill" data-font="'Playfair Display',serif">Playfair</span>
+                            <span class="shape-pill" data-font="Georgia,serif">Georgia</span>
+                            <span class="shape-pill" data-font="'Courier New',monospace">Courier</span>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Name Style</div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>Name Color</label>
+                                <input type="color" id="inpNameColor" value="#111827" oninput="applyFonts()">
+                            </div>
+                            <div class="field">
+                                <label>Name Weight</label>
+                                <select id="inpNameWeight" onchange="applyFonts()">
+                                    <option value="400">Regular</option>
+                                    <option value="600">Semi-Bold</option>
+                                    <option value="700" selected>Bold</option>
+                                    <option value="800">Extra Bold</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Name Text Transform</div>
+                        <div class="shape-pills" id="nameCasePills">
+                            <span class="shape-pill active" data-case="none">Normal</span>
+                            <span class="shape-pill" data-case="uppercase">UPPERCASE</span>
+                            <span class="shape-pill" data-case="capitalize">Title Case</span>
+                            <span class="shape-pill" data-case="lowercase">lowercase</span>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Letter Spacing</div>
+                        <div class="field">
+                            <label>Name Letter Spacing &nbsp;<span id="lsVal"
+                                    style="color:var(--accent); font-weight:700;">0px</span></label>
+                            <input type="range" id="inpLetterSpace" min="0" max="10" value="0"
+                                oninput="applyFonts(); document.getElementById('lsVal').textContent=this.value+'px';">
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Header Text</div>
+                        <div class="field">
+                            <label>Header Font Size &nbsp;<span id="hdrSzVal"
+                                    style="color:var(--accent); font-weight:700;">17px</span></label>
+                            <input type="range" id="inpHdrSize" min="10" max="22" value="17"
+                                oninput="applyFonts(); document.getElementById('hdrSzVal').textContent=this.value+'px';">
+                        </div>
+                        <div class="field">
+                            <label>Name Font Size &nbsp;<span id="nameSzVal"
+                                    style="color:var(--accent); font-weight:700;">18px</span></label>
+                            <input type="range" id="inpNameSize2" min="12" max="26" value="18"
+                                oninput="applyFonts(); document.getElementById('nameSzVal').textContent=this.value+'px';">
+                        </div>
+                        <div class="shape-pills" id="hdrStylePills">
+                            <span class="shape-pill active" data-hdrstyle="normal">Normal</span>
+                            <span class="shape-pill" data-hdrstyle="italic">Italic</span>
+                            <span class="shape-pill" data-hdrstyle="shadow">Shadow</span>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.5rem;">Barcode</div>
+                        <div class="row-2">
+                            <div class="field">
+                                <label>Show Barcode</label>
+                                <select id="inpShowBarcode" onchange="applyFonts()">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Barcode Format</label>
+                                <select id="inpBarcodeFormat" onchange="updateBarcode()">
+                                    <option value="CODE128">Code 128</option>
+                                    <option value="CODE39">Code 39</option>
+                                    <option value="EAN13">EAN-13</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div><!-- /tab-fonts -->
+
+                    <!-- ── TAB: Batch ── -->
+                    <div class="tab-panel" id="tab-batch">
+
+                        <div class="section-label">📋 Variables (Field Mapping)</div>
+                        <div class="variables-table">
+                            <div class="var-row var-header">
+                                <span>CSV Column Header</span>
+                                <span>Card Field</span>
+                            </div>
+                            <div class="var-row"><span class="var-col">name</span><span class="var-field">Full
+                                    Name</span>
+                            </div>
+                            <div class="var-row"><span class="var-col">designation</span><span
+                                    class="var-field">Designation</span></div>
+                            <div class="var-row"><span class="var-col">id_no</span><span class="var-field">ID
+                                    Number</span>
+                            </div>
+                            <div class="var-row"><span class="var-col">blood</span><span class="var-field">Blood
+                                    Group</span></div>
+                            <div class="var-row"><span class="var-col">phone</span><span class="var-field">Mobile</span>
+                            </div>
+                            <div class="var-row"><span class="var-col">address</span><span class="var-field">Address /
+                                    Dept</span></div>
+                            <div class="var-row" style="background:rgba(245,158,11,0.08);">
+                                <span class="var-col">photo</span>
+                                <span class="var-field" style="color:#f59e0b;">Photo filename (e.g. rajesh.jpg)</span>
+                            </div>
+                        </div>
+                        <div style="font-size:0.68rem; color:var(--text-muted); margin-top:0.4rem; line-height:1.6;">
+                            💡 CSV must use these exact column names. Each row = one ID card. All other design settings
+                            (colors, fonts, header) are shared across all cards.
+                        </div>
+
+                        <div style="margin-top:0.6rem;">
+                            <a href="#" onclick="downloadCsvTemplate(); return false;"
+                                style="font-size:0.78rem; color:var(--accent); text-decoration:underline; cursor:pointer;">
+                                ⬇ Download CSV Template
+                            </a>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.75rem;">📂 Apply Dataset (CSV)</div>
+                        <div class="file-drop" id="dropCsv">
+                            <input type="file" id="inpCsv" accept=".csv" onchange="loadCsvFile(this)">
+                            <div class="file-drop-label">📄 Click to upload <span class="filename">.CSV file</span>
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:0.75rem;">🖼 Upload Photo Folder (for CSV photos)
+                        </div>
+                        <div class="file-drop" id="dropPhotos">
+                            <input type="file" id="inpBatchPhotos" accept="image/*" multiple
+                                onchange="loadBatchPhotos(this)">
+                            <div class="file-drop-label" id="batchPhotoLabel">📁 Select <span class="filename">all
+                                    employee
+                                    photos</span> at once</div>
+                        </div>
+                        <div id="photoMapStatus" style="font-size:0.68rem; color:var(--text-muted); margin-top:0.3rem;">
+                        </div>
+
+                        <div id="csvPreviewWrap" style="display:none; margin-top:0.75rem;">
+                            <div class="section-label">👁 Data Preview</div>
+                            <div id="csvStats"
+                                style="font-size:0.72rem; color:var(--accent); font-weight:600; margin-bottom:0.4rem;">
+                            </div>
+                            <div
+                                style="overflow-x:auto; max-height:160px; border:1px solid var(--panel-border); border-radius:0.4rem;">
+                                <table id="csvPreviewTable"
+                                    style="width:100%; font-size:0.65rem; border-collapse:collapse;"></table>
+                            </div>
+                        </div>
+
+                        <div id="batchProgressWrap" style="display:none; margin-top:0.75rem;">
+                            <div class="section-label">⚙ Generation Progress</div>
+                            <div
+                                style="background:var(--input-bg); border:1px solid var(--input-border); border-radius:0.4rem; padding:0.5rem;">
+                                <div id="batchProgressLabel"
+                                    style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:0.35rem;">
+                                    Ready...
+                                </div>
+                                <div
+                                    style="background:var(--panel-border); border-radius:99px; height:8px; overflow:hidden;">
+                                    <div id="batchProgressBar"
+                                        style="height:100%; background:var(--accent); border-radius:99px; width:0%; transition:width 0.25s;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="batchGenBtn"
+                            style="margin-top:1rem; width:100%; padding:0.9rem; background:linear-gradient(135deg,#f59e0b,#f97316); color:white; border:none; border-radius:0.6rem; font-family:inherit; font-size:0.95rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.5rem; box-shadow:0 4px 16px rgba(249,115,22,0.4); transition:all 0.2s; opacity:0.5; pointer-events:none;"
+                            onclick="startBatchGeneration()">
+                            ⚡ Generate All ID Cards (ZIP)
+                        </button>
+                        <div style="font-size:0.68rem; color:var(--text-muted); text-align:center; margin-top:0.3rem;">
+                            All
+                            cards saved as JPEG inside one .zip file</div>
+
+                    </div><!-- /tab-batch -->
+
+                </div><!-- /tab-panels -->
+            </aside>
+
+            <!-- ═══════════════════════════════════
+       RIGHT PREVIEW AREA
+  ═══════════════════════════════════ -->
+            <section class="preview-area">
+                <div class="preview-label">Live Card Preview</div>
+
+                <div class="card-shadow-wrap">
+                    <!-- THE ACTUAL ID CARD - what gets exported -->
+                    <div id="id-card">
+                        <!-- Layers 0-1: BG image + overlay shape -->
+                        <img id="card-bg-img" src="" alt="">
+                        <div id="card-shape-layer"></div>
+
+                        <!-- Layer 2: Header -->
+                        <div id="card-header">
+                            <div id="card-org-name">Organization</div>
+                            <div id="card-title">IDENTITY CARD</div>
+                        </div>
+
+                        <!-- Layer 3: Body -->
+                        <div id="card-body">
+                            <div id="card-photo-ring">
+                                <img id="card-photo"
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239CA3AF'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"
+                                    alt="Photo">
+                            </div>
+
+                            <div id="card-name">FULL NAME</div>
+                            <div id="card-designation">Designation</div>
+
+                            <div class="card-info">
+                                <div class="card-info-row">
+                                    <span class="ci-label">ID No</span>
+                                    <span class="ci-value" id="ci-idno">---</span>
+                                </div>
+                                <div class="card-info-row">
+                                    <span class="ci-label">Blood</span>
+                                    <span class="ci-value" id="ci-blood">---</span>
+                                </div>
+                                <div class="card-info-row">
+                                    <span class="ci-label">Mobile</span>
+                                    <span class="ci-value" id="ci-phone">---</span>
+                                </div>
+                                <div class="card-info-row" style="border: none;">
+                                    <span class="ci-label">Address</span>
+                                    <span class="ci-value" id="ci-addr">---</span>
+                                </div>
+                            </div>
+
+                            <div id="card-barcode-wrap">
+                                <svg id="card-barcode"></svg>
+                                <div class="barcode-label" id="barcode-label-text">ID • Mobile</div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div id="card-footer">Authorised Signature</div>
+                    </div>
+                </div>
+
+                <!-- Download Controls -->
+                <div class="download-bar">
+                    <div style="font-size:0.68rem; color: var(--text-muted); text-align:center;">Export Quality</div>
+                    <div class="quality-choice">
+                        <div class="quality-btn" data-scale="1">Draft (1×)</div>
+                        <div class="quality-btn" data-scale="2">HD (2×)</div>
+                        <div class="quality-btn active" data-scale="3">Ultra (3×)</div>
+                        <div class="quality-btn" data-scale="4">Print (4×)</div>
+                    </div>
+                    <button class="btn btn-primary btn-lg" id="downloadBtnMain" onclick="downloadCard()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3" />
+                        </svg>
+                        Download HQ ID Card
+                    </button>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- ─── SCRIPTS ─── -->
+        <script>
+            /* ─────────────────────────────────────────────────────────
+               STATE
+            ───────────────────────────────────────────────────────── */
+            let exportScale = 3;
+
+            /* ─────────────────────────────────────────────────────────
+               TAB SWITCHING
+            ───────────────────────────────────────────────────────── */
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.tab;
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('tab-' + target).classList.add('active');
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               LIVE TEXT SYNC
+            ───────────────────────────────────────────────────────── */
+            function sync(inputId, cardId) {
+                const val = document.getElementById(inputId).value;
+                document.getElementById(cardId).textContent = val || (inputId === 'inpTitle' ? 'IDENTITY CARD' : inputId === 'inpFooter' ? 'Authorised Signature' : '');
+            }
+            function syncIdCategory() {
+                const val = document.getElementById('inpIdCategory').value;
+                document.getElementById('ci-idno-lbl').textContent = val;
+                updateBarcode(); // Update barcode label
+            }
+
+            function syncInfo(inputId, ciId) {
+                const val = document.getElementById(inputId).value.trim();
+                document.getElementById(ciId).textContent = val || '---';
+            }
+
+            /* ─────────────────────────────────────────────────────────
+               IMAGE LOADERS
+            ───────────────────────────────────────────────────────── */
+            function loadImage(input, imgId, dropId) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById(imgId).src = e.target.result;
+                    document.querySelector('#' + dropId + ' .file-drop-label').innerHTML =
+                        '✅ <span class="filename">' + file.name.substring(0, 22) + '</span>';
+                };
+                reader.readAsDataURL(file);
+            }
+            function loadBg(input) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.getElementById('card-bg-img');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.querySelector('#dropBg .file-drop-label').innerHTML =
+                        '✅ <span class="filename">' + file.name.substring(0, 22) + '</span>';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            /* ─────────────────────────────────────────────────────────
+               BACKGROUND FILTER PILLS
+            ───────────────────────────────────────────────────────── */
+            document.querySelectorAll('#filterPills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#filterPills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    document.getElementById('card-bg-img').style.filter = pill.dataset.filter;
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               OVERLAY SHAPES
+            ───────────────────────────────────────────────────────── */
+            const overlays = {
+                none: '',
+                hexgrid: `<svg width="100%" height="100%" opacity="0.07"><defs><pattern id="hx" width="22" height="38" patternUnits="userSpaceOnUse"><path d="M11 0L22 6.5V19.5L11 26L0 19.5V6.5Z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M11 26L22 32.5V45.5L11 52L0 45.5V32.5Z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M33 6.5L44 13V26L33 32.5L22 26V13Z" fill="none" stroke="currentColor" stroke-width="1.2"/></pattern></defs><rect width="100%" height="100%" fill="url(#hx)" color="#4f46e5"/></svg>`,
+                dots: `<svg width="100%" height="100%" opacity="0.1"><defs><pattern id="dt" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1.5" fill="#4f46e5"/></pattern></defs><rect width="100%" height="100%" fill="url(#dt)"/></svg>`,
+                waves: `<svg width="100%" height="100%" opacity="0.12" preserveAspectRatio="none" viewBox="0 0 1440 320"><path fill="#4f46e5" d="M0,192L60,181.3C120,171,240,149,360,154.7C480,160,600,192,720,197.3C840,203,960,181,1080,165.3C1200,149,1320,139,1380,133.3L1440,128L1440,320L0,320Z"/></svg>`,
+                circles: `<svg width="100%" height="100%" opacity="0.08"><circle cx="15%" cy="25%" r="70" fill="#4f46e5"/><circle cx="88%" cy="70%" r="100" fill="#818cf8"/><circle cx="40%" cy="90%" r="50" fill="#4338ca"/></svg>`,
+                stripes: `<svg width="100%" height="100%" opacity="0.06"><defs><pattern id="st" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="16" fill="#4f46e5"/></pattern></defs><rect width="100%" height="100%" fill="url(#st)"/></svg>`
+            };
+            document.querySelectorAll('#overlayPills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#overlayPills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    document.getElementById('card-shape-layer').innerHTML = overlays[pill.dataset.overlay] || '';
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               HEADER SHAPES
+            ───────────────────────────────────────────────────────── */
+            const hShapes = {
+                angled: 'polygon(0 0, 100% 0, 100% 82%, 0 100%)',
+                curve: 'ellipse(130% 100% at 50% 0%)',
+                wave: 'polygon(0 0, 100% 0, 100% 100%, 78% 84%, 55% 100%, 32% 84%, 10% 100%, 0 82%)',
+                zigzag: 'polygon(0 0, 100% 0, 100% 80%, 95% 90%, 90% 80%, 85% 90%, 80% 80%, 75% 90%, 70% 80%, 65% 90%, 60% 80%, 55% 90%, 50% 80%, 45% 90%, 40% 80%, 35% 90%, 30% 80%, 25% 90%, 20% 80%, 15% 90%, 10% 80%, 5% 90%, 0 80%)',
+                straight: 'none'
+            };
+            document.querySelectorAll('#headerShapePills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#headerShapePills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    document.getElementById('card-header').style.clipPath = hShapes[pill.dataset.hshape];
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               COLORS
+            ───────────────────────────────────────────────────────── */
+            function applyColors() {
+                const c1 = document.getElementById('inpHdrC1').value;
+                const c2 = document.getElementById('inpHdrC2').value;
+                const textColor = document.getElementById('inpTextColor').value;
+                const subColor = document.getElementById('inpSubColor').value;
+                const borderColor = document.getElementById('inpBorderColor').value;
+                const cardBg = document.getElementById('inpCardBg').value;
+                const footerOpacity = document.getElementById('inpFooterOpacity').value / 100;
+
+                document.getElementById('card-header').style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+                document.getElementById('card-name').style.color = textColor;
+                document.getElementById('card-designation').style.color = subColor;
+                document.querySelectorAll('.ci-value').forEach(el => el.style.color = textColor);
+                document.getElementById('card-photo-ring').style.background = borderColor;
+                document.getElementById('id-card').style.background = cardBg;
+                document.getElementById('card-footer').style.background = `rgba(17,24,39,${footerOpacity})`;
+            }
+
+            /* Header Toggle */
+            function toggleHeader(cb) {
+                const hdr = document.getElementById('card-header');
+                const knob = document.getElementById('toggleKnob');
+                const track = document.getElementById('toggleSlider');
+                if (cb.checked) {
+                    hdr.style.display = '';
+                    track.style.background = '#6366f1';
+                    knob.style.transform = 'translateX(18px)';
+                } else {
+                    hdr.style.display = 'none';
+                    track.style.background = '#334155';
+                    knob.style.transform = 'translateX(0)';
+                }
+            }
+
+            /* Card BG Color Presets */
+            document.querySelectorAll('#cardBgPresets .color-swatch').forEach(sw => {
+                sw.addEventListener('click', () => {
+                    document.querySelectorAll('#cardBgPresets .color-swatch').forEach(s => s.classList.remove('active'));
+                    sw.classList.add('active');
+                    document.getElementById('inpCardBg').value = sw.dataset.bg;
+                    applyColors();
+                });
+            });
+
+            /* Info Row Styling */
+            function applyInfoStyle() {
+                const labelColor = document.getElementById('inpLabelColor').value;
+                const valueColor = document.getElementById('inpValueColor').value;
+                const dividerColor = document.getElementById('inpRowDivider').value;
+                const infoSize = document.getElementById('inpInfoSize').value;
+                const design = document.getElementById('inpInfoDesign').value;
+
+                document.querySelectorAll('.ci-label').forEach(el => el.style.color = labelColor);
+                document.querySelectorAll('.ci-value').forEach(el => el.style.color = valueColor);
+                document.querySelectorAll('.card-info-row').forEach((el, i) => {
+                    el.style.fontSize = infoSize + 'px';
+                    if (design === 'line') {
+                        el.style.borderBottom = `1px solid ${dividerColor}`;
+                        el.style.background = 'transparent';
+                    } else if (design === 'bg') {
+                        el.style.borderBottom = 'none';
+                        el.style.background = i % 2 === 0 ? 'rgba(0,0,0,0.04)' : 'transparent';
+                        el.style.padding = '3px 4px';
+                    } else {
+                        el.style.borderBottom = 'none';
+                        el.style.background = 'transparent';
+                    }
+                });
+            }
+
+            /* Header color presets */
+            document.querySelectorAll('#headerPresets .color-swatch').forEach(sw => {
+                sw.addEventListener('click', () => {
+                    document.querySelectorAll('#headerPresets .color-swatch').forEach(s => s.classList.remove('active'));
+                    sw.classList.add('active');
+                    document.getElementById('inpHdrC1').value = sw.dataset.c1;
+                    document.getElementById('inpHdrC2').value = sw.dataset.c2;
+                    applyColors();
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               FONTS
+            ───────────────────────────────────────────────────────── */
+            function applyFonts() {
+                const nameEl = document.getElementById('card-name');
+                // Name size comes from either the Fonts tab slider (inpNameSize2) or the hidden original
+                const nameSize = (document.getElementById('inpNameSize2') || document.getElementById('inpNameSize')).value;
+                const nameWeight = document.getElementById('inpNameWeight').value;
+                const spacing = document.getElementById('inpLetterSpace').value;
+                const hdrSize = document.getElementById('inpHdrSize').value;
+                const showBarcode = document.getElementById('inpShowBarcode').value;
+                const nameColor = document.getElementById('inpNameColor').value;
+
+                nameEl.style.fontSize = nameSize + 'px';
+                nameEl.style.fontWeight = nameWeight;
+                nameEl.style.letterSpacing = spacing + 'px';
+                nameEl.style.color = nameColor;
+                document.getElementById('card-title').style.fontSize = hdrSize + 'px';
+                document.getElementById('card-barcode-wrap').style.display = showBarcode === 'yes' ? 'block' : 'none';
+
+                // Name case
+                const activeCasePill = document.querySelector('#nameCasePills .shape-pill.active');
+                if (activeCasePill) nameEl.style.textTransform = activeCasePill.dataset.case;
+
+                // Header style
+                const hdrStylePill = document.querySelector('#hdrStylePills .shape-pill.active');
+                if (hdrStylePill) {
+                    const s = hdrStylePill.dataset.hdrstyle;
+                    document.getElementById('card-title').style.fontStyle = s === 'italic' ? 'italic' : 'normal';
+                    document.getElementById('card-title').style.textShadow = s === 'shadow' ? '2px 2px 6px rgba(0,0,0,0.5)' : 'none';
+                }
+            }
+
+            /* Font family pills */
+            document.querySelectorAll('#fontPills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#fontPills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    document.getElementById('id-card').style.fontFamily = pill.dataset.font;
+                });
+            });
+
+            /* Name case pills */
+            document.querySelectorAll('#nameCasePills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#nameCasePills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    applyFonts();
+                });
+            });
+
+            /* Header style pills */
+            document.querySelectorAll('#hdrStylePills .shape-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('#hdrStylePills .shape-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    applyFonts();
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               BARCODE
+            ───────────────────────────────────────────────────────── */
+            function updateBarcode() {
+                const idNo = document.getElementById('inpCardNo').value.trim() || 'ID000';
+                const phone = document.getElementById('inpPhone').value.trim() || 'PHONE';
+                const fmt = document.getElementById('inpBarcodeFormat').value;
+                let data = idNo + '-' + phone;
+                if (fmt === 'EAN13') {
+                    // EAN-13 needs 12 digits, use only digits
+                    const digits = data.replace(/\D/g, '').padEnd(12, '0').substring(0, 12);
+                    data = digits;
+                }
+                try {
+                    JsBarcode('#card-barcode', data, {
+                        format: fmt,
+                        width: 1.3,
+                        height: 28,
+                        displayValue: false,
+                        margin: 0,
+                        background: 'transparent'
+                    });
+                    document.getElementById('barcode-label-text').textContent = idNo ? idNo + ' • ' + phone : 'ID • Mobile';
+                } catch (e) {
+                    console.warn('Barcode err:', e);
+                }
+            }
+
+            /* ─────────────────────────────────────────────────────────
+               EXPORT SCALE
+            ───────────────────────────────────────────────────────── */
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    exportScale = parseInt(btn.dataset.scale);
+                });
+            });
+
+            /* ─────────────────────────────────────────────────────────
+               DOWNLOAD
+            ───────────────────────────────────────────────────────── */
+            async function downloadCard() {
+                const btns = document.querySelectorAll('#downloadBtn, #downloadBtnMain');
+                btns.forEach(b => { b.innerHTML = '⏳ Rendering...'; b.disabled = true; });
+                try {
+                    const card = document.getElementById('id-card');
+                    const canvas = await html2canvas(card, {
+                        scale: exportScale,
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        imageTimeout: 0
+                    });
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/jpeg', 0.96);
+                    const name = (document.getElementById('inpName').value.trim() || 'ID_Card').replace(/\s+/g, '_');
+                    link.download = `${name}_IDCard_${exportScale}x.jpg`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (e) {
+                    alert('Export failed. Please check image sources.');
+                    console.error(e);
+                } finally {
+                    btns.forEach(b => {
+                        b.innerHTML = b.id === 'downloadBtn'
+                            ? `<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"/></svg> Download Card`
+                            : `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M7 10l5 5 5-5M12 15V3"/></svg> Download HQ ID Card`;
+                        b.disabled = false;
+                    });
+                }
+            }
+
+            /* ─────────────────────────────────────────────────────────
+               RESET
+            ───────────────────────────────────────────────────────── */
+            function resetAll() {
+                if (!confirm('Reset all settings to default?')) return;
+                location.reload();
+            }
+
+            /* ─────────────────────────────────────────────────────────
+               INIT
+            ───────────────────────────────────────────────────────── */
+            (function init() {
+                applyColors();
+                applyFonts();
+                applyInfoStyle();
+                updateBarcode();
+                document.getElementById('card-header').style.clipPath = hShapes['angled'];
+                // Init toggle visual state
+                document.getElementById('toggleSlider').style.background = '#6366f1';
+                document.getElementById('toggleKnob').style.transform = 'translateX(18px)';
+                document.getElementById('inpTitle').dispatchEvent(new Event('input'));
+                document.getElementById('inpFooter').dispatchEvent(new Event('input'));
+            })();
+
+            /* ═══════════════════════════════════════════════════════════
+               BATCH GENERATION SYSTEM
+            ═══════════════════════════════════════════════════════════ */
+
+            let batchDataset = []; // Array of row objects from CSV
+            let batchPhotoMap = {}; // filename.toLowerCase() → dataURL
+
+            /* ── Upload Batch Photos ── */
+            function loadBatchPhotos(input) {
+                const files = Array.from(input.files);
+                if (!files.length) return;
+                batchPhotoMap = {};
+                let loaded = 0;
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        batchPhotoMap[file.name.toLowerCase()] = e.target.result;
+                        loaded++;
+                        if (loaded === files.length) {
+                            document.getElementById('batchPhotoLabel').innerHTML =
+                                `✅ <span class="filename">${loaded} photo(s) loaded</span>`;
+                            document.getElementById('photoMapStatus').textContent =
+                                `Photos ready: ${Object.keys(batchPhotoMap).join(', ')}`;
+                            // Re-render preview to update photo status markers
+                            if (batchDataset.length) renderCsvPreview(batchDataset);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            /* ── Download CSV Template ── */
+            function downloadCsvTemplate() {
+                const header = 'name,designation,id_no,blood,phone,address,photo\n';
+                const sample = [
+                    'Rajesh Kumar,Senior Officer,EMP-001,O+,9876543210,HR - Block A,rajesh.jpg',
+                    'Priya Singh,Manager,EMP-002,B+,9876543211,Finance - Block B,priya.jpg',
+                    'Amit Sharma,Developer,EMP-003,A+,9876543212,IT - Block C,amit.jpg',
+                ].join('\n');
+                const blob = new Blob([header + sample], { type: 'text/csv' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'id_card_template.csv';
+                link.click();
+            }
+
+            /* ── Parse CSV File ── */
+            function loadCsvFile(input) {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const text = e.target.result;
+                    const rows = parseCSV(text);
+                    if (rows.length === 0) { alert('CSV is empty or has no valid rows.'); return; }
+                    batchDataset = rows;
+                    document.querySelector('#dropCsv .file-drop-label').innerHTML =
+                        '✅ <span class="filename">' + file.name.substring(0, 28) + '</span>';
+                    renderCsvPreview(rows);
+                    enableBatchBtn();
+                };
+                reader.readAsText(file);
+            }
+
+            /* ── Simple CSV Parser ── */
+            function parseCSV(text) {
+                const lines = text.trim().split(/\r?\n/);
+                if (lines.length < 2) return [];
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                return lines.slice(1).map(line => {
+                    const vals = line.split(',');
+                    const obj = {};
+                    headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim(); });
+                    return obj;
+                }).filter(r => r.name || r.id_no);
+            }
+
+            /* ── Render Preview Table ── */
+            function renderCsvPreview(rows) {
+                const keys = ['name', 'designation', 'id_no', 'blood', 'phone', 'address', 'photo'];
+                let thead = '<tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr>';
+                let tbody = rows.slice(0, 8).map(r =>
+                    '<tr>' + keys.map(k => {
+                        if (k === 'photo' && r[k]) {
+                            const mapped = batchPhotoMap[r[k].toLowerCase()];
+                            return `<td style="color:${mapped ? '#22c55e' : '#ef4444'}">${r[k] || ''} ${mapped ? '✔' : '✗'}</td>`;
+                        }
+                        return `<td>${r[k] || ''}</td>`;
+                    }).join('') + '</tr>'
+                ).join('');
+                if (rows.length > 8) tbody += `<tr><td colspan="${keys.length}" style="text-align:center; color:var(--text-muted); padding:4px;">... and ${rows.length - 8} more rows</td></tr>`;
+                document.getElementById('csvPreviewTable').innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
+                document.getElementById('csvStats').textContent = `✔ ${rows.length} employee records loaded`;
+                document.getElementById('csvPreviewWrap').style.display = 'block';
+            }
+
+            /* ── Enable Generate Button ── */
+            function enableBatchBtn() {
+                const btn = document.getElementById('batchGenBtn');
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            }
+
+            /* ── Apply One Dataset Row to the Card ── */
+            function applyRowToCard(row) {
+                const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '---'; };
+                document.getElementById('card-name').textContent = row.name || 'FULL NAME';
+                document.getElementById('card-designation').textContent = row.designation || 'Designation';
+                set('ci-idno', row.id_no);
+                set('ci-blood', row.blood);
+                set('ci-phone', row.phone);
+                set('ci-addr', row.address);
+                // Apply photo from batch photo map
+                if (row.photo) {
+                    const photoData = batchPhotoMap[row.photo.toLowerCase()];
+                    if (photoData) {
+                        document.getElementById('card-photo').src = photoData;
+                    }
+                }
+                // Re-generate barcode for this row
+                const idNo = row.id_no || 'ID000';
+                const phone = row.phone || 'PHONE';
+                const fmt = document.getElementById('inpBarcodeFormat').value;
+                try {
+                    JsBarcode('#card-barcode', idNo + '-' + phone, {
+                        format: fmt, width: 1.3, height: 28, displayValue: false, margin: 0, background: 'transparent'
+                    });
+                    document.getElementById('barcode-label-text').textContent = idNo + ' \u2022 ' + phone;
+                } catch (e) { }
+            }
+
+            /* ── Main Batch Loop ── */
+            async function startBatchGeneration() {
+                if (batchDataset.length === 0) { alert('Please load a CSV file first.'); return; }
+
+                const btn = document.getElementById('batchGenBtn');
+                btn.textContent = '⏳ Generating...';
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.7';
+
+                const progressWrap = document.getElementById('batchProgressWrap');
+                const progressBar = document.getElementById('batchProgressBar');
+                const progressLabel = document.getElementById('batchProgressLabel');
+                progressWrap.style.display = 'block';
+
+                const card = document.getElementById('id-card');
+                const zip = new JSZip();
+                const total = batchDataset.length;
+
+                // Store original card values to restore after batch
+                const origName = document.getElementById('card-name').textContent;
+                const origDesig = document.getElementById('card-designation').textContent;
+                const origIdno = document.getElementById('ci-idno').textContent;
+                const origBlood = document.getElementById('ci-blood').textContent;
+                const origPhone = document.getElementById('ci-phone').textContent;
+                const origAddr = document.getElementById('ci-addr').textContent;
+                const origPhoto = document.getElementById('card-photo').src;
+
+                for (let i = 0; i < total; i++) {
+                    const row = batchDataset[i];
+                    progressLabel.textContent = `Rendering ${i + 1} of ${total}: ${row.name || row.id_no}...`;
+                    progressBar.style.width = Math.round(((i) / total) * 100) + '%';
+
+                    applyRowToCard(row);
+
+                    // Wait a brief moment for DOM to settle before capturing
+                    await new Promise(r => setTimeout(r, 120));
+
+                    try {
+                        const canvas = await html2canvas(card, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: '#ffffff',
+                            logging: false,
+                            imageTimeout: 0
+                        });
+                        // Convert to base64 and add to zip
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                        const base64 = dataUrl.split(',')[1];
+                        const safeName = (row.name || row.id_no || `card_${i + 1}`).replace(/[^a-zA-Z0-9]/g, '_');
+                        zip.file(`${safeName}_IDCard.jpg`, base64, { base64: true });
+                    } catch (err) {
+                        console.error('Failed to generate card for row:', row, err);
+                    }
+                }
+
+                progressLabel.textContent = 'Creating ZIP file...';
+                progressBar.style.width = '95%';
+
+                // Restore original card state
+                document.getElementById('card-name').textContent = origName;
+                document.getElementById('card-designation').textContent = origDesig;
+                document.getElementById('ci-idno').textContent = origIdno;
+                document.getElementById('ci-blood').textContent = origBlood;
+                document.getElementById('ci-phone').textContent = origPhone;
+                document.getElementById('ci-addr').textContent = origAddr;
+                document.getElementById('card-photo').src = origPhoto;
+
+                try {
+                    const zipBlob = await zip.generateAsync({ type: 'blob' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(zipBlob);
+                    const ts = new Date().toISOString().slice(0, 10);
+                    link.download = `ID_Cards_Batch_${ts}_${total}cards.zip`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    progressBar.style.width = '100%';
+                    progressLabel.textContent = `✅ Done! ${total} ID cards saved to ZIP.`;
+                    progressLabel.style.color = '#22c55e';
+                } catch (err) {
+                    progressLabel.textContent = '❌ ZIP generation failed. Please try again.';
+                    console.error(err);
+                }
+
+                btn.textContent = '⚡ Generate All ID Cards (ZIP)';
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            }
+
+        </script>
+
+    </div>
+    <script>
+        function checkPwd() {
+            const input = document.getElementById('pinInput').value;
+            // PDF Form PIN
+            if (input === '4314') {
+                // Hide login overlay, show main application
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'flex';
+            } else {
+                // Show Error
+                document.getElementById('pwdError').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

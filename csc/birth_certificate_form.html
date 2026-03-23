@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birth Certificate Application Form</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* --- Page Layout & General Styling --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* The container that explicitly defines A4 size */
+        .a4-container {
+            width: 210mm;
+            height: 297mm;
+            /* Fixed A4 height */
+            background: white;
+            padding: 15mm 20mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        /* --- Button Styling --- */
+        .action-buttons-container {
+            width: 210mm;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-print {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+        }
+
+
+        /* --- Print Media Queries --- */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            body,
+            html {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .action-buttons-container {
+                display: none !important;
+            }
+
+            .a4-container {
+                box-shadow: none;
+                margin: 0;
+                border: none;
+                padding: 15mm 20mm !important;
+                width: 100%;
+                height: 100%;
+                page-break-after: avoid !important;
+                page-break-before: avoid !important;
+            }
+
+            /* Force background colors to print */
+            .section-title,
+            input[readonly],
+            .charges-table th,
+            .charges-table .total-row {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Ensure inputs and wrappers inside table print without borders */
+            .fee-input,
+            .currency-wrapper {
+                border: none !important;
+                background: transparent !important;
+            }
+
+            .currency-wrapper {
+                padding: 0 !important;
+            }
+        }
+
+        /* --- Form Content Styling --- */
+        h2 {
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            background-color: #e0e0e0;
+            padding: 5px 10px;
+            margin: 10px 0 8px 0;
+            font-size: 13px;
+            border-left: 4px solid #000;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"],
+        .form-group select {
+            border: 1px solid #999;
+            padding: 5px 7px;
+            font-size: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 2px;
+            height: 28px;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* --- Charges Table Styling --- */
+        .charges-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+            border: 2px solid black;
+        }
+
+        .charges-table th {
+            background-color: blue;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid black;
+        }
+
+        .charges-table td {
+            border: 2px solid black;
+            padding: 4px;
+            color: #000;
+            vertical-align: middle;
+        }
+
+        .charges-table .td-label {
+            padding: 8px;
+        }
+
+        .charges-table .amount-col {
+            width: 150px;
+            text-align: center;
+        }
+
+        .charges-table .total-row {
+            background-color: #d0eef5;
+            font-weight: bold;
+        }
+
+        /* --- Rupee Currency Inputs --- */
+        .currency-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #999;
+            border-radius: 2px;
+            height: 28px;
+            background-color: white;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .currency-symbol {
+            font-size: 13px;
+            padding-left: 5px;
+            color: #333;
+        }
+
+        .fee-input {
+            border: none;
+            background: transparent;
+            height: 100%;
+            width: auto;
+            flex-grow: 0;
+            text-align: left;
+            padding: 5px 2px 5px 2px;
+            outline: none;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .total-wrapper {
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        .fee-total {
+            font-weight: bold;
+            color: black;
+            cursor: not-allowed;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+
+        /* Declaration and Signature styling */
+        .declaration {
+            margin-top: 15px;
+            font-size: 11px;
+            line-height: 1.3;
+            display: flex;
+            gap: 8px;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .signature-box {
+            width: 35%;
+            border-top: 1px solid #000;
+            text-align: center;
+            padding-top: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="action-buttons-container">
+        <button class="btn btn-print" onclick="window.print()">Print Option</button>
+        <button class="btn btn-save" onclick="downloadPDF()">Save Option (PDF)</button>
+    </div>
+
+    <div id="form-content-area" class="a4-container">
+        <div
+            style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
+            <div style="flex: 1;"></div>
+            <h2 style="border: none; margin: 0; padding: 0; flex: 2; text-align: center;">Birth Certificate Application
+                Form</h2>
+            <div style="flex: 1; text-align: right; font-size: 13px; font-weight: bold; padding-bottom: 2px;">
+                Registration No: <input type="text"
+                    style="border: none; border-bottom: 1px dashed #000; width: 80px; outline: none; background: transparent; font-family: inherit; font-size: 16px; font-weight: bold; padding: 0 2px; color: #000;">
+            </div>
+        </div>
+
+        <div class="section-title">1. Applicant Details & Date</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Application Date (System Auto-Fill)</label>
+                <input type="date" id="applicationDate" readonly>
+            </div>
+            <div class="form-group" style="flex: 1.5;">
+                <label>Applicant Full Name</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Relation With Child</label>
+                <select>
+                    <option value="">-- Select --</option>
+                    <option value="father">Father</option>
+                    <option value="mother">Mother</option>
+                    <option value="guardian">Guardian</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">2. Child Details</div>
+        <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+                <label>Full Name of Child</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Date Of Birth</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select>
+                    <option value="">-- Select --</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Father's Name</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Mother's Name</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="section-title">3. Place of Birth Details</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Place of Birth Category</label>
+                <select>
+                    <option value="">-- Select --</option>
+                    <option value="hospital">Hospital/Institution</option>
+                    <option value="home">Home</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 2;">
+                <label>Hospital/Institution Name (If applicable)</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="section-title">4. Permanent Address</div>
+        <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+                <label>Address Line 1 (House No / Street / Village)</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Address Line 2 (Post Office)</label>
+                <input type="text">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>District</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>State</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>PIN Code</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <div class="section-title">5. Contact Information & Identification</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel">
+            </div>
+            <div class="form-group" style="flex: 1.5;">
+                <label>Email ID</label>
+                <input type="email">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Document Submitted (ID Proof)</label>
+                <select>
+                    <option value="">-- Select --</option>
+                    <option value="aadhaar">Aadhaar Card</option>
+                    <option value="voter">Voter ID Card</option>
+                    <option value="passport">Passport</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Aadhaar No.</label>
+                <input type="text" maxlength="12" placeholder="12-digit Aadhaar">
+            </div>
+            <div class="form-group">
+                <label>Voter ID No.</label>
+                <input type="text" placeholder="Enter Voter ID">
+            </div>
+        </div>
+
+
+        <table class="charges-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Application Charges</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="td-label">Extract Of Certificate Fee</td>
+                    <td class="amount-col">
+                        <div class="currency-wrapper">
+                            <span class="currency-symbol">₹</span>
+                            <input type="number" id="extractFee" class="fee-input" placeholder="0.00" min="0"
+                                step="0.01" oninput="calculateTotal()">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td-label">Processing Fee</td>
+                    <td class="amount-col">
+                        <div class="currency-wrapper">
+                            <span class="currency-symbol">₹</span>
+                            <input type="number" id="processingFee" class="fee-input" placeholder="0.00" min="0"
+                                step="0.01" oninput="calculateTotal()">
+                        </div>
+                    </td>
+                </tr>
+                <tr class="total-row">
+                    <td class="td-label">Total Amount</td>
+                    <td class="amount-col">
+                        <div class="currency-wrapper total-wrapper">
+                            <span class="currency-symbol" style="font-weight: bold;">₹</span>
+                            <input type="text" id="totalFee" class="fee-input fee-total" value="0.00" readonly>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">6. Declaration</div>
+        <div class="declaration">
+            <input type="checkbox" id="declare" style="width: auto; margin-top: 2px;">
+            <label for="declare">I hereby declare that the information given in this application is true and correct to
+                the best of my knowledge and belief.</label>
+        </div>
+
+        <div class="signature-row">
+            <div class="signature-box">Date & Place</div>
+            <div class="signature-box">Signature of Applicant</div>
+        </div>
+
+    </div>
+    <script>
+        // --- 1. Auto-fill Date Script ---
+        window.onload = function () {
+            const dateInput = document.getElementById('applicationDate');
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1;
+            let dd = today.getDate();
+            if (mm < 10) mm = '0' + mm;
+            if (dd < 10) dd = '0' + dd;
+            dateInput.value = yyyy + '-' + mm + '-' + dd;
+        };
+
+        // --- 2. Calculate Total Fee Script ---
+        function calculateTotal() {
+            const extractVal = parseFloat(document.getElementById('extractFee').value) || 0;
+            const processingVal = parseFloat(document.getElementById('processingFee').value) || 0;
+            const total = extractVal + processingVal;
+            document.getElementById('totalFee').value = total.toFixed(2);
+        }
+
+        // --- 3. PDF Download Script ---
+        function downloadPDF() {
+            // 1. Select the element we want to convert to PDF by its ID
+            const element = document.getElementById('form-content-area');
+
+            // 2. Configure the options for html2pdf
+            const opt = {
+                margin: 0, // We rely on the CSS padding within the container
+                filename: 'Birth_Certificate_Application.pdf', // Name of downloaded file
+                image: { type: 'jpeg', quality: 0.98 }, // Image quality if any images are present
+                html2canvas: { scale: 2, useCORS: true, logging: false }, // Scale 2 makes text sharper
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // Set standard A4 PDF
+            };
+
+            // 3. Execute the conversion and download
+            // The library takes the element, applies options, converts, and saves.
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+
+</body>
+
+</html>

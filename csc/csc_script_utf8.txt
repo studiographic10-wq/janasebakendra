@@ -1,0 +1,463 @@
+﻿const translations = {
+    "en": {
+        "tagline": "Integrated Citizen Portal",
+        "home": "Home",
+        "about": "About Us",
+        "blog": "Blog",
+        "branding": "CSC Branding",
+        "register": "CSC Register",
+        "login": "LOGIN",
+        "vle_locator": "VLE LOCATOR",
+        "marquee": "Welcome to Digital India CSC VLE Services Portal ÔÇó Access all government and common services in one place ÔÇó Stay updated with the latest service additions ÔÇó Fast, Secure, and Efficient workflow for all VLEs.",
+        "welcome": "Welcome, VLE",
+        "sub_hero": "Quickly access all CSC and Odisha Government services below.",
+        "search_placeholder": "Search for a service...",
+        "footer_text": "Digital India CSC-VLE Services in One Place . All rights reserved Mr. Deepk Kumar Prdhan",
+        "Civic Services": "Civic Services",
+        "Business & Tax": "Business & Tax",
+        "Central/Premium": "Central/Premium",
+        "Utilities & Banking": "Utilities & Banking",
+        "Farmer & Labor": "Farmer & Labor",
+        "Education & Training": "Education & Training",
+        "chat_placeholder": "Ask CSC Assistant...",
+        "bot_intro": "Hello! I am your <strong>CSC Assistant</strong>. I can find CSC services for you or answer general questions.",
+        "bot_greeting": "Hello! I am the CSC Assistant. Type your question below to search services or ask me anything.",
+        "bot_found_service": "I found this local service:",
+        "bot_found_multiple": "I found these local services:",
+        "bot_fallback": "I didn't find a direct local service match. <br><br>­ƒæë <strong><a href='https://gemini.google.com/app' target='_blank' style='color:#003366;text-decoration:underline;'>Click here to ask our AI Support about: </a></strong>",
+        "bot_contact_support": "For technical support issues, you might need to check with the CSC team. <br>­ƒæë <a href='https://gemini.google.com/app' target='_blank'>Ask AI Support for troubleshooting steps</a>",
+        "bot_ask_gemini_prefix": "Click to Search AI: "
+    },
+    "or": {
+        "tagline": "Ó¼ÅÓ¼òÓ¡ÇÓ¼òÓ¡âÓ¼ñ Ó¼¿Ó¼¥Ó¼ùÓ¼░Ó¼┐Ó¼ò Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒÓ¼¥Ó¼▓Ó¡ì",
+        "home": "Ó¼«Ó¡éÓ¼│ Ó¼¬Ó¡âÓ¼ÀÓ¡ìÓ¼áÓ¼¥",
+        "about": "Ó¼åÓ¼« Ó¼¼Ó¼┐Ó¼ÀÓ¡ƒÓ¼░Ó¡ç",
+        "blog": "Ó¼¼Ó¡ìÓ¼▓Ó¼ùÓ¡ì",
+        "branding": "CSC Ó¼¼Ó¡ìÓ¼░Ó¼¥Ó¼úÓ¡ìÓ¼íÓ¼┐Ó¼é",
+        "register": "CSC Ó¼¬Ó¼×Ó¡ìÓ¼£Ó¼┐Ó¼òÓ¼░Ó¼ú",
+        "login": "Ó¼▓Ó¼ùÓ¡ì Ó¼çÓ¼¿Ó¡ì",
+        "vle_locator": "VLE Ó¼ûÓ¡ïÓ¼£Ó¼¿Ó¡ìÓ¼ñÓ¡ü",
+        "marquee": "Ó¼íÓ¼┐Ó¼£Ó¼┐Ó¼ƒÓ¼¥Ó¼▓Ó¡ì Ó¼çÓ¼úÓ¡ìÓ¼íÓ¼┐Ó¼å CSC VLE Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒÓ¼¥Ó¼▓Ó¼òÓ¡ü Ó¼©Ó¡ìÓ¡▒Ó¼¥Ó¼ùÓ¼ñ ÔÇó Ó¼ùÓ¡ïÓ¼ƒÓ¼┐Ó¼Å Ó¼©Ó¡ìÓ¼ÑÓ¼¥Ó¼¿Ó¼░Ó¡ç Ó¼©Ó¼«Ó¼©Ó¡ìÓ¼ñ Ó¼©Ó¼░Ó¼òÓ¼¥Ó¼░Ó¡Ç Ó¼ÅÓ¼¼Ó¼é Ó¼©Ó¼¥Ó¼ºÓ¼¥Ó¼░Ó¼ú Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼¬Ó¡ìÓ¼░Ó¼¥Ó¼¬Ó¡ìÓ¼ñ Ó¼òÓ¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü ÔÇó Ó¼©Ó¼░Ó¡ìÓ¼¼Ó¼ÂÓ¡çÓ¼À Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼»Ó¡ïÓ¼ù Ó¼©Ó¼╣Ó¼┐Ó¼ñ Ó¼àÓ¼¬Ó¼íÓ¡çÓ¼ƒÓ¡ì Ó¼░Ó¡üÓ¼╣Ó¼¿Ó¡ìÓ¼ñÓ¡ü ÔÇó Ó¼©Ó¼«Ó¼©Ó¡ìÓ¼ñ VLE Ó¼¬Ó¼¥Ó¼çÓ¼ü Ó¼ªÓ¡ìÓ¼░Ó¡üÓ¼ñ, Ó¼©Ó¡üÓ¼░Ó¼òÓ¡ìÓ¼ÀÓ¼┐Ó¼ñ Ó¼ÅÓ¼¼Ó¼é Ó¼ªÓ¼òÓ¡ìÓ¼À Ó¼òÓ¼¥Ó¼░Ó¡ìÓ¼»Ó¡ìÓ¡ƒ",
+        "welcome": "Ó¼©Ó¡ìÓ¡▒Ó¼¥Ó¼ùÓ¼ñ, VLE",
+        "sub_hero": "Ó¼¿Ó¼┐Ó¼«Ó¡ìÓ¼¿Ó¼░Ó¡ç Ó¼ÑÓ¼┐Ó¼¼Ó¼¥ Ó¼©Ó¼«Ó¼©Ó¡ìÓ¼ñ CSC Ó¼ÅÓ¼¼Ó¼é Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼©Ó¼░Ó¼òÓ¼¥Ó¼░Ó¡Ç Ó¼©Ó¡çÓ¼¼Ó¼¥Ó¼ùÓ¡üÓ¼íÓ¼┐Ó¼òÓ¡ü Ó¼ÂÓ¡ÇÓ¼ÿÓ¡ìÓ¼░ Ó¼¬Ó¡ìÓ¼░Ó¼¼Ó¡çÓ¼Â Ó¼òÓ¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü |",
+        "search_placeholder": "Ó¼ÅÓ¼ò Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼ûÓ¡ïÓ¼£Ó¼¿Ó¡ìÓ¼ñÓ¡ü ...",
+        "footer_text": "Ó¼íÓ¼┐Ó¼£Ó¼┐Ó¼ƒÓ¼¥Ó¼▓Ó¡ì Ó¼çÓ¼úÓ¡ìÓ¼íÓ¼┐Ó¼å CSC-VLE Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼ùÓ¡ïÓ¼ƒÓ¼┐Ó¼Å Ó¼©Ó¡ìÓ¼ÑÓ¼¥Ó¼¿Ó¼░Ó¡ç | Ó¼©Ó¼░Ó¡ìÓ¼¼Ó¼©Ó¼ñÓ¡ìÓ¼ñÓ¡ìÓ¡▒ Ó¼©Ó¼éÓ¼░Ó¼òÓ¡ìÓ¼ÀÓ¼┐Ó¼ñ Ó¼ÂÓ¡ìÓ¼░Ó¡Ç Ó¼ªÓ¡ÇÓ¼¬Ó¼ò Ó¼òÓ¡üÓ¼«Ó¼¥Ó¼░ Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿",
+        "Civic Services": "Ó¼¿Ó¼¥Ó¼ùÓ¼░Ó¼┐Ó¼ò Ó¼©Ó¡çÓ¼¼Ó¼¥",
+        "Business & Tax": "Ó¼¼Ó¡ìÓ¡ƒÓ¼¼Ó¼©Ó¼¥Ó¡ƒ Ó¼ÅÓ¼¼Ó¼é Ó¼ƒÓ¼┐Ó¼òÓ¼©",
+        "Central/Premium": "Ó¼òÓ¡çÓ¼¿Ó¡ìÓ¼ªÓ¡ìÓ¼░Ó¡ÇÓ¡ƒ / Ó¼¬Ó¡ìÓ¼░Ó¼┐Ó¼«Ó¼┐Ó¡ƒÓ¼«Ó¡ì",
+        "Utilities & Banking": "Ó¡ƒÓ¡üÓ¼ƒÓ¼┐Ó¼▓Ó¼┐Ó¼ƒÓ¼┐ Ó¼ÅÓ¼¼Ó¼é Ó¼¼Ó¡ìÓ¡ƒÓ¼¥Ó¼ÖÓ¡ìÓ¼òÓ¼┐Ó¼ÖÓ¡ìÓ¼ùÓ¡ì",
+        "Farmer & Labor": "Ó¼òÓ¡âÓ¼ÀÓ¼ò Ó¼ÅÓ¼¼Ó¼é Ó¼ÂÓ¡ìÓ¼░Ó¼«Ó¼┐Ó¼ò",
+        "Education & Training": "Ó¼ÂÓ¼┐Ó¼òÓ¡ìÓ¼ÀÓ¼¥ Ó¼ÅÓ¼¼Ó¼é Ó¼¬Ó¡ìÓ¼░Ó¼ÂÓ¼┐Ó¼òÓ¡ìÓ¼ÀÓ¼ú",
+        "chat_placeholder": "CSC Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼òÓ¼ÖÓ¡ìÓ¼òÓ¡ü Ó¼¬Ó¼ÜÓ¼¥Ó¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü...",
+        "bot_intro": "Ó¼¿Ó¼«Ó¼©Ó¡ìÓ¼òÓ¼¥Ó¼░! Ó¼«Ó¡üÓ¼ü Ó¼åÓ¼¬Ó¼úÓ¼ÖÓ¡ìÓ¼òÓ¼░ <strong>CSC Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼ò</strong> | Ó¼«Ó¡üÓ¼ü Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼ûÓ¡ïÓ¼£Ó¼┐Ó¼¼Ó¼¥Ó¼░Ó¡ç Ó¼òÓ¼┐Ó¼«Ó¡ìÓ¼¼Ó¼¥ Ó¼àÓ¼¿Ó¡ìÓ¡ƒ Ó¼òÓ¡îÓ¼úÓ¼©Ó¼┐ Ó¼¬Ó¡ìÓ¼░Ó¼ÂÓ¡ìÓ¼¿Ó¼░ Ó¼ëÓ¼ñÓ¡ìÓ¼ñÓ¼░ Ó¼ªÓ¡çÓ¼¼Ó¼¥Ó¼░Ó¡ç Ó¼©Ó¼¥Ó¼╣Ó¼¥Ó¼»Ó¡ìÓ¡ƒ Ó¼òÓ¼░Ó¼┐Ó¼¬Ó¼¥Ó¼░Ó¼┐Ó¼¼Ó¼┐ |",
+        "bot_greeting": "Ó¼¿Ó¼«Ó¼©Ó¡ìÓ¼òÓ¼¥Ó¼░! Ó¼«Ó¡üÓ¼ü CSC Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼ò | Ó¼åÓ¼¬Ó¼úÓ¼ÖÓ¡ìÓ¼òÓ¼░ Ó¼¬Ó¡ìÓ¼░Ó¼ÂÓ¡ìÓ¼¿ Ó¼▓Ó¡çÓ¼ûÓ¼¿Ó¡ìÓ¼ñÓ¡ü |",
+        "bot_found_service": "Ó¼«Ó¡üÓ¼ü Ó¼ÅÓ¼╣Ó¼┐ Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼¬Ó¼¥Ó¼çÓ¼▓Ó¼┐:",
+        "bot_found_multiple": "Ó¼«Ó¡üÓ¼ü Ó¼ÅÓ¼òÓ¼¥Ó¼ºÓ¼┐Ó¼ò Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼¬Ó¼¥Ó¼çÓ¼▓Ó¼┐:",
+        "bot_fallback": "Ó¼«Ó¡üÓ¼ü Ó¼òÓ¡îÓ¼úÓ¼©Ó¼┐ Ó¼¿Ó¼┐Ó¼░Ó¡ìÓ¼ªÓ¡ìÓ¼ªÓ¼┐Ó¼ÀÓ¡ìÓ¼ƒ Ó¼▓Ó¡ïÓ¼òÓ¼¥Ó¼▓Ó¡ì Ó¼©Ó¡çÓ¼¼Ó¼¥ Ó¼¬Ó¼¥Ó¼çÓ¼▓Ó¼┐ Ó¼¿Ó¼¥Ó¼╣Ó¼┐Ó¼ü | <br><br>­ƒæë <strong><a href='https://gemini.google.com/app' target='_blank' style='color:#003366;text-decoration:underline;'>AI Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼ñÓ¼¥ Ó¼¬Ó¼ÜÓ¼¥Ó¼░Ó¼┐Ó¼¼Ó¼¥Ó¼òÓ¡ü Ó¼ÅÓ¼áÓ¼¥Ó¼░Ó¡ç Ó¼òÓ¡ìÓ¼▓Ó¼┐Ó¼òÓ¡ì Ó¼òÓ¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü: </a></strong>",
+        "bot_contact_support": "Ó¼©Ó¼¥Ó¼╣Ó¼¥Ó¼»Ó¡ìÓ¡ƒ Ó¼¬Ó¼¥Ó¼çÓ¼ü AI Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼ñÓ¼¥ Ó¼¼Ó¡ìÓ¡ƒÓ¼¼Ó¼╣Ó¼¥Ó¼░ Ó¼òÓ¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü | <br>­ƒæë <a href='https://gemini.google.com/app' target='_blank'>AI Ó¼©Ó¼╣Ó¼¥Ó¡ƒÓ¼ñÓ¼¥ Ó¼ûÓ¡ïÓ¼▓Ó¼¿Ó¡ìÓ¼ñÓ¡ü</a>",
+        "bot_ask_gemini_prefix": "AI Ó¼òÓ¡ü Ó¼¬Ó¼ÜÓ¼¥Ó¼░Ó¼¿Ó¡ìÓ¼ñÓ¡ü: "
+    }
+};
+
+const services = [
+    // 01 - Civic Services
+    { category: "Civic Services", name: "Ration Card Download", name_or: "Ó¼░Ó¼¥Ó¼©Ó¼¿ Ó¼òÓ¼¥Ó¼░Ó¡ìÓ¼í Ó¼íÓ¼¥Ó¼ëÓ¼¿Ó¼▓Ó¡ïÓ¼íÓ¡ì", url: "https://www.pdsodisha.gov.in/NFSA/DownloadRationCard/PublicRationCardDownload", icon: "https://img.icons8.com/color/512/ration-card.png", keywords: ["ration", "card", "pds", "food", "safety", "nfsa", "Ó¼░Ó¼¥Ó¼©Ó¼¿"] },
+    // 02 - Business & Tax
+    { category: "Business & Tax", name: "PAN Service (UTIITSL)", name_or: "Ó¼¬Ó¼¥Ó¼¿ Ó¼©Ó¡çÓ¼¼Ó¼¥ (UTIITSL)", url: "https://www.myutiitsl.com/panonlineservices/CSCLogin", icon: "https://img.icons8.com/color/512/identity-theft.png", keywords: ["pan", "uti", "tax", "card", "Ó¼¬Ó¼¥Ó¼¿"] },
+    // 03 - Civic Services (Duplicate of 01)
+    { category: "Civic Services", name: "Ration Card (Link 2)", name_or: "Ó¼░Ó¼¥Ó¼©Ó¼¿ Ó¼òÓ¼¥Ó¼░Ó¡ìÓ¼í (Ó¼▓Ó¼┐Ó¼ÖÓ¡ìÓ¼òÓ¡ì Ó¡¿)", url: "https://www.pdsodisha.gov.in/NFSA/DownloadRationCard/PublicRationCardDownload", icon: "https://img.icons8.com/color/512/ration-card.png", keywords: ["ration", "card"] },
+    // 04 - Central/Premium
+    { category: "Central/Premium", name: "CSC Safar", name_or: "Ó¼©Ó¼┐Ó¼ÅÓ¼©Ó¼©Ó¼┐ Ó¼©Ó¼½Ó¼░", url: "https://cscsafar.in/", icon: "https://img.icons8.com/color/512/bus.png", keywords: ["safar", "travel", "bus", "ticket", "booking"] },
+    // 05 - Central/Premium
+    { category: "Central/Premium", name: "Ayushman Bharat", name_or: "Ó¼åÓ¡ƒÓ¡üÓ¼ÀÓ¡ìÓ¼«Ó¼¥Ó¼¿ Ó¼¡Ó¼¥Ó¼░Ó¼ñ", url: "https://beneficiary.nha.gov.in/", icon: "https://img.icons8.com/color/512/hospital.png", keywords: ["ayushman", "bharat", "health", "card", "biometric", "golden", "card"] },
+    // 06 - Civic Services
+    { category: "Civic Services", name: "Voter Services", name_or: "Ó¼¡Ó¡ïÓ¼ƒÓ¼░ Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://voters.eci.gov.in/", icon: "https://img.icons8.com/color/512/elections.png", keywords: ["voter", "election", "id", "card", "eci"] },
+    // 07 - Utilities & Banking
+    { category: "Utilities & Banking", name: "HDFC Bank Login", name_or: "HDFC Ó¼¼Ó¡ìÓ¡ƒÓ¼¥Ó¼ÖÓ¡ìÓ¼ò Ó¼▓Ó¼ùÓ¡ì Ó¼çÓ¼¿Ó¡ì", url: "https://agentapp.ddp.hdfcbank.com/ddp-agent-portal/ddp/login", icon: "https://img.icons8.com/color/512/bank.png", keywords: ["hdfc", "bank", "account", "login", "bc"] },
+    // 08 - Duplicate PAN
+    { category: "Business & Tax", name: "PAN Service (Link 2)", name_or: "Ó¼¬Ó¼¥Ó¼¿ Ó¼©Ó¡çÓ¼¼Ó¼¥ (Ó¼▓Ó¼┐Ó¼ÖÓ¡ìÓ¼òÓ¡ì Ó¡¿)", url: "https://www.myutiitsl.com/panonlineservices/CSCLogin", icon: "https://img.icons8.com/color/512/id-card.png", keywords: ["pan"] },
+    // 09 - Farmer & Labor
+    { category: "Farmer & Labor", name: "PM Maandhan", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿Ó¼«Ó¼¿Ó¡ìÓ¼ñÓ¡ìÓ¼░Ó¡Ç Ó¼«Ó¼¥Ó¼¿Ó¼ºÓ¼¿", url: "https://maandhan.in/maandhan/login", icon: "https://img.icons8.com/color/512/umbrella.png", keywords: ["maandhan", "pension", "pm", "farmer"] },
+    // 10 - Business & Tax
+    { category: "Business & Tax", name: "Income Tax", name_or: "Ó¼åÓ¡ƒÓ¼òÓ¼░", url: "https://www.incometax.gov.in/iec/foportal/", icon: "https://img.icons8.com/color/512/tax.png", keywords: ["income", "tax", "itr", "filing"] },
+    // 11 - Farmer & Labor
+    { category: "Farmer & Labor", name: "CM Kisan Odisha", name_or: "Ó¼©Ó¼┐Ó¼ÅÓ¼«Ó¡ì Ó¼òÓ¼┐Ó¼ÀÓ¼¥Ó¼¿ Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥", url: "https://cmkisan.odisha.gov.in/", icon: "https://img.icons8.com/color/512/sprout.png", keywords: ["cm", "kisan", "odisha", "farmer", "scheme", "Ó¼òÓ¡âÓ¼ÀÓ¼ò"] },
+    // 12 - Business & Tax
+    { category: "Business & Tax", name: "Udyam Registration", name_or: "Ó¼ëÓ¼ªÓ¡ìÓ¡ƒÓ¼« Ó¼¬Ó¼×Ó¡ìÓ¼£Ó¼┐Ó¼òÓ¼░Ó¼ú", url: "https://udyamregistration.gov.in/UdyamRegistration.aspx", icon: "https://img.icons8.com/color/512/factory-breakdown.png", keywords: ["udyam", "msme", "business", "registration"] },
+    // 13 - Central/Premium
+    { category: "Central/Premium", name: "IRCTC Agent", name_or: "IRCTC Ó¼ÅÓ¼£Ó¡çÓ¼úÓ¡ìÓ¼ƒ", url: "https://registration.csccloud.in/irctc/Default.aspx", icon: "https://img.icons8.com/color/512/train.png", keywords: ["irctc", "train", "ticket", "railway", "booking"] },
+    // 14 - Civic Services
+    { category: "Civic Services", name: "Odisha Citizen Portal", name_or: "Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼¿Ó¼¥Ó¼ùÓ¼░Ó¼┐Ó¼ò Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒÓ¼¥Ó¼▓Ó¡ì", url: "https://citizenportal-op.gov.in/Citizen/Login.aspx", icon: "https://img.icons8.com/color/512/user.png", keywords: ["citizen", "portal", "odisha", "police", "verification"] },
+    // 15 - Central/Premium
+    { category: "Central/Premium", name: "Parivahan Sewa", name_or: "Ó¼¬Ó¼░Ó¼┐Ó¼¼Ó¼╣Ó¼¿ Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://parivahansewas.com/", icon: "https://img.icons8.com/color/512/steering-wheel.png", keywords: ["parivahan", "driving", "license", "dl", "rc", "vehicle"] },
+    // 16 - Education
+    { category: "Education & Training", name: "National Scholarship", name_or: "Ó¼£Ó¼¥Ó¼ñÓ¡ÇÓ¡ƒ Ó¼øÓ¼¥Ó¼ñÓ¡ìÓ¼░Ó¼¼Ó¡âÓ¼ñÓ¡ìÓ¼ñÓ¼┐", url: "https://scholarships.gov.in/", icon: "https://img.icons8.com/color/512/student-registration.png", keywords: ["scholarship", "nsp", "student", "education"] },
+    // 17 - Farmer
+    { category: "Farmer & Labor", name: "Nirman Shramik", name_or: "Ó¼¿Ó¼┐Ó¼░Ó¡ìÓ¼«Ó¼¥Ó¼ú Ó¼ÂÓ¡ìÓ¼░Ó¼«Ó¼┐Ó¼ò", url: "https://nirmanshramik.odisha.gov.in/website/welcome", icon: "https://img.icons8.com/color/512/worker-male.png", keywords: ["nirman", "shramik", "labor", "construction", "bocw", "worker"] },
+    // 18 - Central
+    { category: "Central/Premium", name: "Passport Seva", name_or: "Ó¼¬Ó¼¥Ó¼©Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒ Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://www.passportindia.gov.in/psp", icon: "https://img.icons8.com/color/512/passport.png", keywords: ["passport", "visa", "travel", "abroad", "Ó¼¬Ó¼¥Ó¼©Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒ"] },
+    // 19 - Civic
+    { category: "Civic Services", name: "UIDAI (Aadhaar)", name_or: "Ó¼åÓ¼ºÓ¼¥Ó¼░ Ó¼©Ó¡çÓ¼¼Ó¼¥ (UIDAI)", url: "https://uidai.gov.in/en/", icon: "https://img.icons8.com/color/512/fingerprint.png", keywords: ["aadhaar", "uidai", "fingerprint", "id", "update", "download", "Ó¼åÓ¼ºÓ¼¥Ó¼░"] },
+    // 20 - Utilities
+    { category: "Utilities & Banking", name: "NPCI", name_or: "NPCI", url: "https://www.npci.org.in/", icon: "https://img.icons8.com/color/512/transaction.png", keywords: ["npci", "upi", "banking", "payment"] },
+    // 21 - Utilities
+    { category: "Utilities & Banking", name: "TPNODL Electricity", name_or: "TPNODL Ó¼¼Ó¼┐Ó¼ªÓ¡ìÓ¡ƒÓ¡üÓ¼ñÓ¡ì Ó¼¼Ó¼┐Ó¼▓Ó¡ì", url: "https://www.tpnodl.com/", icon: "https://img.icons8.com/color/512/electricity.png", keywords: ["electricity", "bill", "power", "tpnodl", "tata"] },
+    // 22 - Farmer
+    { category: "Farmer & Labor", name: "Agrisnet Farmer", name_or: "Ó¼ÅÓ¼ùÓ¡ìÓ¼░Ó¼┐Ó¼©Ó¡ìÓ¼¿Ó¡çÓ¼ƒÓ¡ì Ó¼òÓ¡âÓ¼ÀÓ¼ò", url: "https://agrisnetodisha.ori.nic.in/stock/farmer/FarmerInquiry.aspx", icon: "https://img.icons8.com/color/512/farmer.png", keywords: ["agrisnet", "farmer", "agriculture", "id"] },
+    // 23 - Civic
+    { category: "Civic Services", name: "CEO Voter Search", name_or: "CEO Ó¼¡Ó¡ïÓ¼ƒÓ¼░ Ó¼ñÓ¼¥Ó¼▓Ó¼┐Ó¼òÓ¼¥", url: "https://ceoodisha.nic.in/en/search-your-name-2002/", icon: "https://img.icons8.com/color/512/fine-print.png", keywords: ["ceo", "voter", "list", "search"] },
+    // 24 - Civic
+    { category: "Civic Services", name: "Birth & Death", name_or: "Ó¼£Ó¼¿Ó¡ìÓ¼« Ó¼ô Ó¼«Ó¡âÓ¼ñÓ¡ìÓ¡ƒÓ¡ü Ó¼¬Ó¼×Ó¡ìÓ¼£Ó¼┐Ó¼òÓ¼░Ó¼ú", url: "https://www.birthdeath.odisha.gov.in/", icon: "https://img.icons8.com/color/512/baby.png", keywords: ["birth", "death", "certificate", "registration"] },
+    // 25 - Civic
+    { category: "Civic Services", name: "Jeevan Pramaan", name_or: "Ó¼£Ó¡ÇÓ¼¼Ó¼¿ Ó¼¬Ó¡ìÓ¼░Ó¼«Ó¼¥Ó¼ú", url: "https://jeevanpramaan.gov.in/v1.0/ppouser/login", icon: "https://img.icons8.com/color/512/grand-master-key.png", keywords: ["jeevan", "pramaan", "life", "certificate", "pensioner"] },
+    // 26 - Business
+    { category: "Business & Tax", name: "NSDL / e-Gov", name_or: "NSDL / Ó¼ç-Ó¼ùÓ¼¡Ó¼░Ó¡ìÓ¼úÓ¡ìÓ¼úÓ¼¥Ó¼¿Ó¡ìÓ¼©", url: "https://egovcsc.csccloud.in/nsdl/", icon: "https://img.icons8.com/color/512/briefcase.png", keywords: ["nsdl", "pan", "egov"] },
+    // 27 - Utilities
+    { category: "Utilities & Banking", name: "HDFC ERGO", name_or: "HDFC ERGO Ó¼çÓ¼¿Ó¼©Ó¡üÓ¼░Ó¼¥Ó¼¿Ó¡ìÓ¼©", url: "https://hepgw.hdfcergo.com/CSChdfcergo/cscconnect.aspx", icon: "https://img.icons8.com/color/512/security-checked.png", keywords: ["insurance", "hdfc", "ergo", "policy"] },
+    // 28 - Utilities
+    { category: "Utilities & Banking", name: "SBI General", name_or: "SBI Ó¼£Ó¡çÓ¼¿Ó¡çÓ¼░Ó¼¥Ó¼▓Ó¡ì Ó¼çÓ¼¿Ó¼©Ó¡üÓ¼░Ó¼¥Ó¼¿Ó¡ìÓ¼©", url: "https://dip.sbigeneral.in/Dashboard?n=FziwMQ8Hj4EfTSSXEwd0dmbOoSyswaSdr5hhv%2bIk%2fLNg9JDOVLMR80WsoEXrp5HIZjdUp6uBLJi%2bQltHZgDbfdrE1%2bJuV5dPRKl7q%2fWGaIqzYlTuLpVk1OOaUA6wlNj5xjI5fYxSwLQITxD3oCqVPhborgMo7OK4E88TnLr4hWIWf14dP1%2f%2bz7WWUW2Ge%2bExDPUB%2b%2foWlXirKSsraLLIbH1W%2fg6jkq45N6c%2bwNN8F41cC1ORUp5emdPpOWhkRzFnn11JEIoaRgNE4329FGsd56uw%2ff2VpvlxldbWAfM12bMjaJPVIhpvexDp%2feP%2f19Y3%2bPh77UCYttxvC1DoGxgoHg%3d%3d", icon: "https://img.icons8.com/color/512/online-payment-with-a-credit-card.png", keywords: ["sbi", "general", "insurance"] },
+    // 29 - Utilities
+    { category: "Utilities & Banking", name: "IFFCO Tokio", name_or: "IFFCO Ó¼ƒÓ¡ïÓ¼òÓ¼┐Ó¼ô Ó¼çÓ¼¿Ó¼©Ó¡üÓ¼░Ó¼¥Ó¼¿Ó¡ìÓ¼©", url: "https://online.iffcotokio.co.in/itgicscportal/vehicle.do?code=2f76dd3a4bc93ce6aed3433ca04d8ba428bde17e&state=690709", icon: "https://img.icons8.com/color/512/car-insurance.png", keywords: ["iffco", "tokio", "insurance", "motor"] },
+    // 30 - Utilities
+    { category: "Utilities & Banking", name: "Bajaj Allianz", name_or: "Ó¼¼Ó¼£Ó¼¥Ó¼£Ó¡ì Ó¼åÓ¼▓Ó¼┐Ó¼åÓ¼×Ó¡ìÓ¼£ Ó¼çÓ¼¿Ó¼©Ó¡üÓ¼░Ó¼¥Ó¼¿Ó¡ìÓ¼©", url: "https://webservices.bajajallianz.com/CSC/login.jsp", icon: "https://img.icons8.com/color/512/handshake.png", keywords: ["bajaj", "allianz", "insurance"] },
+    // 31 - Education
+    { category: "Education & Training", name: "APAAR", name_or: "Ó¼àÓ¼¬Ó¼¥Ó¼░ (APAAR)", url: "https://apaar.csccloud.in/", icon: "https://img.icons8.com/color/512/student-center.png", keywords: ["apaar", "student", "id", "academic"] },
+    // 32 - Utilities
+    { category: "Utilities & Banking", name: "BCBF Exam", name_or: "BCBF Ó¼¬Ó¼░Ó¡ÇÓ¼òÓ¡ìÓ¼ÀÓ¼¥", url: "https://onboarding-bcbf.cscacademy.org/?source=idp", icon: "https://img.icons8.com/color/512/exam.png", keywords: ["bcbf", "exam", "banking", "correspondent"] },
+    // 33 - Civic
+    { category: "Civic Services", name: "Bhulekh Odisha", name_or: "Ó¼¡Ó¡üÓ¼▓Ó¡çÓ¼û Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥", url: "https://bhulekh.ori.nic.in/RoRView.aspx", icon: "https://img.icons8.com/color/512/land-sales.png", keywords: ["bhulekh", "land", "record", "ror", "odisha"] },
+    // 34 - Civic
+    { category: "Civic Services", name: "e-District Odisha", name_or: "Ó¼ç-Ó¼íÓ¼┐Ó¼ÀÓ¡ìÓ¼ƒÓ¡ìÓ¼░Ó¼┐Ó¼òÓ¡ì Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥", url: "https://edistrict.odisha.gov.in/loginWindow.do", icon: "https://img.icons8.com/color/512/monitor.png", keywords: ["edistrict", "income", "caste", "resident", "certificate"] },
+    // 35 - Education
+    { category: "Education & Training", name: "DigiPaathshala", name_or: "Ó¼íÓ¼┐Ó¼£Ó¼┐ Ó¼¬Ó¼¥Ó¼áÓ¼ÂÓ¼¥Ó¼│Ó¼¥", url: "https://digipaathshala.cscacademy.org/", icon: "https://img.icons8.com/color/512/classroom.png", keywords: ["digipaathshala", "learning", "skills"] },
+    // 36 - Business
+    { category: "Business & Tax", name: "CSC Bazaar", name_or: "CSC Ó¼¼Ó¼£Ó¼¥Ó¼░", url: "https://eseva.csccloud.in/cscbazaar/default.aspx", icon: "https://img.icons8.com/color/512/shop.png", keywords: ["bazaar", "shop", "ecommerce", "buy"] },
+    // 37 - Education
+    { category: "Education & Training", name: "CSC Olympiad", name_or: "CSC Ó¼àÓ¼▓Ó¼┐Ó¼«Ó¡ìÓ¼¬Ó¼┐Ó¼åÓ¼íÓ¡ì", url: "https://cscolympiad.org/", icon: "https://img.icons8.com/color/512/medal.png", keywords: ["olympiad", "exam", "contest"] },
+    // 38 - Civic
+    { category: "Civic Services", name: "Subhadra Yojana", name_or: "Ó¼©Ó¡üÓ¼¡Ó¼ªÓ¡ìÓ¼░Ó¼¥ Ó¼»Ó¡ïÓ¼£Ó¼¿Ó¼¥", url: "https://subhadra.odisha.gov.in/", icon: "https://img.icons8.com/color/512/women-profile.png", keywords: ["subhadra", "yojana", "scheme", "women"] },
+    // 39 - Business
+    { category: "Business & Tax", name: "DigiName", name_or: "Ó¼íÓ¼┐Ó¼£Ó¼┐ Ó¼¿Ó¡çÓ¼«Ó¡ì", url: "https://www.diginame.in/", icon: "https://img.icons8.com/color/512/domain.png", keywords: ["diginame", "domain", "website", "url"] },
+    // 40 - Central
+    { category: "Central/Premium", name: "CSC MOP", name_or: "CSC MOP", url: "https://services.csccloud.in/MOP/Default.aspx", icon: "https://img.icons8.com/color/512/services.png", keywords: ["mop", "service", "master", "operations"] },
+    // 41 - Central
+    { category: "Central/Premium", name: "CSC Health", name_or: "CSC Ó¼©Ó¡ìÓ¡▒Ó¼¥Ó¼©Ó¡ìÓ¼ÑÓ¡ìÓ¡ƒ Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://connect.csc.gov.in/account/authorize?response_type=code&client_id=ca1b3b40-66f2-4069-d88e-a921bfcdec3c&redirect_uri=http://cschealth.in/Admin/vle_login&state=78570", icon: "https://img.icons8.com/color/512/doctors-bag.png", keywords: ["health", "doctor", "telemedicine", "consultation"] },
+    // 42 - Farmer
+    { category: "Farmer & Labor", name: "PM Kisan", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿Ó¼«Ó¼¿Ó¡ìÓ¼ñÓ¡ìÓ¼░Ó¡Ç Ó¼òÓ¼┐Ó¼ÀÓ¼¥Ó¼¿", url: "https://pmkisan.gov.in/", icon: "https://img.icons8.com/color/512/tractor.png", keywords: ["pm", "kisan", "samman", "nidhi", "farmer", "scheme"] },
+    // 43 - Civic
+    { category: "Civic Services", name: "Food Odisha", name_or: "Ó¼ûÓ¼¥Ó¼ªÓ¡ìÓ¡ƒ Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼»Ó¡ïÓ¼ùÓ¼¥Ó¼ú", url: "https://www.foododisha.in/citizenservice.asp?GL=eservice&lnk=29", icon: "https://img.icons8.com/color/512/food-bar.png", keywords: ["food", "odisha", "ration", "supply"] },
+    // 44 - Education
+    { category: "Education & Training", name: "NIELIT Student", name_or: "NIELIT Ó¼øÓ¼¥Ó¼ñÓ¡ìÓ¼░", url: "https://student.nielit.gov.in/", icon: "https://img.icons8.com/color/512/reading.png", keywords: ["nielit", "computer", "course", "exam", "ccc"] },
+    // 45 - Civic
+    { category: "Civic Services", name: "Emp. Exchange Odisha", name_or: "Ó¼¿Ó¼┐Ó¡ƒÓ¡ïÓ¼£Ó¼¿ Ó¼¼Ó¼┐Ó¼¿Ó¼┐Ó¼«Ó¡ƒ Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥", url: "https://empmission.odisha.gov.in/Exchange/employment.jsp", icon: "https://img.icons8.com/color/512/find-matching-job.png", keywords: ["employment", "exchange", "job", "registration"] },
+    // 46 - Farmer
+    { category: "Farmer & Labor", name: "e-Shram", name_or: "Ó¼ç-Ó¼ÂÓ¡ìÓ¼░Ó¼«", url: "https://eshram.gov.in/", icon: "https://img.icons8.com/color/512/hard-hat.png", keywords: ["eshram", "shram", "labor", "card", "registration"] },
+    // 47 - Farmer
+    { category: "Farmer & Labor", name: "EPFO India", name_or: "EPFO Ó¼çÓ¼úÓ¡ìÓ¼íÓ¼┐Ó¼å", url: "https://www.epfindia.gov.in/site_en/index.php", icon: "https://img.icons8.com/color/512/money-box.png", keywords: ["epfo", "epf", "provident", "fund", "pf"] },
+    // 48 - Education
+    { category: "Education & Training", name: "OSSSC", name_or: "OSSSC (Ó¼òÓ¼░Ó¡ìÓ¼«Ó¼ÜÓ¼¥Ó¼░Ó¡Ç Ó¼ÜÓ¡ƒÓ¼¿)", url: "https://www.osssc.gov.in/Public/OSSSC/Default.aspx", icon: "https://img.icons8.com/color/512/test-passed.png", keywords: ["osssc", "exam", "recruitment", "job"] },
+    // 49 - Farmer
+    { category: "Farmer & Labor", name: "Agristack (Farmer Reg)", name_or: "Ó¼ÅÓ¼ùÓ¡ìÓ¼░Ó¼┐Ó¼ÀÓ¡ìÓ¼ƒÓ¼¥Ó¼òÓ¡ì (Ó¼òÓ¡âÓ¼ÀÓ¼ò Ó¼¬Ó¼×Ó¡ìÓ¼£Ó¼┐Ó¼òÓ¼░Ó¼ú)", url: "https://asfr.agristack.gov.in/farmer-registry-as/#/", icon: "https://img.icons8.com/color/512/wheat.png", keywords: ["agristack", "farmer", "registry"] },
+    // 50 - Farmer
+    { category: "Farmer & Labor", name: "NFDP (Fisheries)", name_or: "NFDP (Ó¼«Ó¼ñÓ¡ìÓ¼©Ó¡ìÓ¡ƒÓ¼ÜÓ¼¥Ó¼À)", url: "https://nfdp.dof.gov.in/nfdp/#/", icon: "https://img.icons8.com/color/512/fish.png", keywords: ["nfdp", "fish", "fisheries"] },
+    // 51 - Civic
+    { category: "Civic Services", name: "SSEPD (Pension)", name_or: "SSEPD (Ó¼¡Ó¼ñÓ¡ìÓ¼ñÓ¼¥)", url: "https://ssepd.gov.in:8443/swp/applyBeneficiaryApplication.htm", icon: "https://img.icons8.com/color/512/wheelchair.png", keywords: ["ssepd", "pension", "disability", "old", "age"] },
+    // 52 - Civic
+    { category: "Civic Services", name: "Anganwadi Engagement", name_or: "Ó¼àÓ¼ÖÓ¡ìÓ¼ùÓ¼¿Ó¡▒Ó¼¥Ó¼íÓ¼┐ Ó¼¿Ó¼┐Ó¼»Ó¡üÓ¼òÓ¡ìÓ¼ñÓ¼┐", url: "https://engagement-awc.odisha.gov.in/landing", icon: "https://img.icons8.com/color/512/mother.png", keywords: ["anganwadi", "job", "engagement"] },
+    // 53 - Education
+    { category: "Education & Training", name: "Navodaya Vidyalaya", name_or: "Ó¼¿Ó¼¼Ó¡ïÓ¼ªÓ¡ƒ Ó¼¼Ó¼┐Ó¼ªÓ¡ìÓ¡ƒÓ¼¥Ó¼│Ó¡ƒ", url: "https://www.navodaya.gov.in/nvs/en/Home1/", icon: "https://img.icons8.com/color/512/school.png", keywords: ["navodaya", "school", "admission"] },
+    // 54 - Education
+    { category: "Education & Training", name: "Odisha Adarsha Vidyalaya", name_or: "Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼åÓ¼ªÓ¼░Ó¡ìÓ¼Â Ó¼¼Ó¼┐Ó¼ªÓ¡ìÓ¡ƒÓ¼¥Ó¼│Ó¡ƒ", url: "https://oav.edu.in/", icon: "https://img.icons8.com/color/512/student-male.png", keywords: ["oav", "adarsha", "school", "vidyalaya"] },
+    // 55 - Civic
+    { category: "Civic Services", name: "PDS Odisha Main", name_or: "PDS Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼«Ó¡éÓ¼│ Ó¼¬Ó¡âÓ¼ÀÓ¡ìÓ¼áÓ¼¥", url: "https://www.pdsodisha.gov.in/", icon: "https://img.icons8.com/color/512/ingredients.png", keywords: ["pds", "food", "supply"] },
+    // 56 - Education
+    { category: "Education & Training", name: "Career Power", name_or: "Ó¼òÓ¡ìÓ¡ƒÓ¼¥Ó¼░Ó¼┐Ó¡ƒÓ¼░Ó¡ì Ó¼¬Ó¼¥Ó¡▒Ó¼¥Ó¼░Ó¡ì", url: "https://www.careerpower.in/", icon: "https://img.icons8.com/color/512/books.png", keywords: ["career", "power", "exam", "prep"] },
+    // 57 - Business
+    { category: "Business & Tax", name: "Proactive Construction", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¡ïÓ¼åÓ¼òÓ¡ìÓ¼ƒÓ¼┐Ó¼¡Ó¡ì Ó¼¿Ó¼┐Ó¼░Ó¡ìÓ¼«Ó¼¥Ó¼ú", url: "https://proactiveconstruction.in/", icon: "https://img.icons8.com/color/512/crane.png", keywords: ["construction", "proactive"] },
+    // 58 - Business
+    { category: "Business & Tax", name: "PM-Vishwakarma", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿Ó¼«Ó¼¿Ó¡ìÓ¼ñÓ¡ìÓ¼░Ó¡Ç Ó¼¼Ó¼┐Ó¼ÂÓ¡ìÓ¡▒Ó¼òÓ¼░Ó¡ìÓ¼«Ó¼¥", url: "https://pmvishwakarma.gov.in/", icon: "https://img.icons8.com/color/512/pottery.png", keywords: ["pm", "vishwakarma", "artisan", "scheme"] },
+    // 59 - Farmer
+    { category: "Farmer & Labor", name: "PM Fasal Bima Yojana", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿Ó¼«Ó¼¿Ó¡ìÓ¼ñÓ¡ìÓ¼░Ó¡Ç Ó¼½Ó¼©Ó¼▓ Ó¼¼Ó¡ÇÓ¼«Ó¼¥", url: "https://pmfby.gov.in/", icon: "https://img.icons8.com/color/512/field.png", keywords: ["pm", "fasal", "bima", "yojana", "crop", "insurance"] },
+    // 60 - Business
+    { category: "Business & Tax", name: "Udyam Services", name_or: "Ó¼ëÓ¼ªÓ¡ìÓ¡ƒÓ¼« Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://udyamregistration.gov.in/", icon: "https://img.icons8.com/color/512/factory-breakdown.png", keywords: ["udyam", "services", "msme"] },
+    // 61 - Civic
+    { category: "Civic Services", name: "Odisha Govt Portal", name_or: "Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼©Ó¼░Ó¼òÓ¼¥Ó¼░Ó¡Ç Ó¼¬Ó¡ïÓ¼░Ó¡ìÓ¼ƒÓ¼¥Ó¼▓", url: "https://www.odisha.gov.in/", icon: "https://img.icons8.com/color/512/administrative-tools.png", keywords: ["odisha", "govt", "portal", "government"] },
+    // 62 - Civic
+    { category: "Civic Services", name: "Gopabandhu Jan Arogya", name_or: "Ó¼ùÓ¡ïÓ¼¬Ó¼¼Ó¼¿Ó¡ìÓ¼ºÓ¡ü Ó¼£Ó¼¿ Ó¼åÓ¼░Ó¡ïÓ¼ùÓ¡ìÓ¡ƒ", url: "https://gjay.odisha.gov.in/home", icon: "https://img.icons8.com/color/512/healthcare-claim.png", keywords: ["gjay", "health", "insurance"] },
+    // 63 - Civic
+    { category: "Civic Services", name: "Jana Sunani", name_or: "Ó¼£Ó¼¿ Ó¼ÂÓ¡üÓ¼úÓ¼¥Ó¼úÓ¼┐", url: "https://janasunani.odisha.gov.in/", icon: "https://img.icons8.com/color/512/customer-support.png", keywords: ["jana", "sunani", "grievance"] },
+    // 64 - Civic
+    { category: "Civic Services", name: "Sugam Odisha", name_or: "Ó¼©Ó¡üÓ¼ùÓ¼« Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥", url: "https://sugam.odisha.gov.in/website/home", icon: "https://img.icons8.com/color/512/verified-account.png", keywords: ["sugam", "portal"] },
+    // 65 - Farmer
+    { category: "Farmer & Labor", name: "Odisha Solar Pump", name_or: "Ó¼ôÓ¼íÓ¼┐Ó¼ÂÓ¼¥ Ó¼©Ó¡îÓ¼░ Ó¼¬Ó¼«Ó¡ìÓ¼¬", url: "https://odishasolarpump.nic.in/", icon: "https://img.icons8.com/color/512/solar-panel.png", keywords: ["solar", "pump", "farmer"] },
+    // 66 - Central
+    { category: "Central/Premium", name: "PM Surya Ghar", name_or: "Ó¼¬Ó¡ìÓ¼░Ó¼ºÓ¼¥Ó¼¿Ó¼«Ó¼¿Ó¡ìÓ¼ñÓ¡ìÓ¼░Ó¡Ç Ó¼©Ó¡éÓ¼░Ó¡ìÓ¼»Ó¡ìÓ¡ƒ Ó¼ÿÓ¼░", url: "https://pmsuryaghar.gov.in/#/", icon: "https://img.icons8.com/color/512/sun.png", keywords: ["pm", "surya", "ghar", "solar"] },
+    // 67 - Civic
+    { category: "Civic Services", name: "Madhu Babu Pension", name_or: "Ó¼«Ó¼ºÓ¡ü Ó¼¼Ó¼¥Ó¼¼Ó¡ü Ó¼¬Ó¡çÓ¼¿Ó¼©Ó¼¿", url: "https://ssepd.gov.in:8443/swp/applyMbpyPensionScheme.htm", icon: "https://img.icons8.com/color/512/retirement.png", keywords: ["mbpy", "pension", "madhu", "babu"] },
+    // 68 - Civic
+    { category: "Civic Services", name: "e-Pauti", name_or: "Ó¼ç-Ó¼¬Ó¼¥Ó¼ëÓ¼ñÓ¼┐", url: "https://odishalandrevenue.nic.in/", icon: "https://img.icons8.com/color/512/land-sales.png", keywords: ["pauti", "land", "revenue", "payment"] },
+    // 69 - Civic
+    { category: "Civic Services", name: "e-Pauti Receipt", name_or: "Ó¼ç-Ó¼¬Ó¼¥Ó¼ëÓ¼ñÓ¼┐ Ó¼░Ó¼©Ó¼┐Ó¼ª", url: "https://odishalandrevenue.nic.in/OnlineOflineReceiptDownload.aspx", icon: "https://img.icons8.com/color/512/receipt.png", keywords: ["pauti", "receipt", "download"] },
+    // 70 - Civic
+    { category: "Civic Services", name: "Revenue & Disaster Mgmt", name_or: "Ó¼░Ó¼¥Ó¼£Ó¼©Ó¡ìÓ¡▒ Ó¼ô Ó¼¼Ó¼┐Ó¼¬Ó¼░Ó¡ìÓ¼»Ó¡ìÓ¡ƒÓ¡ƒ Ó¼¬Ó¼░Ó¼┐Ó¼ÜÓ¼¥Ó¼│Ó¼¿Ó¼¥", url: "https://www.igrodisha.gov.in/Marraige.aspx", icon: "https://img.icons8.com/color/512/government.png", keywords: ["revenue", "disaster", "management", "marriage"] },
+    // 71 - Civic
+    { category: "Civic Services", name: "Marriage Certificate", name_or: "Ó¼¼Ó¼┐Ó¼¼Ó¼¥Ó¼╣ Ó¼¬Ó¡ìÓ¼░Ó¼«Ó¼¥Ó¼úÓ¼¬Ó¼ñÓ¡ìÓ¼░", url: "https://www.igrodisha.gov.in/Marraige.aspx", icon: "https://img.icons8.com/color/512/wedding-rings.png", keywords: ["marriage", "certificate", "registration"] },
+    // 72 - Utilities
+    { category: "Utilities & Banking", name: "Digipay Light", name_or: "Ó¼íÓ¼┐Ó¼£Ó¼┐Ó¼¬Ó¡ç Ó¼▓Ó¼¥Ó¼çÓ¼ƒÓ¡ì", url: "https://agent.paycsc.in/#/sign-in", icon: "https://img.icons8.com/color/512/wallet.png", keywords: ["digipay", "light", "banking", "payment"] },
+    // 73 - Utilities
+    { category: "Utilities & Banking", name: "Jio Service", name_or: "Ó¼£Ó¼┐Ó¼ô Ó¼©Ó¡çÓ¼¼Ó¼¥ (Ó¼ƒÓ¡çÓ¼▓Ó¼┐Ó¼òÓ¼«Ó¡ì)", url: "https://telecom.csccloud.in/", icon: "https://img.icons8.com/color/512/sim-card.png", keywords: ["jio", "telecom", "recharge", "sim"] },
+    // 74 - Central
+    { category: "Central/Premium", name: "NPS Services", name_or: "NPS Ó¼©Ó¡çÓ¼¼Ó¼¥", url: "https://npscsc.in/", icon: "https://img.icons8.com/color/512/money-bag.png", keywords: ["nps", "pension", "national"] },
+    // 75 - Utilities
+    { category: "Utilities & Banking", name: "CSC Demat Account", name_or: "CSC Ó¼íÓ¼┐Ó¼«Ó¼¥Ó¼ƒÓ¡ì Ó¼åÓ¼òÓ¼¥Ó¼ëÓ¼úÓ¡ìÓ¼ƒ", url: "https://demat.csccloud.in/", icon: "https://img.icons8.com/color/512/bullish.png", keywords: ["demat", "stock", "trading", "share"] },
+    // 76 - Business
+    { category: "Business & Tax", name: "Tax2Win", name_or: "Ó¼ƒÓ¡ìÓ¡ƒÓ¼¥Ó¼òÓ¡ìÓ¼© Ó¡¿ Ó¡▒Ó¼┐Ó¼¿Ó¡ì", url: "https://tax2win.biz/csc/login/", icon: "https://img.icons8.com/color/512/tax.png", keywords: ["tax2win", "tax", "itr", "filing"] }
+];
+
+const categoryStyles = {
+    "Civic Services": "cat-civic",
+    "Central/Premium": "cat-central",
+    "Farmer & Labor": "cat-farmer",
+    "Utilities & Banking": "cat-utilities",
+    "Business & Tax": "cat-business",
+    "Education & Training": "cat-education"
+};
+
+let currentLanguage = 'or';
+let isVoiceActive = true;
+
+function applyLanguage(lang) {
+    currentLanguage = lang;
+
+    // Update active state of new language buttons
+    const langEnBtn = document.getElementById('lang-en');
+    const langOrBtn = document.getElementById('lang-or');
+    if (langEnBtn && langOrBtn) {
+        if (lang === 'en') {
+            langEnBtn.classList.add('active');
+            langOrBtn.classList.remove('active');
+        } else {
+            langOrBtn.classList.add('active');
+            langEnBtn.classList.remove('active');
+        }
+    }
+
+    const t = translations[lang];
+
+    // Update static elements with data-translate attributes
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (t[key]) {
+            el.textContent = t[key];
+        }
+    });
+
+    // Update placeholders
+    document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        if (t[key]) {
+            el.placeholder = t[key];
+        }
+    });
+
+    // Update Font Family based on language
+    if (lang === 'or') {
+        document.body.style.fontFamily = "'Noto Sans Odia', sans-serif";
+    } else {
+        document.body.style.fontFamily = "'Inter', -apple-system, sans-serif";
+    }
+
+    // Reset Chat Greeting if it's the only message
+    const chatMessages = document.getElementById('chat-messages');
+    if (chatMessages && chatMessages.children.length === 1) {
+        chatMessages.innerHTML = '';
+        const greetingText = t['bot_intro'];
+        const introDiv = document.createElement('div');
+        introDiv.className = 'message bot-message';
+        introDiv.innerHTML = greetingText;
+        chatMessages.appendChild(introDiv);
+
+        // Audio greeting removed as per user request
+    }
+
+    // Re-render services to update category titles
+    renderServices(services);
+}
+
+function speakText(textWithHtml) {
+    if (!('speechSynthesis' in window)) return;
+
+    // Stop any current speech
+    window.speechSynthesis.cancel();
+
+    // Create a temporary element to strip HTML tags
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = textWithHtml;
+    const textToSpeak = tempDiv.textContent || tempDiv.innerText || "";
+
+    if (!textToSpeak.trim()) return;
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    // Attempt to set language
+    if (currentLanguage === 'or') {
+        utterance.lang = 'or-IN'; // If supported
+        // Fallback for Oriya might be Hindi if Oriya TTS isn't widely available
+    } else {
+        utterance.lang = 'en-IN'; // Indian English
+    }
+
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(utterance);
+}
+
+function renderServices(servicesToRender) {
+    const mainGrid = document.getElementById('servicesGrid');
+    mainGrid.innerHTML = '';
+    const t = translations[currentLanguage];
+
+    // Group by category
+    const grouped = servicesToRender.reduce((acc, s) => {
+        if (!acc[s.category]) acc[s.category] = [];
+        acc[s.category].push(s);
+        return acc;
+    }, {});
+
+    Object.keys(grouped).forEach(catName => {
+        const container = document.createElement('div');
+        container.className = `category-container ${categoryStyles[catName] || ''}`;
+
+        // Translate category name if available, else keep original
+        const displayCatName = t[catName] || catName;
+
+        container.innerHTML = `
+            <h3 class="category-title">${displayCatName}</h3>
+            <div class="category-grid"></div>
+        `;
+
+        const catGrid = container.querySelector('.category-grid');
+
+        grouped[catName].forEach(service => {
+            const card = document.createElement('a');
+            card.href = service.url;
+            card.target = '_blank';
+            card.className = 'service-item';
+
+            // Determine Name based on Language
+            let displayName = service.name;
+            if (currentLanguage === 'or' && service.name_or) {
+                displayName = service.name_or;
+            }
+
+            card.innerHTML = `
+                <div class="icon-wrapper">
+                    <img src="${service.icon}" alt="${displayName}" class="service-icon" onerror="this.src='https://img.icons8.com/color/512/external-link.png'">
+                </div>
+                <div class="service-content">
+                    <span class="service-name">${displayName}</span>
+                </div>
+            `;
+            catGrid.appendChild(card);
+        });
+
+        mainGrid.appendChild(container);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Language
+    // Initialize Language Buttons
+    const langEnBtn = document.getElementById('lang-en');
+    const langOrBtn = document.getElementById('lang-or');
+
+    if (langEnBtn && langOrBtn) {
+        langEnBtn.addEventListener('click', () => applyLanguage('en'));
+        langOrBtn.addEventListener('click', () => applyLanguage('or'));
+    }
+
+    // Font Size Adjustment Logic
+    const fontDecBtn = document.getElementById('font-dec');
+    const fontNormBtn = document.getElementById('font-norm');
+    const fontIncBtn = document.getElementById('font-inc');
+    let currentFontSize = 100; // Percentage
+
+    function setFontSize(size) {
+        currentFontSize = size;
+        document.documentElement.style.fontSize = `${currentFontSize}%`;
+
+        // Update active class
+        [fontDecBtn, fontNormBtn, fontIncBtn].forEach(btn => btn?.classList.remove('active'));
+        if (size < 100 && fontDecBtn) fontDecBtn.classList.add('active');
+        else if (size > 100 && fontIncBtn) fontIncBtn.classList.add('active');
+        else if (size === 100 && fontNormBtn) fontNormBtn.classList.add('active');
+    }
+
+    if (fontDecBtn && fontNormBtn && fontIncBtn) {
+        fontDecBtn.addEventListener('click', () => {
+            if (currentFontSize > 70) setFontSize(currentFontSize - 10);
+        });
+        fontNormBtn.addEventListener('click', () => {
+            setFontSize(100);
+        });
+        fontIncBtn.addEventListener('click', () => {
+            if (currentFontSize < 150) setFontSize(currentFontSize + 10);
+        });
+    }
+
+    // Initial Render
+    applyLanguage(currentLanguage);
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = services.filter(s => s.name.toLowerCase().includes(term));
+        renderServices(filtered);
+    });
+
+    // Banner Slider Logic
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let currentSlide = 0;
+    const slideInterval = 5000; // 5 seconds
+
+    function showSlide(index) {
+        if (slides.length === 0) return;
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        if (slides.length === 0) return;
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Auto Advance
+    setInterval(nextSlide, slideInterval);
+
+    // Click on dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+        });
+    });
+
+    // Home Button Scroll to Services
+    const homeLink = document.getElementById('homeLink');
+    if (homeLink) {
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const heroSection = document.querySelector('.hero');
+            if (heroSection) {
+                heroSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+});
