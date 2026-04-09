@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-CARD PRINT 3.0 | Professional Card Layout Studio</title>
+    <meta name="description" content="Professional E-Card print layout tool for AADHAAR, PAN, VOTER, DL, RC and all Indian ID cards.">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.27/interact.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ─── TOKENS ──────────────────────────────────────────── */
+        :root {
+            --bg:        #0a0a0f;
+            --surface:   #111118;
+            --panel:     #161620;
+            --border:    #2a2a38;
+            --border2:   #3a3a50;
+            --accent:    #f5c518;
+            --accent2:   #ffd54f;
+            --blue:      #4f8ef7;
+            --cyan:      #00e5ff;
+            --green:     #00e676;
+            --red:       #ff5252;
+            --purple:    #b388ff;
+            --text:      #f0f0f8;
+            --text-dim:  #7878a0;
+            --text-muted:#44445a;
+            --box-front: #4f8ef7;
+            --box-back:  #00e676;
+            --card-w-mm: 86mm;
+            --card-h-mm: 54mm;
+            --sidebar-w: 270px;
+        }
+
+        /* ─── RESET ───────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* ─── SCROLLBAR ───────────────────────────────────────── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+        /* ─── SIDEBAR ─────────────────────────────────────────── */
+        #sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 20;
+        }
+
+        .sidebar-head {
+            padding: 18px 16px 14px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, #0d0d18 0%, #111120 100%);
+            flex-shrink: 0;
+        }
+        .logo-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 34px; height: 34px;
+            background: linear-gradient(135deg, var(--accent), #ff9800);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+            box-shadow: 0 0 16px rgba(245,197,24,.35);
+        }
+        .logo-text h1 {
+            font-size: 13px; font-weight: 900; letter-spacing: 1.5px;
+            color: var(--accent); text-transform: uppercase;
+        }
+        .logo-text span {
+            font-size: 9px; color: var(--text-dim); letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sidebar-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .sidebar-footer {
+            padding: 10px 12px;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        /* section label */
+        .sec-label {
+            font-size: 9px; font-weight: 700; letter-spacing: 1.8px;
+            color: var(--text-muted); text-transform: uppercase;
+            padding: 6px 2px 4px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .sec-label::after {
+            content:''; flex: 1; height: 1px; background: var(--border);
+        }
+
+        /* ─── BUTTON SYSTEM ───────────────────────────────────── */
+        .btn {
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 9px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-align: center;
+            transition: all 0.18s ease;
+            display: flex; align-items: center; justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+        .btn:hover { border-color: var(--border2); background: #1e1e2c; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn.accent     { background: var(--accent);  color: #000; border-color: var(--accent);  font-weight: 800; }
+        .btn.accent:hover { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 0 20px rgba(245,197,24,.4); }
+
+        .btn.blue       { border-color: var(--blue);   color: var(--blue); }
+        .btn.blue:hover { background: rgba(79,142,247,.15); border-color: var(--blue); box-shadow: 0 0 14px rgba(79,142,247,.3); }
+
+        .btn.green      { border-color: var(--green);  color: var(--green); }
+        .btn.green:hover { background: rgba(0,230,118,.12); box-shadow: 0 0 14px rgba(0,230,118,.3); }
+
+        .btn.cyan       { border-color: var(--cyan);   color: var(--cyan); }
+        .btn.cyan:hover  { background: rgba(0,229,255,.12); box-shadow: 0 0 14px rgba(0,229,255,.3); }
+
+        .btn.ghost      { background: transparent; border-color: var(--border); color: var(--text-dim); }
+        .btn.ghost:hover { color: var(--text); border-color: var(--border2); }
+
+        .btn.mode-active.front-active { background: rgba(79,142,247,.2); border-color: var(--box-front); color: var(--box-front); box-shadow: 0 0 12px rgba(79,142,247,.25); }
+        .btn.mode-active.back-active  { background: rgba(0,230,118,.2);  border-color: var(--box-back);  color: var(--box-back);  box-shadow: 0 0 12px rgba(0,230,118,.25); }
+
+        /* grid 2 cols */
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4px; }
+
+        /* upload label-btn */
+        .upload-label {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; width: 100%;
+            background: linear-gradient(135deg, #1a1a28, #111118);
+            border: 1.5px dashed var(--border2);
+            color: var(--text-dim);
+            border-radius: 8px; padding: 14px 12px;
+            cursor: pointer; font-size: 11px; font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            text-align: center; line-height: 1.4;
+        }
+        .upload-label:hover { border-color: var(--accent); color: var(--accent); background: rgba(245,197,24,.06); }
+        .upload-label .up-icon { font-size: 22px; }
+        .upload-label small { display: block; font-size: 9px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.5px; }
+
+        /* slider control group */
+        .ctrl-group {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .ctrl-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+        .ctrl-row label { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; }
+        .ctrl-row .val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); font-weight: 600; }
+        input[type="range"] {
+            width: 100%; accent-color: var(--accent);
+            height: 4px; cursor: pointer;
+            background: var(--border); border-radius: 2px;
+        }
+
+        /* status indicator */
+        .status-bar {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 8px;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 6px; font-size: 9px; color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border2); flex-shrink: 0; }
+        .status-dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .status-dot.warn   { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+        .chip {
+            display: inline-flex; align-items: center;
+            gap: 4px; padding: 2px 8px;
+            border-radius: 99px; font-size: 8.5px; font-weight: 700;
+            letter-spacing: 0.5px; border: 1px solid;
+        }
+        .chip.front { color: var(--box-front); border-color: var(--box-front); background: rgba(79,142,247,.1); }
+        .chip.back  { color: var(--box-back);  border-color: var(--box-back);  background: rgba(0,230,118,.1); }
+        .chip.none  { color: var(--text-muted); border-color: var(--border); }
+
+        /* ─── WORKSPACE ───────────────────────────────────────── */
+        #workspace {
+            flex: 1; display: flex; flex-direction: column;
+            overflow: hidden; position: relative; background: var(--bg);
+        }
+
+        /* topbar */
+        #topbar {
+            height: 44px; background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center;
+            padding: 0 16px; gap: 14px;
+            flex-shrink: 0;
+        }
+        #topbar .tb-label {
+            font-size: 9px; color: var(--text-dim);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        #topbar .tb-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; color: var(--text); font-weight: 600;
+        }
+        .tb-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+        #topbar .spacer { flex: 1; }
+
+        /* viewer area */
+        #viewer-area {
+            flex: 1; overflow: auto;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding: 50px;
+            background: radial-gradient(ellipse at 50% 0%, #1a1a2e 0%, #0a0a0f 70%);
+            cursor: crosshair;
+            position: relative;
+        }
+        #viewer-area::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+        }
+
+        #canvas-wrapper {
+            position: relative;
+            background: white;
+            transform-origin: center top;
+            box-shadow: 0 20px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.05);
+            transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+            cursor: crosshair;
+        }
+        #pdf-canvas { display: block; }
+
+        /* draw rectangle */
+        #draw-rect {
+            position: absolute;
+            border: 2px dashed rgba(245,197,24,.8);
+            background: rgba(245,197,24,.05);
+            display: none;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 2px;
+        }
+
+        /* selection boxes */
+        .selection-box {
+            position: absolute;
+            border: 2px solid var(--box-front);
+            background: rgba(79,142,247,.1);
+            z-index: 8;
+            border-radius: 3px;
+            cursor: move;
+            transition: box-shadow 0.15s;
+        }
+        .selection-box:hover { box-shadow: 0 0 0 2px rgba(79,142,247,.4); }
+        .selection-box.back-box { border-color: var(--box-back); background: rgba(0,230,118,.08); }
+        .selection-box.back-box:hover { box-shadow: 0 0 0 2px rgba(0,230,118,.35); }
+        .selection-box .box-label {
+            position: absolute; top: -22px; left: 0;
+            font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+            padding: 2px 8px; border-radius: 3px 3px 0 0;
+            background: var(--box-front); color: #000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .selection-box.back-box .box-label { background: var(--box-back); }
+        .selection-box .box-close {
+            position: absolute; top: -22px; right: 0;
+            background: rgba(255,82,82,.9); color: #fff;
+            border: none; cursor: pointer;
+            font-size: 11px; padding: 1px 6px;
+            border-radius: 0 3px 0 0; font-weight: 700;
+            line-height: 1.5;
+        }
+        .selection-box .box-close:hover { background: var(--red); }
+
+        /* resize handle */
+        .selection-box .resize-handle {
+            position: absolute; right: -6px; bottom: -6px;
+            width: 12px; height: 12px;
+            background: var(--box-front); border-radius: 50%;
+            cursor: se-resize; z-index: 9;
+        }
+        .selection-box.back-box .resize-handle { background: var(--box-back); }
+
+        /* ─── ZOOMBAR ─────────────────────────────────────────── */
+        #zoom-bar {
+            height: 46px; background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex; align-items: center;
+            padding: 0 16px; gap: 12px;
+            flex-shrink: 0;
+        }
+        .zoom-btn {
+            width: 26px; height: 26px; border-radius: 6px;
+            background: var(--panel); border: 1px solid var(--border);
+            color: var(--text); cursor: pointer; font-size: 16px; font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s; flex-shrink: 0;
+        }
+        .zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
+        #zoom-range { width: 160px; accent-color: var(--accent); cursor: pointer; }
+        #zoom-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            color: var(--accent); font-weight: 600; min-width: 42px;
+        }
+        .zoom-sep { flex: 1; }
+        #fit-btn {
+            padding: 4px 10px; font-size: 9px; letter-spacing: 1px;
+            background: var(--panel); border: 1px solid var(--border);
+            color: var(--text-dim); border-radius: 5px; cursor: pointer;
+            font-family: inherit; font-weight: 600; text-transform: uppercase;
+            transition: all 0.15s;
+        }
+        #fit-btn:hover { color: var(--text); border-color: var(--border2); }
+
+        /* ─── DRAG-OVER ───────────────────────────────────────── */
+        #drop-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(10,10,15,.92);
+            border: 3px dashed var(--accent);
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 800; color: var(--accent);
+            letter-spacing: 2px; gap: 12px;
+            pointer-events: none;
+        }
+        #drop-overlay svg { width: 60px; height: 60px; opacity: .7; }
+        body.dragging #drop-overlay { display: flex; }
+
+        /* ─── PREVIEW MODAL ───────────────────────────────────── */
+        #preview-modal {
+            position: fixed; inset: 0;
+            background: rgba(5,5,10,.97);
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .preview-title {
+            font-size: 11px; letter-spacing: 3px; font-weight: 700;
+            color: var(--text-dim); text-transform: uppercase; margin-bottom: 20px;
+        }
+        .preview-cards {
+            display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+            justify-content: center;
+        }
+        .preview-card-wrap {
+            display: flex; flex-direction: column; gap: 8px; align-items: center;
+        }
+        .preview-card-label {
+            font-size: 9px; font-weight: 800; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .preview-img {
+            width: 86mm; height: 54mm;
+            object-fit: fill;
+            border-radius: 6px;
+            display: block;
+        }
+        .preview-img.front-img { border: 2px solid var(--box-front); box-shadow: 0 0 24px rgba(79,142,247,.4); }
+        .preview-img.back-img  { border: 2px solid var(--box-back);  box-shadow: 0 0 24px rgba(0,230,118,.4);  }
+
+        .preview-meta {
+            margin-top: 16px;
+            background: var(--panel); border: 1px solid var(--border);
+            padding: 10px 20px; border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px; color: var(--text-dim);
+            display: flex; gap: 24px;
+        }
+        .preview-meta span { color: var(--text); font-weight: 600; }
+
+        .preview-actions {
+            margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+        }
+        .preview-actions .btn { width: auto; padding: 10px 22px; font-size: 11px; }
+
+        /* ─── TOAST ───────────────────────────────────────────── */
+        #toast {
+            position: fixed; bottom: 60px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--panel); border: 1px solid var(--border2);
+            color: var(--text); padding: 10px 20px; border-radius: 8px;
+            font-size: 11px; font-weight: 500; opacity: 0;
+            transition: all 0.3s; z-index: 9998; pointer-events: none;
+            display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        #toast.ok   { border-color: var(--green); }
+        #toast.err  { border-color: var(--red);   }
+        #toast.info { border-color: var(--accent); }
+
+        /* ─── EMPTY STATE ─────────────────────────────────────── */
+        #empty-state {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 14px; pointer-events: none;
+            color: var(--text-muted);
+        }
+        #empty-state .es-icon { font-size: 56px; opacity: .35; }
+        #empty-state h2 { font-size: 15px; font-weight: 700; color: var(--text-dim); }
+        #empty-state p  { font-size: 11px; line-height: 1.6; text-align: center; max-width: 260px; }
+        #empty-state.hidden { display: none; }
+
+        /* util */
+        .hidden { display: none !important; }
+        .flex-row { display: flex; gap: 6px; }
+    </style>
+</head>
+<body>
+
+<!-- ─── DROP OVERLAY ──────────────────────────────────────── -->
+<div id="drop-overlay">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+    </svg>
+    DROP TO UPLOAD
+</div>
+
+<!-- ─── SIDEBAR ───────────────────────────────────────────── -->
+<div id="sidebar">
+    <div class="sidebar-head">
+        <div class="logo-badge">
+            <div class="logo-icon">🪪</div>
+            <div class="logo-text">
+                <h1>E-CARD PRINT</h1>
+                <span>v3.0 · PROFESSIONAL STUDIO</span>
+            </div>
+        </div>
+        <div style="margin-top: 16px;">
+            <a href="my_new_app.html" class="btn" style="background: var(--accent); color: #000; text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center; border: none; box-shadow: 0 4px 10px rgba(245,197,24,0.3);">
+                ⬅ Back to Appstore
+            </a>
+        </div>
+    </div>
+
+    <div class="sidebar-body">
+
+        <!-- UPLOAD -->
+        <label class="upload-label" for="file-input">
+            <div>
+                <div class="up-icon">📂</div>
+                <div>UPLOAD FILE</div>
+                <small>PDF · JPG · PNG · JPEG</small>
+            </div>
+        </label>
+        <input type="file" id="file-input" class="hidden" accept="application/pdf,image/jpeg,image/jpg,image/png">
+
+        <!-- STATUS -->
+        <div class="status-bar" id="file-status">
+            <div class="status-dot" id="file-dot"></div>
+            <span id="file-name-label">No file loaded</span>
+        </div>
+
+        <!-- ROTATE -->
+        <div class="sec-label">Source Rotation</div>
+        <div class="grid4">
+            <button class="btn ghost" title="+90°" onclick="rotatePage(90)">↻90</button>
+            <button class="btn ghost" title="-90°" onclick="rotatePage(-90)">↺90</button>
+            <button class="btn ghost" title="+180°" onclick="rotatePage(180)">↻180</button>
+            <button class="btn ghost" title="Reset" onclick="rotatePage(0, true)">RST</button>
+        </div>
+
+        <!-- MODE -->
+        <div class="sec-label">Selection Mode</div>
+        <div class="grid2">
+            <button class="btn mode-active front-active" id="mode-front" onclick="setMode('front')">
+                ◈ FRONT
+            </button>
+            <button class="btn" id="mode-back" onclick="setMode('back')">
+                ◈ BACK
+            </button>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;" id="mode-status">
+            <span style="font-size:9px; color:var(--text-muted);">MODE:</span>
+            <span class="chip front" id="mode-chip">FRONT</span>
+            <span style="font-size:9px; color:var(--text-muted); margin-left:auto;">Draw box on image</span>
+        </div>
+
+        <!-- BOX STATUS -->
+        <div class="grid2" id="box-status">
+            <div class="status-bar">
+                <div class="status-dot" id="front-dot"></div>
+                <span style="font-size:9px;">Front</span>
+            </div>
+            <div class="status-bar">
+                <div class="status-dot" id="back-dot"></div>
+                <span style="font-size:9px;">Back</span>
+            </div>
+        </div>
+
+        <!-- CLEAR BOXES -->
+        <div class="grid2">
+            <button class="btn ghost" onclick="clearBox('front')" style="font-size:9px;">✕ Clr Front</button>
+            <button class="btn ghost" onclick="clearBox('back')"  style="font-size:9px;">✕ Clr Back</button>
+        </div>
+
+        <!-- COLOUR CORRECTION -->
+        <div class="sec-label">Colour Correction</div>
+        <div class="ctrl-group">
+            <div class="ctrl-row"><label>BRIGHTNESS</label><div class="val" id="bright-val">100%</div></div>
+            <input type="range" id="bright" min="30" max="200" value="100">
+            <div class="ctrl-row" style="margin-top:6px;"><label>CONTRAST</label><div class="val" id="contrast-val">100%</div></div>
+            <input type="range" id="contrast" min="30" max="200" value="100">
+            <div class="ctrl-row" style="margin-top:6px;"><label>SATURATION</label><div class="val" id="sat-val">100%</div></div>
+            <input type="range" id="saturation" min="0" max="200" value="100">
+            <div class="ctrl-row" style="margin-top:6px;"><label>SHARPNESS</label><div class="val" id="sharp-val">0</div></div>
+            <input type="range" id="sharpness" min="0" max="10" value="0">
+            <button class="btn ghost" onclick="resetFilters()" style="font-size:9px; margin-top:4px;">↺ Reset Filters</button>
+        </div>
+
+        <!-- PAGE NAV (PDF) -->
+        <div class="sec-label" id="page-nav-label" style="display:none;">PDF Pages</div>
+        <div class="grid2 hidden" id="page-nav">
+            <button class="btn ghost" id="btn-prev-page">◀ Prev</button>
+            <button class="btn ghost" id="btn-next-page">Next ▶</button>
+        </div>
+        <div class="status-bar hidden" id="page-indicator" style="justify-content:center;">
+            <span id="page-label" style="font-family:'JetBrains Mono',monospace;font-size:10px;">Page 1 / 1</span>
+        </div>
+
+    </div><!-- /sidebar-body -->
+
+    <div class="sidebar-footer">
+        <!-- RESET -->
+        <button class="btn" id="btn-reset" onclick="resetAll()" style="border-color:var(--red);color:var(--red);margin-bottom:8px;">⟳ RESET — NEW FILE</button>
+        <!-- EXPORT ACTIONS -->
+        <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="btn green"  id="btn-save-png"     >💾 Save as PNG</button>
+            <button class="btn cyan"   id="btn-open-ps"      >🔵 Export for Photoshop</button>
+            <button class="btn blue"   id="btn-view-preview" >👁 Preview Cards</button>
+            <button class="btn accent" id="btn-print"        >🖨 Print Book (PDF)</button>
+        </div>
+        <!-- COPYRIGHT -->
+        <div style="margin-top:10px; padding-top:8px; border-top:1px solid var(--border); text-align:center; line-height:1.6;">
+            <div style="font-size:9px; font-weight:700; letter-spacing:1px; color:var(--text-dim); text-transform:uppercase;">Graphic Digital Studio</div>
+            <div style="font-size:8px; color:var(--text-muted); letter-spacing:0.5px;">© Copyright. All Rights Reserved.</div>
+        </div>
+    </div>
+</div><!-- /sidebar -->
+
+<!-- ─── WORKSPACE ─────────────────────────────────────────── -->
+<div id="workspace">
+
+    <!-- TOPBAR -->
+    <div id="topbar">
+        <div>
+            <div class="tb-label">File</div>
+            <div class="tb-val" id="tb-file">—</div>
+        </div>
+        <div class="tb-sep"></div>
+        <div>
+            <div class="tb-label">Dimensions</div>
+            <div class="tb-val" id="tb-size">—</div>
+        </div>
+        <div class="tb-sep"></div>
+        <div>
+            <div class="tb-label">Rotation</div>
+            <div class="tb-val" id="tb-rot">0°</div>
+        </div>
+        <div class="tb-sep"></div>
+        <div class="spacer"></div>
+        <div style="font-size:9px; color:var(--text-muted); letter-spacing:0.5px; text-align:right; line-height:1.6;">
+            Draw a box on the image to select card area.<br>
+            <span style="color:var(--box-front);">Blue = Front</span> &nbsp; <span style="color:var(--box-back);">Green = Back</span>
+        </div>
+    </div>
+
+    <!-- VIEWER -->
+    <div id="viewer-area" id="viewer" tabindex="0">
+
+        <!-- empty state -->
+        <div id="empty-state">
+            <div class="es-icon">🪪</div>
+            <h2>No File Loaded</h2>
+            <p>Upload a PDF, JPG, or PNG file of an ID card (AADHAAR, PAN, VOTER, DL, RC, etc.) to get started.</p>
+            <p style="margin-top:8px;">You can also <strong style="color:var(--accent);">drag &amp; drop</strong> a file anywhere on the window.</p>
+        </div>
+
+        <div id="canvas-wrapper">
+            <canvas id="pdf-canvas"></canvas>
+            <div id="draw-rect"></div>
+        </div>
+    </div>
+
+    <!-- ZOOM BAR -->
+    <div id="zoom-bar">
+        <button class="zoom-btn" onclick="adjustZoom(-0.1)">−</button>
+        <input type="range" id="zoom-range" min="0.2" max="4" step="0.05" value="1">
+        <button class="zoom-btn" onclick="adjustZoom(0.1)">+</button>
+        <div id="zoom-label">100%</div>
+        <div class="zoom-sep"></div>
+        <button id="fit-btn" onclick="fitToScreen()">FIT</button>
+        <button id="fit-btn" onclick="resetZoom()" style="margin-left:4px;">100%</button>
+    </div>
+
+</div><!-- /workspace -->
+
+<!-- ─── PREVIEW MODAL ─────────────────────────────────────── -->
+<div id="preview-modal">
+    <div class="preview-title">CARD PREVIEW — PRINT READY</div>
+
+    <div class="preview-cards">
+        <div class="preview-card-wrap">
+            <div class="preview-card-label">▸ FRONT SIDE</div>
+            <img id="prev-f" class="preview-img front-img" src="" alt="Front card preview">
+        </div>
+        <div style="font-size:24px; color:var(--border2);">⇄</div>
+        <div class="preview-card-wrap">
+            <div class="preview-card-label">▸ BACK SIDE</div>
+            <img id="prev-b" class="preview-img back-img"  src="" alt="Back card preview">
+        </div>
+    </div>
+
+    <div class="preview-meta">
+        Card Size: <span>86 × 54 mm</span> &nbsp; &nbsp;
+        Format: <span>ISO/IEC 7810 ID-1</span> &nbsp; &nbsp;
+        Resolution: <span id="prev-res">—</span>
+    </div>
+
+    <div class="preview-actions">
+        <button class="btn ghost"  onclick="closePreview()">✕ Close</button>
+        <button class="btn green"  onclick="savePNG_both()">💾 Save PNG (Front)</button>
+        <button class="btn cyan"   onclick="savePNG_all()">💾 Save PNG (Both)</button>
+        <button class="btn accent" onclick="savePDF()">🖨 Save Print PDF</button>
+    </div>
+</div>
+
+<!-- ─── TOAST ──────────────────────────────────────────────── -->
+<div id="toast">
+    <span id="toast-icon">✓</span>
+    <span id="toast-msg">Done.</span>
+</div>
+
+<!-- ─── SCRIPT ────────────────────────────────────────────── -->
+<script>
+(function() {
+'use strict';
+
+/* ─── PDF.JS & jsPDF SETUP ─────────────────── */
+const { jsPDF } = window.jspdf;
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+/* ─── STATE ────────────────────────────────── */
+let pdfDoc        = null;
+let currentPage   = 1;
+let totalPages    = 1;
+let isImage       = false;
+let currentZoom   = 1;
+let currentRot    = 0;
+let currentMode   = 'front';
+let isDrawing     = false;
+let startX, startY;
+let loadedFileName = '';
+
+const canvas      = document.getElementById('pdf-canvas');
+const ctx         = canvas.getContext('2d');
+const wrapper     = document.getElementById('canvas-wrapper');
+const drawRect    = document.getElementById('draw-rect');
+const emptyState  = document.getElementById('empty-state');
+
+/* helpers */
+const $  = id => document.getElementById(id);
+const sty = (el, s) => Object.assign(el.style, s);
+
+/* ─── TOAST ────────────────────────────────── */
+let toastTimer;
+function toast(msg, type='info') {
+    const t = $('toast');
+    const icons = { ok:'✓', err:'✕', info:'ℹ' };
+    $('toast-icon').textContent = icons[type] || 'ℹ';
+    $('toast-msg').textContent  = msg;
+    t.className = `show ${type}`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.className = '', 3000);
+}
+
+/* ─── FILTER LOGIC ─────────────────────────── */
+function getFilter() {
+    const b = $('bright').value;
+    const c = $('contrast').value;
+    const s = $('saturation').value;
+    const sh = parseFloat($('sharpness').value);
+    let f = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+    if (sh > 0) f += ` blur(0px)`;  /* sharpness simulated via css below */
+    return f;
+}
+function applyFilter() {
+    wrapper.style.filter = getFilter();
+    $('bright-val').textContent   = $('bright').value + '%';
+    $('contrast-val').textContent = $('contrast').value + '%';
+    $('sat-val').textContent      = $('saturation').value + '%';
+    $('sharp-val').textContent    = $('sharpness').value;
+}
+function resetFilters() {
+    $('bright').value = 100; $('contrast').value = 100;
+    $('saturation').value = 100; $('sharpness').value = 0;
+    applyFilter();
+    toast('Filters reset', 'info');
+}
+['bright','contrast','saturation','sharpness'].forEach(id => $(`${id}`).oninput = applyFilter);
+
+/* ─── UPLOAD ───────────────────────────────── */
+$('file-input').onchange = e => {
+    const file = e.target.files[0];
+    if (file) loadFile(file);
+};
+
+function loadFile(file) {
+    loadedFileName = file.name.replace(/\.[^.]+$/, '');
+    $('file-dot').className    = 'status-dot warn';
+    $('file-name-label').textContent = 'Loading…';
+    currentRot = 0; applyTransform();
+
+    if (file.type === 'application/pdf') {
+        isImage = false;
+        const reader = new FileReader();
+        reader.onload = async function() {
+            try {
+                pdfDoc = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
+                totalPages = pdfDoc.numPages; currentPage = 1;
+                updatePageNav();
+                await renderPDFPage(currentPage);
+                fileLoaded(file.name);
+            } catch { toast('Failed to load PDF.', 'err'); }
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        isImage = true; pdfDoc = null; totalPages = 1;
+        updatePageNav();
+        const img = new Image();
+        img.onload = () => {
+            canvas.width = img.width; canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            fileLoaded(file.name);
+            $('tb-size').textContent = `${img.width} × ${img.height} px`;
+        };
+        img.onerror = () => toast('Cannot read image file.', 'err');
+        img.src = URL.createObjectURL(file);
+    }
+}
+
+function fileLoaded(name) {
+    emptyState.classList.add('hidden');
+    canvas.style.display = 'block';
+    $('file-dot').className    = 'status-dot active';
+    $('file-name-label').textContent = name.length > 26 ? name.slice(0,24)+'…' : name;
+    $('tb-file').textContent   = name;
+    toast('File loaded — draw boxes on the image!', 'ok');
+    fitToScreen();
+}
+
+/* ─── PDF RENDER ───────────────────────────── */
+async function renderPDFPage(num) {
+    const page = await pdfDoc.getPage(num);
+    const vp   = page.getViewport({ scale: 2.5 });
+    canvas.width  = vp.width;
+    canvas.height = vp.height;
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    $('tb-size').textContent = `${vp.width} × ${vp.height} px`;
+}
+
+function updatePageNav() {
+    const multi = totalPages > 1;
+    const navEl = $('page-nav');
+    const ind   = $('page-indicator');
+    const lbl   = $('page-nav-label');
+    navEl.classList.toggle('hidden', !multi);
+    ind.classList.toggle('hidden', !multi);
+    if (lbl) lbl.style.display = multi ? '' : 'none';
+    $('page-label').textContent = `Page ${currentPage} / ${totalPages}`;
+}
+
+$('btn-prev-page').onclick = async () => {
+    if (!pdfDoc || currentPage <= 1) return;
+    currentPage--; await renderPDFPage(currentPage); updatePageNav();
+};
+$('btn-next-page').onclick = async () => {
+    if (!pdfDoc || currentPage >= totalPages) return;
+    currentPage++; await renderPDFPage(currentPage); updatePageNav();
+};
+
+/* ─── ROTATION & ZOOM ──────────────────────── */
+function rotatePage(deg, reset=false) {
+    currentRot = reset ? 0 : currentRot + deg;
+    applyTransform();
+    $('tb-rot').textContent = currentRot + '°';
+}
+function applyTransform() {
+    wrapper.style.transform = `scale(${currentZoom}) rotate(${currentRot}deg)`;
+    $('zoom-label').textContent = Math.round(currentZoom * 100) + '%';
+    $('zoom-range').value = currentZoom;
+}
+
+function adjustZoom(v) {
+    currentZoom = +Math.max(0.2, Math.min(4, currentZoom + v)).toFixed(2);
+    applyTransform();
+}
+function resetZoom() { currentZoom = 1; applyTransform(); }
+function fitToScreen() {
+    const area   = document.getElementById('viewer-area');
+    const aw     = area.clientWidth  - 100;
+    const ah     = area.clientHeight - 100;
+    const cw     = canvas.width  || 1;
+    const ch     = canvas.height || 1;
+    currentZoom  = +Math.min(aw/cw, ah/ch, 2).toFixed(2);
+    applyTransform();
+}
+$('zoom-range').oninput = e => { currentZoom = parseFloat(e.target.value); applyTransform(); };
+
+/* ─── SELECTION MODE ───────────────────────── */
+function setMode(m) {
+    currentMode = m;
+    $('mode-front').className = m==='front' ? 'btn mode-active front-active' : 'btn ghost';
+    $('mode-back').className  = m==='back'  ? 'btn mode-active back-active'  : 'btn ghost';
+    $('mode-chip').textContent  = m.toUpperCase();
+    $('mode-chip').className    = `chip ${m}`;
+}
+$('mode-front').onclick = () => setMode('front');
+$('mode-back').onclick  = () => setMode('back');
+
+/* ─── DRAW RECTANGLE ───────────────────────── */
+wrapper.addEventListener('mousedown', e => {
+    if (!canvas.width || e.button !== 0) return;
+    isDrawing = true;
+    const r = wrapper.getBoundingClientRect();
+    startX = (e.clientX - r.left) / currentZoom;
+    startY = (e.clientY - r.top)  / currentZoom;
+    sty(drawRect, { left: startX+'px', top: startY+'px', width: '0', height: '0', display: 'block' });
+    e.preventDefault();
+});
+
+window.addEventListener('mousemove', e => {
+    if (!isDrawing) return;
+    const r  = wrapper.getBoundingClientRect();
+    const cx = (e.clientX - r.left) / currentZoom;
+    const cy = (e.clientY - r.top)  / currentZoom;
+    sty(drawRect, {
+        width:  Math.abs(cx - startX) + 'px',
+        height: Math.abs(cy - startY) + 'px',
+        left:   Math.min(cx, startX)  + 'px',
+        top:    Math.min(cy, startY)  + 'px'
+    });
+});
+
+window.addEventListener('mouseup', () => {
+    if (!isDrawing) return; isDrawing = false;
+    const w = parseInt(drawRect.style.width);
+    const h = parseInt(drawRect.style.height);
+    if (w > 20 && h > 10) {
+        createBox(drawRect.style.left, drawRect.style.top, drawRect.style.width, drawRect.style.height, currentMode);
+    }
+    drawRect.style.display = 'none';
+});
+
+/* ─── SELECTION BOXES ──────────────────────── */
+function clearBox(id) {
+    const el = document.getElementById(id);
+    if (el) { el.remove(); updateBoxStatus(); }
+}
+
+function createBox(l, t, w, h, mode) {
+    const id = mode; // 'front' or 'back'
+    if (document.getElementById(id)) document.getElementById(id).remove();
+
+    const box = document.createElement('div');
+    box.id = id;
+    box.className = 'selection-box' + (mode==='back' ? ' back-box' : '');
+    sty(box, { left: l, top: t, width: w, height: h, position: 'absolute' });
+    box.dataset.x = 0; box.dataset.y = 0;
+
+    box.innerHTML = `
+        <div class="box-label">${mode.toUpperCase()}</div>
+        <button class="box-close" title="Remove">✕</button>
+        <div class="resize-handle"></div>`;
+
+    box.querySelector('.box-close').onclick = e => { e.stopPropagation(); clearBox(id); };
+
+    wrapper.appendChild(box);
+    updateBoxStatus();
+    toast(`${mode.toUpperCase()} box set — Draw again to reposition`, 'ok');
+
+    /* draggable */
+    interact(box).draggable({
+        listeners: {
+            move(e) {
+                const x = (parseFloat(e.target.dataset.x)||0) + e.dx;
+                const y = (parseFloat(e.target.dataset.y)||0) + e.dy;
+                e.target.style.transform = `translate(${x}px,${y}px)`;
+                e.target.dataset.x = x; e.target.dataset.y = y;
+            }
+        }
+    }).resizable({
+        edges: { right: true, bottom: true, bottomRight: '.resize-handle' },
+        listeners: {
+            move(e) {
+                sty(e.target, { width: e.rect.width+'px', height: e.rect.height+'px' });
+            }
+        }
+    });
+}
+
+function updateBoxStatus() {
+    const hf = !!document.getElementById('front');
+    const hb = !!document.getElementById('back');
+    $('front-dot').className = 'status-dot' + (hf ? ' active' : '');
+    $('back-dot').className  = 'status-dot' + (hb ? ' active' : '');
+}
+
+/* ─── CAPTURE HELPER ───────────────────────── */
+function captureBox(boxEl) {
+    /* Get raw pixel region from canvas matching the selection box */
+    const boxR = boxEl.getBoundingClientRect();
+    const cvR  = canvas.getBoundingClientRect();
+
+    const scaleX = canvas.width  / cvR.width;
+    const scaleY = canvas.height / cvR.height;
+
+    /* Account for translate transform on the box */
+    const tx = parseFloat(boxEl.dataset.x) || 0;
+    const ty = parseFloat(boxEl.dataset.y) || 0;
+    const boxR_left   = boxR.left   - (tx * currentZoom);
+    const boxR_top    = boxR.top    - (ty * currentZoom);
+    const boxR_width  = boxR.width;
+    const boxR_height = boxR.height;
+
+    const sx = (boxR_left  - cvR.left)  * scaleX;
+    const sy = (boxR_top   - cvR.top)   * scaleY;
+    const sw = boxR_width  * scaleX;
+    const sh = boxR_height * scaleY;
+
+    const tmp = document.createElement('canvas');
+    tmp.width  = Math.round(sw);
+    tmp.height = Math.round(sh);
+    const tCtx = tmp.getContext('2d');
+
+    // Apply brightness/contrast/saturation if needed (canvas drawing ignores CSS filter)
+    const b  = parseFloat($('bright').value)    / 100;
+    const c  = parseFloat($('contrast').value)  / 100;
+    const s  = parseFloat($('saturation').value)/ 100;
+
+    tCtx.filter = `brightness(${b*100}%) contrast(${c*100}%) saturate(${s*100}%)`;
+    tCtx.drawImage(canvas, sx, sy, sw, sh, 0, 0, tmp.width, tmp.height);
+    return tmp;
+}
+
+/* ─── PREVIEW ──────────────────────────────── */
+$('btn-view-preview').onclick = openPreview;
+function openPreview() {
+    const f = document.getElementById('front');
+    const b = document.getElementById('back');
+    if (!f && !b) { toast('Select at least one area first!', 'err'); return; }
+
+    const fCv = f ? captureBox(f) : null;
+    const bCv = b ? captureBox(b) : null;
+
+    $('prev-f').src = fCv ? fCv.toDataURL('image/png') : '';
+    $('prev-b').src = bCv ? bCv.toDataURL('image/png') : '';
+    $('prev-f').style.display = fCv ? 'block' : 'none';
+    $('prev-b').style.display = bCv ? 'block' : 'none';
+    $('preview-modal').style.display = 'flex';
+
+    if (fCv) $('prev-res').textContent = `${fCv.width} × ${fCv.height} px`;
+}
+
+function closePreview() { $('preview-modal').style.display = 'none'; }
+
+/* ─── SAVE PNG ─────────────────────────────── */
+$('btn-save-png').onclick = () => {
+    const f = document.getElementById('front');
+    const b = document.getElementById('back');
+    if (!f && !b) { toast('No selection box found!', 'err'); return; }
+    openPreview(); savePNG_both();
+};
+
+function download(url, name) {
+    const a = document.createElement('a');
+    a.href = url; a.download = name; a.click();
+}
+
+function savePNG_both() {
+    const fi = $('prev-f');
+    if (fi.src && fi.src !== window.location.href) download(fi.src, (loadedFileName||'CARD') + '_FRONT.png');
+    toast('Front PNG saved!', 'ok');
+}
+function savePNG_all() {
+    const fi = $('prev-f'), bi = $('prev-b');
+    if (fi.src && fi.src !== window.location.href) download(fi.src, (loadedFileName||'CARD') + '_FRONT.png');
+    if (bi.src && bi.src !== window.location.href) download(bi.src, (loadedFileName||'CARD') + '_BACK.png');
+    toast('Both PNGs saved!', 'ok');
+}
+
+/* ─── SAVE PDF (A6 print layout) ───────────── */
+function savePDF() {
+    const fi    = $('prev-f');
+    const bi    = $('prev-b');
+    const hasFr = fi.src && fi.src !== window.location.href;
+    const hasBk = bi.src && bi.src !== window.location.href;
+    if (!hasFr && !hasBk) { toast('No card images to export!', 'err'); return; }
+
+    /* A6 ≈ 105 × 148 mm — neatly holds 2 ID-1 cards vertically */
+    const doc = new jsPDF({ unit: 'mm', format: [105, 148], orientation: 'portrait' });
+
+    /* Card = 86 × 54 mm, centred on A6 = left margin (105-86)/2 = 9.5 */
+    const lm = (105 - 86) / 2;  // 9.5 mm
+
+    if (hasFr) {
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(lm - 1, 14, 88, 56, 2, 2, 'F');
+        doc.addImage(fi.src, 'PNG', lm, 15, 86, 54);
+        doc.setFontSize(6); doc.setTextColor(150);
+        doc.text('FRONT SIDE', lm, 13, { baseline: 'bottom' });
+    }
+    if (hasBk) {
+        const y2 = hasFr ? 80 : 15;
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(lm - 1, y2 - 1, 88, 56, 2, 2, 'F');
+        doc.addImage(bi.src, 'PNG', lm, y2, 86, 54);
+        doc.setFontSize(6); doc.setTextColor(150);
+        doc.text('BACK SIDE', lm, y2 - 1, { baseline: 'bottom' });
+    }
+
+    /* Footer */
+    doc.setFontSize(5); doc.setTextColor(180);
+    doc.text('E-CARD PRINT 3.0 | ISO/IEC 7810 ID-1 Format | 86×54mm', 52.5, 145, { align: 'center' });
+
+    doc.save((loadedFileName||'ALL_CARD') + '_PRINT.pdf');
+    toast('PDF saved!', 'ok');
+}
+
+/* ─── PHOTOSHOP EXPORT ─────────────────────── */
+$('btn-open-ps').onclick = () => {
+    const f = document.getElementById('front');
+    const b = document.getElementById('back');
+    if (!f && !b) { toast('Draw at least one selection box!', 'err'); return; }
+
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    doc.setFillColor(30,30,30); doc.rect(0, 0, 210, 297, 'F');
+
+    const drawCard = (boxEl, y, label) => {
+        const cv = captureBox(boxEl);
+        const lm = (210 - 86) / 2;
+        doc.setFillColor(50,50,50);
+        doc.roundedRect(lm-2, y-10, 90, 58+14, 3, 3, 'F');
+        doc.addImage(cv.toDataURL('image/png'), 'PNG', lm, y, 86, 54);
+        doc.setFontSize(8); doc.setTextColor(200,200,200);
+        doc.text(label, lm, y - 1);
+    };
+
+    if (f) drawCard(f, 40,  'FRONT SIDE — 86×54mm');
+    if (b) drawCard(b, f ? 120 : 40, 'BACK SIDE — 86×54mm');
+
+    doc.setFontSize(8); doc.setTextColor(100);
+    doc.text('E-CARD PRINT 3.0 — Photoshop Export', 105, 285, { align:'center' });
+    doc.save('OPEN_IN_PHOTOSHOP.pdf');
+    toast('Photoshop PDF exported!', 'ok');
+};
+
+/* ─── PRINT BOOK ───────────────────────────── */
+$('btn-print').onclick = () => {
+    const f = document.getElementById('front');
+    const b = document.getElementById('back');
+    if (!f || !b) { toast('Set both FRONT and BACK boxes to create Print Book!', 'err'); return; }
+    openPreview(); savePDF();
+};
+
+/* ─── DRAG & DROP ──────────────────────────── */
+document.addEventListener('dragenter', e => { e.preventDefault(); document.body.classList.add('dragging'); });
+document.addEventListener('dragleave', e => { if (!e.relatedTarget) document.body.classList.remove('dragging'); });
+document.addEventListener('dragover',  e => { e.preventDefault(); });
+document.addEventListener('drop', e => {
+    e.preventDefault();
+    document.body.classList.remove('dragging');
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const ok = ['application/pdf','image/jpeg','image/jpg','image/png'].includes(file.type);
+    if (!ok) { toast('Please drop a PDF, JPG, or PNG file.', 'err'); return; }
+    loadFile(file);
+});
+
+/* ─── KEYBOARD SHORTCUTS ───────────────────── */
+document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    const map = {
+        'ArrowLeft':  () => $('btn-prev-page').click(),
+        'ArrowRight': () => $('btn-next-page').click(),
+        'f':          () => setMode('front'),
+        'b':          () => setMode('back'),
+        'Escape':     () => closePreview(),
+        'p':          () => openPreview(),
+        '+':          () => adjustZoom(0.1),
+        '-':          () => adjustZoom(-0.1),
+        '0':          () => fitToScreen(),
+    };
+    if (map[e.key]) map[e.key]();
+});
+
+/* ─── INIT ─────────────────────────────────── */
+canvas.style.display = 'none';
+applyFilter();
+setMode('front');
+
+/* ─── RESET ALL ────────────────────────────── */
+function resetAll() {
+    /* clear selection boxes */
+    ['front','back'].forEach(id => { const el = document.getElementById(id); if (el) el.remove(); });
+    updateBoxStatus();
+
+    /* clear canvas */
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = 0; canvas.height = 0;
+    canvas.style.display = 'none';
+
+    /* reset file state */
+    pdfDoc = null; isImage = false;
+    currentPage = 1; totalPages = 1;
+    loadedFileName = '';
+
+    /* reset UI labels */
+    $('file-dot').className      = 'status-dot';
+    $('file-name-label').textContent = 'No file loaded';
+    $('tb-file').textContent     = '—';
+    $('tb-size').textContent     = '—';
+    $('tb-rot').textContent      = '0°';
+
+    /* reset transform */
+    currentRot = 0; currentZoom = 1; applyTransform();
+
+    /* reset filters */
+    $('bright').value = 100; $('contrast').value = 100;
+    $('saturation').value = 100; $('sharpness').value = 0;
+    applyFilter();
+
+    /* reset page nav */
+    $('page-nav').classList.add('hidden');
+    $('page-indicator').classList.add('hidden');
+    $('page-nav-label').style.display = 'none';
+    $('page-label').textContent = 'Page 1 / 1';
+
+    /* reset file input so same file can be re-uploaded */
+    $('file-input').value = '';
+
+    /* show empty state */
+    emptyState.classList.remove('hidden');
+
+    toast('Reset done — upload a new file!', 'info');
+}
+
+/* ─── EXPOSE TO WINDOW (for inline onclick) ── */
+window.closePreview  = closePreview;
+window.openPreview   = openPreview;
+window.savePNG_both  = savePNG_both;
+window.savePNG_all   = savePNG_all;
+window.savePDF       = savePDF;
+window.rotatePage    = rotatePage;
+window.adjustZoom    = adjustZoom;
+window.fitToScreen   = fitToScreen;
+window.resetZoom     = resetZoom;
+window.setMode       = setMode;
+window.clearBox      = clearBox;
+window.resetFilters  = resetFilters;
+window.resetAll      = resetAll;
+
+})(); /* end IIFE */
+</script>
+</body>
+</html>

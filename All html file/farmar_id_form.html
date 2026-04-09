@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<!-- saved from url=(0076)file:///C:/Users/Windows%2011/Desktop/New%20folder%20(4)/FARMAR%20FORM3.html -->
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fillable Farmer Registration Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+            background-color: #525659;
+        }
+
+        /* Floating Buttons */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+        }
+
+        .btn-save:hover {
+            background-color: #1e7e34;
+        }
+
+        /* Document Page Container */
+        #pdf-content {
+            width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm 15mm;
+            box-sizing: border-box;
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Form Internal Styles */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 5px;
+            min-height: 65px;
+        }
+
+        .header img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 65px;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+            padding-top: 5px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .form-title {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 5px;
+            margin-bottom: 15px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .section-title {
+            background-color: black;
+            color: white;
+            display: inline-block;
+            padding: 4px 10px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 11px;
+        }
+
+        input[type="text"] {
+            border: 1px solid black;
+            height: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            padding: 0 4px;
+            box-sizing: border-box;
+            background: transparent;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        td[contenteditable="true"]:focus {
+            background-color: #eef8ff;
+        }
+
+        .input-line {
+            flex-grow: 1;
+        }
+
+        .input-short {
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        .char-grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .char-box {
+            width: 16px;
+            height: 20px;
+            border: 1px solid black;
+            border-right: none;
+            text-align: center;
+            padding: 0;
+            text-transform: uppercase;
+        }
+
+        .char-box:last-child {
+            border-right: 1px solid black;
+        }
+
+        .char-box.dashed {
+            border-style: dashed;
+            border-right: none;
+        }
+
+        .char-box.dashed:last-child {
+            border-right: 1px dashed black;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid black;
+            padding: 0;
+        }
+
+        .checkbox-label {
+            height: 20px;
+            border-right: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-label:last-child {
+            border-right: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        .odia-text {
+            font-size: 12px;
+            margin-top: 15px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .signature-section {
+            text-align: right;
+            margin-top: 40px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .nb-section {
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .nb-section ul {
+            list-style-type: none;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .office-use {
+            border: 2px solid black;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #000;
+            color: #fff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .office-content {
+            background-color: #fff;
+            color: #000;
+            padding: 15px;
+            border: 2px dashed black;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .controls {
+                display: none !important;
+            }
+
+            #pdf-content {
+                box-shadow: none;
+                margin: 0;
+            }
+
+            input[type="text"]:focus,
+            td[contenteditable="true"]:focus {
+                background-color: transparent;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls" id="control-panel">
+        <button class="btn" onclick="window.print()">??? Print PDF</button>
+    </div>
+    <div id="pdf-content">
+        <div class="page">
+            <div class="header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Seal_of_Odisha.png/1200px-Seal_of_Odisha.png"
+                    alt="Govt of Odisha Logo">
+                <h1>Govt. of Odisha</h1>
+                <h2>Agriculture Department</h2>
+            </div>
+            <div class="form-title">Farmer Registration Form</div>
+            <div class="section-title">A. Farmer Details</div>
+            <div class="row">
+                <span class="label">1 Farmer Registration No</span>
+                <div class="char-grid">
+                    <script>for (let i = 0; i < 24; i++) document.write('<input type="text" class="char-box" maxlength="1">');</script>
+                    <input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1">
+                </div>
+            </div>
+            <div class="row">
+                <span class="label">2 Dist</span>
+                <select class="input-short" id="dist-select"
+                    style="height: 24px; font-family: Arial, sans-serif; font-size: 12px; outline: none;">
+                    <option value=""></option>
+                    <option value="BALESWAR">BALESWAR</option>
+                </select>
+                <span class="label">3 Block/ULB</span>
+                <select class="input-line" id="block-select"
+                    style="height: 24px; font-family: Arial, sans-serif; font-size: 12px; outline: none;">
+                    <option value=""></option>
+                    <option value="BAHANAGA">BAHANAGA</option>
+                    <option value="BALASORE (SADAR)">BALASORE (SADAR)</option>
+                    <option value="BALIAPAL">BALIAPAL</option>
+                    <option value="BASTA">BASTA</option>
+                    <option value="BHOGRAI">BHOGRAI</option>
+                    <option value="JALESWAR">JALESWAR</option>
+                    <option value="KHAIRA">KHAIRA</option>
+                    <option value="NILAGIRI">NILAGIRI</option>
+                    <option value="OUPADA">OUPADA</option>
+                    <option value="REMUNA">REMUNA</option>
+                    <option value="SIMULIA">SIMULIA</option>
+                    <option value="SORO">SORO</option>
+                </select>
+            </div>
+            <div class="row">
+                <span class="label">4 GP/ Ward</span>
+                <select class="input-short" id="gp-select"
+                    style="height: 24px; font-family: Arial, sans-serif; font-size: 12px; outline: none;">
+                    <option value=""></option>
+                </select>
+                <span class="label">5 Village</span>
+                <select class="input-line" id="village-select"
+                    style="height: 24px; font-family: Arial, sans-serif; font-size: 12px; outline: none;">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="row">
+                <span class="label">6 PINCODE</span><input type="text" class="input-short">
+            </div>
+            <div class="row">
+                <span class="label">7 Head of Family Name</span>
+                <div class="char-grid">
+                    <script>for (let i = 0; i < 30; i++) document.write('<input type="text" class="char-box" maxlength="1">');</script>
+                    <input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1"><input
+                        type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text"
+                        class="char-box" maxlength="1"><input type="text" class="char-box" maxlength="1">
+                </div>
+            </div>
+            <div class="row" style="justify-content: space-between; width: 80%;">
+                <div style="display: flex; align-items: center;">
+                    <span class="label">8 Gender</span>
+                    <div style="text-align: center; font-size: 10px;">Please (√)<br>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="radio" name="gender" value="M"> M</label>
+                            <label class="checkbox-label"><input type="radio" name="gender" value="F"> F</label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span class="label">9 Category</span>
+                    <div style="text-align: center; font-size: 10px;">Please (√)<br>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="radio" name="cat" value="GEN"> GEN</label>
+                            <label class="checkbox-label"><input type="radio" name="cat" value="OBC/CSBC">
+                                OBC/CSBC</label>
+                            <label class="checkbox-label"><input type="radio" name="cat" value="SC"> SC</label>
+                            <label class="checkbox-label"><input type="radio" name="cat" value="ST"> ST</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <span class="label">10 Date of Birth</span>
+                <div class="char-grid" style="margin-right: 30px;" id="dob-inputs">
+                    <input type="text" class="char-box" maxlength="1" placeholder="D" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="D"
+                        style="width:25px; border-right:2px solid black;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="M" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="M"
+                        style="width:25px; border-right:2px solid black;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="Y" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="Y" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="Y" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" placeholder="Y" style="width:25px;">
+                </div>
+                <span class="label">11 Age</span>
+                <div class="char-grid" id="age-inputs">
+                    <input type="text" class="char-box" maxlength="1" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" style="width:25px;">
+                </div>
+            </div>
+            <div class="row">
+                <span class="label">12 (Father / Husband ) Name</span><input type="text" class="input-line">
+            </div>
+            <div class="row">
+                <span class="label">13 Voter ID Card No</span>
+                <div class="char-grid">
+                    <script>for (let i = 0; i < 15; i++) document.write('<input type="text" class="char-box dashed" maxlength="1" style="width: 20px;">');</script>
+                    <input type="text" class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 20px;">
+                </div>
+            </div>
+            <div class="row">
+                <span class="label">14 Aadhar No</span>
+                <div class="char-grid" style="margin-right: 20px;">
+                    <script>for (let i = 0; i < 12; i++) document.write('<input type="text" class="char-box dashed" maxlength="1" style="width: 15px;">');</script>
+                    <input type="text" class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;">
+                </div>
+                <span class="label">15 Mobile</span>
+                <div class="char-grid">
+                    <script>for (let i = 0; i < 10; i++) document.write('<input type="text" class="char-box dashed" maxlength="1" style="width: 15px;">');</script>
+                    <input type="text" class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;"><input type="text"
+                        class="char-box dashed" maxlength="1" style="width: 15px;">
+                </div>
+            </div>
+            <div class="section-title">B. Family Member Details</div>
+            <div class="row">
+                <span class="label">16 No of Family Members</span>
+                <div class="char-grid">
+                    <input type="text" class="char-box" maxlength="1" style="width:25px;">
+                    <input type="text" class="char-box" maxlength="1" style="width:25px;">
+                </div>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <th style="width: 5%;">S.N</th>
+                        <th style="width: 55%;">Name of Family Members</th>
+                        <th style="width: 30%;">Relation with HOF</th>
+                        <th style="width: 10%;">Age</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                        <td><select
+                                style="width:100%; border:none; text-align:center; background:transparent; -webkit-appearance:none; appearance:none; font-family: Arial, sans-serif; font-size: 11px; outline:none;">
+                                <option value=""></option>
+                                <option value="FATHER">FATHER</option>
+                                <option value="MOTHER">MOTHER</option>
+                                <option value="HUSBEND">HUSBEND</option>
+                                <option value="WIFE">WIFE</option>
+                                <option value="DAUGHTER">DAUGHTER</option>
+                                <option value="SUN">SUN</option>
+                            </select></td>
+                        <td><input type="text" style="width:100%; border:none; text-align:center; font-size: 11px;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="section-title">C. Bank Details</div>
+            <div class="row">
+                <span class="label" style="width: 180px;">17 Name of Account Holder</span>
+                <input type="text" class="input-line">
+            </div>
+            <div class="row">
+                <span class="label" style="width: 180px;">18 Account No</span>
+                <input type="text" class="input-line">
+                <input type="text" class="char-box" maxlength="1" style="width:25px;">
+                <input type="text" class="char-box" maxlength="1" style="width:25px;">
+            </div>
+            <div class="row">
+                <span class="label" style="width: 180px;">19 Bank Name</span>
+                <input type="text" class="input-line">
+            </div>
+            <div class="row">
+                <span class="label" style="width: 180px;">20 IFSC CODE</span>
+                <div class="char-grid">
+                    <input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1"><input type="text" class="char-box" maxlength="1"><input type="text" class="char-box"
+                        maxlength="1">
+                </div>
+            </div>
+        </div>
+    <div class="page" style="page-break-before: always; padding-top: 0;">
+        <div class="section-title">Undertaking -</div>
+        <div class="odia-text">
+            1. ??? ???????? ????? ????? ??, ??? ??? ???? ??? ???? ?????????? ????? ???? ?? ???????? ?????????? ????
+            ???? ??? ????????? ????? ????? ???? ???? ?????????? ??????, ???? ??? ??? ???? ?????????? ???? ????? ???
+            ??????? ?? ????????? ???? ??????? ??????????????? ????? ???????<br><br>
+            2. ??? ?????? ??? ??? ???????? ????? ??? ????????? ????????? ???? ?? ???? ????? ??????? ????? ???, ????
+            ??? ???? ?????? ?????? ???, ???? ??? ???????? ??????? ????? ?????? ??? ????<br><br>
+            3. ??? ???????? ?????? ??????????? ????? ???? ? ?????? ???????<br><br>
+            4. ??? ??? ???????? ???? ?????
+        </div>
+        <div class="signature-section">
+            ???????? ??? ????? ?? ????????<br><span style="font-weight: normal; color: #666;">(Signature/Thumb
+                Impression)</span>
+        </div>
+        <div class="nb-section">
+            <strong>NB</strong> &nbsp;&nbsp; Please Attach the following documents along with this form
+            <ul>
+                <li>1) Photo copy of Voter ID Card ( Head of Family )</li>
+                <li>2) Photocopy of Bank Passbook ( Front Page )</li>
+                <li>3) All the fields should be filled up in English</li>
+            </ul>
+        </div>
+        <div class="office-use">
+            <div style="font-style: italic; font-weight: bold; margin-bottom: 5px;">For Office use</div>
+            <div class="office-content">
+                <div class="row" style="margin-bottom: 20px;">
+                    <span class="label" style="width: 150px;">Application No.</span>
+                    <div class="char-grid">
+                        <script>for (let i = 0; i < 15; i++) document.write('<input type="text" class="char-box dashed" maxlength="1" style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;">');</script>
+                        <input type="text" class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;"><input type="text"
+                            class="char-box dashed" maxlength="1"
+                            style="width: 25px; height: 30px; font-weight: bold; font-size: 16px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="label" style="width: 150px;">Date of Receipt (DD/MM/YY)</span>
+                    <div class="char-grid">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="D"
+                            style="width: 25px; height: 30px;">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="D"
+                            style="width: 25px; height: 30px;">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="M"
+                            style="width: 25px; height: 30px; margin-left: 10px;">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="M"
+                            style="width: 25px; height: 30px;">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="Y"
+                            style="width: 25px; height: 30px; margin-left: 10px;">
+                        <input type="text" class="char-box dashed" maxlength="1" placeholder="Y"
+                            style="width: 25px; height: 30px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        // 1. Auto-jump to the next box when typing
+        document.addEventListener('input', function (e) {
+            if (e.target.classList.contains('char-box') && e.target.value.length === e.target.maxLength) {
+                let next = e.target.nextElementSibling;
+                while (next && next.tagName !== 'INPUT') { next = next.nextElementSibling; }
+                if (next && next.classList.contains('char-box')) { next.focus(); }
+            }
+        });
+        // 1.5 Auto-calculate age
+        document.getElementById('dob-inputs').addEventListener('input', function () {
+            const inputs = this.querySelectorAll('input');
+            let dobString = '';
+            inputs.forEach(input => dobString += input.value);
+            if (dobString.length === 8) {
+                const day = parseInt(dobString.substring(0, 2), 10);
+                const month = parseInt(dobString.substring(2, 4), 10) - 1; // Months are 0-indexed in JS
+                const year = parseInt(dobString.substring(4, 8), 10);
+                const dob = new Date(year, month, day);
+                const today = new Date();
+                let age = today.getFullYear() - dob.getFullYear();
+                const m = today.getMonth() - dob.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                if (age >= 0 && age < 100) {
+                    let ageStr = age.toString().padStart(2, '0');
+                    const ageInputs = document.getElementById('age-inputs').querySelectorAll('input');
+                    ageInputs[0].value = ageStr[0];
+                    ageInputs[1].value = ageStr[1];
+                }
+            }
+        });
+        // 1.8 Populate GP and Village Dropdowns
+        const locationData = {
+            "BALASORE (SADAR)": {
+                gps: [
+                    "Bahabalpur", "Buanl", "Chhanua", "Genguti", "Gopinathpur", "Gudu",
+                    "Hidigan", "Jayadeba Kasaba", "Kasipada", "Nagram", "Odangi",
+                    "Padmapur", "Parikhi", "Patrapada", "Ranasahi", "Rasalpur"
+                ],
+                villages: [
+                    "Balaramgadi", "Mirjapur", "Nuapalgadi", "Akinia", "Amara", "Angula",
+                    "Astia", "Badagobra", "Baharda", "Baincha", "Balipal", "Bangara",
+                    "Baradharia", "Barakhua", "Bardhanpur", "Baringia", "Basantapur",
+                    "Bedeisana", "Bedhapanchaarada", "Belbaria", "Belda", "Bengati",
+                    "Bhagirathipur", "Bhimdia", "Bhimpur", "Bisnupur", "Brahmaneula",
+                    "Buanla", "Budhiamari", "Chakasindhia", "Chakbramhananda",
+                    "Chakpanchurukhi", "Chakradharhati", "Chandipur", "Chasakhanda",
+                    "Chaulachhada", "Chhachina", "Chheliapada", "Chhotokhannagar",
+                    "Dalsusa", "Dandika", "Dhusuli", "Digida", "Dipapal", "Dobarai",
+                    "Domuhanpatna", "Dumuria", "Garada", "Ghodapada", "Abdulapur",
+                    "Ajodhyanagarpatana", "Ambua", "Ambulakuda", "Anantapani",
+                    "Anantapur", "Bahadalpur", "Bahala", "Balichauria", "Balisuan",
+                    "Banaparia", "Bankatira", "Barapada", "Bartana", "Barunsing",
+                    "Basudevpur", "Baunsmuhan", "Bedipur", "Bhandeswar", "Bhuinpada",
+                    "Bilaparia", "Biruhan", "Boita", "Chandatikiri", "Chhadachadia",
+                    "Chilapada", "Dahapada", "Dahigadia"
+                ]
+            },
+            "BALIAPAL": {
+                gps: [
+                    "Aladiha", "Asti", "Badas", "Bahiapal", "Balarampur", "Balikuti",
+                    "Baniadiha", "Betagadia", "Bishnupur", "Bolang", "Chaumukh", "Dagara",
+                    "Deula", "Debhog", "Ghantua", "Jagatipur", "Jambhirai", "Jamkunda",
+                    "Kumbhari", "Kunduli", "Madhupura", "Nikhira", "Nuagan", "Panchupali",
+                    "Pratappur", "Ratei", "Saudi", "Srirampur"
+                ],
+                villages: [
+                    "Aladiha", "Asti", "Antichak", "Amachua", "Dagara", "Anadeula",
+                    "Aruadam", "Balarampur", "Betagadia", "Bishnupur", "Chaumukha",
+                    "Balikuti", "Baliapal", "Athabatia", "Badakachuapada", "Badakasaba",
+                    "Badanpur", "Badasimulia", "Bagada", "Bahabalpur", "Balibil",
+                    "Balichatara", "Barabatia", "Barakaurda", "Baramahisadi", "Baras",
+                    "Basudebpur", "Bedhapal", "Bela", "Betana", "Bhagipentha",
+                    "Bhagirathipur", "Bhanupur", "Bhelpura", "Bhikagaria", "Bhujajathia",
+                    "Bilakumbhari", "Bindhabalikuti", "Bindhakalanda", "Biraparulia",
+                    "Biridiha", "Biswanathpur", "Bramhanbaisada", "Chakabasugaria",
+                    "Chakabrahma", "Chakaghantiari", "Chakanatipur", "Chakaraidanki",
+                    "Chakbaliapal", "Chandamani", "Charabastakalaroi", "Chaudhurikuda",
+                    "Chhada", "Chhotkhanpur", "Chirasungamuhan", "Dakhinapada", "Dalua-2",
+                    "Dalua-I", "Dangapita", "Dantunida", "Demuria", "Dhananda", "Dumichak",
+                    "Ghantiari", "Gokulanandapur", "Khagadapal", "Deula", "Jathia",
+                    "Sunaruhi", "Kachuapada", "Pancharukhi", "Madhupura", "Jamkunda", "Ikarpal",
+                    "Kudmansing", "Kusudiha", "Nachandiya", "Deula Basudebpur", "Hasimpur"
+                ]
+            }
+        };
+        const blockSelect = document.getElementById('block-select');
+        const gpSelect = document.getElementById('gp-select');
+        const villageSelect = document.getElementById('village-select');
+        if (blockSelect && gpSelect && villageSelect) {
+            blockSelect.addEventListener('change', function () {
+                const selectedBlock = this.value;
+                // Clear existing options, keep the empty first option
+                gpSelect.innerHTML = '<option value=""></option>';
+                villageSelect.innerHTML = '<option value=""></option>';
+                if (selectedBlock && locationData[selectedBlock]) {
+                    const blockData = locationData[selectedBlock];
+                    // Populate GP dropdown
+                    blockData.gps.sort().forEach(gp => {
+                        let opt = document.createElement('option');
+                        opt.value = gp.toUpperCase();
+                        opt.textContent = gp.toUpperCase();
+                        gpSelect.appendChild(opt);
+                    });
+                    // Populate Village dropdown
+                    blockData.villages.sort().forEach(village => {
+                        let opt = document.createElement('option');
+                        opt.value = village.toUpperCase();
+                        opt.textContent = village.toUpperCase();
+                        villageSelect.appendChild(opt);
+                    });
+                }
+            });
+        }
+        // 2. Custom Save PDF Logic
+        function downloadPDF() {
+            const btnPanel = document.getElementById('control-panel');
+            btnPanel.style.display = 'none'; // Hide buttons during generation
+            // Before converting to PDF, we must set the "value" attribute for all inputs 
+            // so html2pdf captures the text you typed.
+            const inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.setAttribute('value', input.value);
+            });
+            // Stamp the radio buttons (checkmarks)
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                if (radio.checked) {
+                    radio.setAttribute('checked', 'checked');
+                } else {
+                    radio.removeAttribute('checked');
+                }
+            });
+            // Stamp the select dropdowns
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                const options = select.querySelectorAll('option');
+                options.forEach(opt => opt.removeAttribute('selected'));
+                if (select.selectedIndex >= 0) {
+                    options[select.selectedIndex].setAttribute('selected', 'selected');
+                }
+            });
+            // Configuration for the downloaded PDF
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin: 0,
+                filename: 'Farmer_Registration_Form.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 1.8, useCORS: true, letterRendering: true, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'] }
+            };
+            // Generate and Save
+            html2pdf().set(opt).from(element).save().then(() => {
+                btnPanel.style.display = 'flex'; // Bring the buttons back
+            });
+        }
+    </script>
+</body>
+
+</html>

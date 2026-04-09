@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Customer Data Entry Form - CSC VLE Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+    <style>
+        /* ===== DASHBOARD SHELL STYLES ===== */
+        :root {
+            --primary: #f59e0b;
+            --primary-hover: #fbbf24;
+            --secondary: #1e88e5;
+            --accent: #174279;
+            --bg-body: #eef2f8;
+            --bg-surface: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --text-main: #1a2c45;
+            --text-muted: #4a6080;
+            --border-color: rgba(23, 66, 121, 0.18);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(23, 66, 121, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', Arial, sans-serif;
+            background: linear-gradient(135deg, #dce8f5 0%, #eef2f8 50%, #d8e6f3 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(23, 66, 121, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(23, 66, 121, 0.05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #174279 0%, #0f2d54 100%);
+            border-bottom: 2px solid rgba(245, 158, 11, 0.45);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(23, 66, 121, 0.25);
+            color: white;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title span {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 15px; }
+
+        .news-btn {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .news-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .header-logo img {
+            height: 40px;
+            border-radius: 6px;
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            background: white;
+            padding: 2px;
+        }
+
+        /* Running Strip */
+        .running-strip-container {
+            width: 100%;
+            background: linear-gradient(90deg, #0a1628 0%, #0d1f3c 40%, #081220 100%);
+            color: #ffffff;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            font-size: 12.5px;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.35);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .running-strip-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollStrip 30s linear infinite;
+        }
+
+        .running-strip-text:hover { animation-play-state: paused; }
+
+        @keyframes scrollStrip {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            width: 100%;
+            height: 130px;
+            background: linear-gradient(135deg, #174279 -10%, #061125 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 8px 32px rgba(23, 66, 121, 0.15);
+            z-index: 5;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, rgba(23,66,121,0.5) 0%, transparent 50%);
+        }
+
+        .hero-text { position: absolute; text-align: center; z-index: 2; }
+
+        .hero-text h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 0 rgba(0,0,0,0.95), 0 6px 30px rgba(0,0,0,0.6);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-text h1 span { color: var(--primary); }
+
+        .hero-text p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== ACTION BUTTONS (Dashboard Style) ===== */
+        .dashboard-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 22px 30px 10px;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+        }
+
+        .dash-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+
+        .dash-btn:hover { transform: translateY(-3px); }
+
+        .dash-btn-print {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+        }
+        .dash-btn-print:hover { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5); }
+
+        .dash-btn-save {
+            background: linear-gradient(135deg, #1e88e5, #1565c0);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.35);
+        }
+        .dash-btn-save:hover { box-shadow: 0 8px 25px rgba(30, 136, 229, 0.5); }
+
+        .dash-btn-clear {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .dash-btn-clear:hover { box-shadow: 0 8px 25px rgba(239, 68, 68, 0.45); }
+
+        /* Form Wrapper */
+        .form-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 20px 30px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ===== ORIGINAL FORM STYLES (untouched) ===== */
+        .container {
+            width: 794px;
+            height: 1122px;
+            background: #fff;
+            padding: 30px 40px;
+            box-sizing: border-box;
+            border: 2px solid #000;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 8px 40px rgba(23, 66, 121, 0.18), 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 4px;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 150px;
+            height: 70px;
+            margin-right: 20px;
+            display: block;
+        }
+
+        .header-title { flex-grow: 1; }
+
+        h2 {
+            text-align: center;
+            margin: 0;
+            font-size: 20px;
+            text-decoration: underline;
+            font-family: Arial, sans-serif;
+            color: #000;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .section { margin-bottom: 12px; }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 13px;
+            background-color: #e0e0e0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            padding: 4px 8px;
+            border: 1px solid #000;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-family: Arial, sans-serif;
+        }
+
+        .line {
+            display: flex;
+            margin: 6px 0;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #000;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-right: 8px;
+            white-space: nowrap;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            flex-grow: 1;
+            border: none;
+            border-bottom: 1px solid #000;
+            background: transparent;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            padding: 2px 5px;
+            outline: none;
+            color: #000;
+        }
+
+        @media screen {
+            input[type="text"],
+            input[type="date"],
+            input[type="number"] {
+                background-color: #fcfcfc;
+            }
+
+            input[type="text"]:focus,
+            input[type="date"]:focus,
+            input[type="number"]:focus {
+                background-color: #eef7ff;
+                border-bottom: 2px solid #007bff;
+            }
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .options label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            cursor: pointer;
+            width: 13px;
+            height: 13px;
+            margin: 0;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            right: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 30px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+
+        .sig-line {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sig-box {
+            width: 40%;
+            text-align: center;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        #refNo[readonly] {
+            background-color: #f0f0f0;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Page Footer */
+        .page-footer {
+            background: linear-gradient(0deg, rgba(23, 66, 121, 0.05) 0%, transparent 100%);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print { display: none !important; }
+
+            body {
+                background: #fff;
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+
+            body::before { display: none; }
+
+            .page-header,
+            .running-strip-container,
+            .hero-banner,
+            .dashboard-actions,
+            .page-footer {
+                display: none !important;
+            }
+
+            .form-wrapper {
+                padding: 0;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            .container {
+                margin: 0 auto !important;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="number"] {
+                background: transparent !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== DASHBOARD HEADER ===== -->
+    <header class="page-header no-print">
+        <div class="header-left">
+            <a href="pdf_form.html" class="back-btn">
+                <ion-icon name="arrow-back-outline"></ion-icon> Back
+            </a>
+            <div class="page-title">
+                Document Center
+                <span>Master Customer Data Entry Form</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="news_blog.html" target="_blank" class="news-btn">
+                <ion-icon name="newspaper-outline"></ion-icon> NEWS BLOG
+            </a>
+            <div class="header-logo">
+                <img src="../assets/janasebakendra_logo.png" alt="Logo" onerror="this.src=''; this.style.display='none'">
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== RUNNING STRIP ===== -->
+    <div class="running-strip-container no-print">
+        <div class="running-strip-text">
+            <ion-icon name="information-circle-outline" style="vertical-align: middle; margin-right: 5px; font-size: 16px; color: #f59e0b;"></ion-icon>
+            Please Note: This is an independent, non-government portal. We simplify the process of navigating, finding, and formatting data sourced from official government websites for your convenience.
+            &nbsp;&nbsp;&nbsp;◆&nbsp;&nbsp;&nbsp;
+            <ion-icon name="document-text-outline" style="vertical-align: middle; margin-right: 5px; font-size: 16px; color: #f59e0b;"></ion-icon>
+            Master Customer Data Entry Form — Fill in all sections carefully. Auto Ref No is generated from Mobile + Date + DOB.
+        </div>
+    </div>
+
+    <!-- ===== HERO BANNER ===== -->
+    <div class="hero-banner no-print">
+        <div style="position:absolute; inset:0; background: radial-gradient(circle at center, transparent 0%, #0f172a 100%), linear-gradient(90deg, rgba(37,99,235,0.1) 0%, rgba(15,23,42,0.1) 100%);"></div>
+        <div class="hero-text">
+            <h1>Master Customer <span>Data Entry</span></h1>
+            <p>Fill · Save · Print — Professional CSC VLE Form</p>
+        </div>
+    </div>
+
+    <!-- ===== ACTION BUTTONS (Dashboard Style) ===== -->
+    <div class="dashboard-actions no-print">
+        <button class="dash-btn dash-btn-print" onclick="window.print()">
+            <ion-icon name="print-outline"></ion-icon> Print Form
+        </button>
+        <button class="dash-btn dash-btn-save" onclick="downloadPDF()">
+            <ion-icon name="save-outline"></ion-icon> Save as PDF
+        </button>
+        <button class="dash-btn dash-btn-clear" onclick="clearData()">
+            <ion-icon name="trash-outline"></ion-icon> Clear Data
+        </button>
+    </div>
+
+    <!-- ===== ORIGINAL FORM (completely untouched) ===== -->
+    <div class="form-wrapper">
+        <div class="container" id="form-content">
+            <form id="customerForm">
+                <div class="header-section">
+                    <svg id="barcode" class="header-logo" width="177px" height="62px" x="0px" y="0px" viewBox="0 0 177 62"
+                        xmlns="http://www.w3.org/2000/svg" version="1.1" style="transform: translate(0,0)">
+                        <rect x="0" y="0" width="177" height="62" style="fill:#ffffff;"></rect>
+                        <g transform="translate(5, 5)" style="fill:#000;">
+                            <rect x="0" y="0" width="2" height="40"></rect>
+                            <rect x="3" y="0" width="1" height="40"></rect>
+                            <rect x="6" y="0" width="1" height="40"></rect>
+                            <rect x="11" y="0" width="1" height="40"></rect>
+                            <rect x="13" y="0" width="2" height="40"></rect>
+                            <rect x="18" y="0" width="1" height="40"></rect>
+                            <rect x="22" y="0" width="1" height="40"></rect>
+                            <rect x="24" y="0" width="1" height="40"></rect>
+                            <rect x="28" y="0" width="2" height="40"></rect>
+                            <rect x="33" y="0" width="2" height="40"></rect>
+                            <rect x="36" y="0" width="3" height="40"></rect>
+                            <rect x="42" y="0" width="1" height="40"></rect>
+                            <rect x="44" y="0" width="1" height="40"></rect>
+                            <rect x="46" y="0" width="1" height="40"></rect>
+                            <rect x="50" y="0" width="2" height="40"></rect>
+                            <rect x="55" y="0" width="1" height="40"></rect>
+                            <rect x="58" y="0" width="2" height="40"></rect>
+                            <rect x="61" y="0" width="3" height="40"></rect>
+                            <rect x="66" y="0" width="3" height="40"></rect>
+                            <rect x="70" y="0" width="3" height="40"></rect>
+                            <rect x="74" y="0" width="2" height="40"></rect>
+                            <rect x="77" y="0" width="1" height="40"></rect>
+                            <rect x="81" y="0" width="2" height="40"></rect>
+                            <rect x="84" y="0" width="1" height="40"></rect>
+                            <rect x="88" y="0" width="1" height="40"></rect>
+                            <rect x="90" y="0" width="3" height="40"></rect>
+                            <rect x="96" y="0" width="2" height="40"></rect>
+                            <rect x="99" y="0" width="1" height="40"></rect>
+                            <rect x="101" y="0" width="2" height="40"></rect>
+                            <rect x="106" y="0" width="1" height="40"></rect>
+                            <rect x="110" y="0" width="2" height="40"></rect>
+                            <rect x="115" y="0" width="1" height="40"></rect>
+                            <rect x="119" y="0" width="1" height="40"></rect>
+                            <rect x="121" y="0" width="1" height="40"></rect>
+                            <rect x="123" y="0" width="3" height="40"></rect>
+                            <rect x="129" y="0" width="2" height="40"></rect>
+                            <rect x="132" y="0" width="2" height="40"></rect>
+                            <rect x="135" y="0" width="1" height="40"></rect>
+                            <rect x="139" y="0" width="1" height="40"></rect>
+                            <rect x="143" y="0" width="1" height="40"></rect>
+                            <rect x="145" y="0" width="1" height="40"></rect>
+                            <rect x="147" y="0" width="4" height="40"></rect>
+                            <rect x="154" y="0" width="2" height="40"></rect>
+                            <rect x="159" y="0" width="3" height="40"></rect>
+                            <rect x="163" y="0" width="1" height="40"></rect>
+                            <rect x="165" y="0" width="2" height="40"></rect><text style="font: 10px monospace"
+                                text-anchor="middle" x="83.5" y="52">DATA-PENDING</text>
+                        </g>
+                    </svg>
+                    <div class="header-title">
+                        <h2>MASTER CUSTOMER DATA ENTRY FORM</h2>
+                        <div class="header-info">
+                            <div class="line" style="width: 45%; margin: 0;"><span class="label">Date:</span><input
+                                    type="date" id="currentDate" onchange="generateAutoRefNo()"></div>
+                            <div class="line" style="width: 45%; margin: 0;"><span class="label">Token / Ref
+                                    No:</span><input type="text" id="refNo" readonly="" placeholder="Auto-generated"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">1. Personal Details</div>
+                    <div class="line"><span class="label">Full Name of Applicant:</span><input type="text"
+                            placeholder="Enter Full Name"></div>
+                    <div class="line"><span class="label">Father's / Husband's Name:</span><input type="text"
+                            placeholder="Enter Father/Husband Name"></div>
+                    <div class="line"><span class="label">Mother's Name:</span><input type="text"
+                            placeholder="Enter Mother Name"></div>
+                    <div class="line">
+                        <span class="label">Date of Birth:</span><input type="date" id="dob" style="max-width: 130px;"
+                            onchange="generateAutoRefNo()">
+                        <span class="label" style="margin-left: 15px;">Gender:</span>
+                        <div class="options">
+                            <label><input type="radio" name="gender" value="Male"> Male</label>
+                            <label><input type="radio" name="gender" value="Female"> Female</label>
+                            <label><input type="radio" name="gender" value="Transgender"> Transgender</label>
+                        </div>
+                    </div>
+                    <div class="line">
+                        <span class="label">Category:</span>
+                        <div class="options">
+                            <label><input type="radio" name="category" value="GEN"> GEN</label>
+                            <label><input type="radio" name="category" value="OBC"> OBC</label>
+                            <label><input type="radio" name="category" value="SC"> SC</label>
+                            <label><input type="radio" name="category" value="ST"> ST</label>
+                            <label><input type="radio" name="category" value="Minority"> Minority</label>
+                        </div>
+                        <span class="label" style="margin-left: 15px;">Marital Status:</span>
+                        <div class="options">
+                            <label><input type="radio" name="marital" value="Single"> Single</label>
+                            <label><input type="radio" name="marital" value="Married"> Married</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">2. Contact &amp; Address Details</div>
+                    <div class="line">
+                        <span class="label">Mobile Number 1:</span><input type="number" id="mobileNo"
+                            placeholder="10-digit number" oninput="generateAutoRefNo()">
+                        <span class="label" style="margin-left: 10px;">Mobile 2 / WhatsApp:</span><input type="number">
+                    </div>
+                    <div class="line"><span class="label">Email Address:</span><input type="text"
+                            placeholder="example@email.com"></div>
+                    <div class="line"><span class="label">Village / Town / City:</span><input type="text"></div>
+                    <div class="line"><span class="label">Gram Panchayat (GP) / Ward:</span><input type="text"></div>
+                    <div class="line">
+                        <span class="label">Post Office (PO):</span><input type="text">
+                        <span class="label" style="margin-left: 10px;">Police Station (PS):</span><input type="text">
+                    </div>
+                    <div class="line">
+                        <span class="label">District:</span><input type="text">
+                        <span class="label" style="margin-left: 10px;">State:</span><input type="text" value="Odisha">
+                        <span class="label" style="margin-left: 10px;">PIN Code:</span><input type="number"
+                            style="max-width: 90px;">
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">3. Identity &amp; Document Numbers</div>
+                    <div class="line"><span class="label">Aadhaar Number:</span><input type="text" id="aadhaarNo"
+                            placeholder="XXXX - XXXX - XXXX"
+                            style="letter-spacing: 2px; font-family: monospace; font-size: 14px;"
+                            oninput="generateBarcode()"></div>
+                    <div class="line">
+                        <span class="label">PAN Number:</span><input type="text" style="text-transform: uppercase;">
+                        <span class="label" style="margin-left: 15px;">Voter ID (EPIC) No:</span><input type="text"
+                            style="text-transform: uppercase;">
+                    </div>
+                    <div class="line">
+                        <span class="label">Ration Card Number:</span><input type="text">
+                        <span class="label" style="margin-left: 15px;">Driving License / Passport:</span><input type="text">
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">4. Bank Account Details</div>
+                    <div class="line"><span class="label">Bank Name:</span><input type="text"></div>
+                    <div class="line"><span class="label">Branch Name:</span><input type="text"></div>
+                    <div class="line">
+                        <span class="label">Account Number:</span><input type="text">
+                        <span class="label" style="margin-left: 15px;">IFSC Code:</span><input type="text"
+                            style="text-transform: uppercase;">
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">5. Service Requested &amp; Office Use</div>
+                    <div class="line"><span class="label">Name of Service / Application:</span><input type="text"></div>
+                    <div class="line" style="margin-top: 10px;">
+                        <span class="label">Documents Collected:</span>
+                        <div class="options" style="flex-wrap: wrap;">
+                            <label><input type="checkbox"> Aadhaar</label>
+                            <label><input type="checkbox"> PAN</label>
+                            <label><input type="checkbox"> Passport Photo</label>
+                            <label><input type="checkbox"> Bank Passbook</label>
+                            <label><input type="checkbox"> Ration Card</label>
+                            <label><input type="checkbox"> Voter ID</label>
+                        </div>
+                    </div>
+                    <div class="line"><span class="label">Other Document(s):</span><input type="text"></div>
+                    <div class="line" style="margin-top: 10px;">
+                        <span class="label">Total Fees Received (Rs.):</span><input type="number">
+                        <span class="label" style="margin-left: 15px;">Balance Due (Rs.):</span><input type="number">
+                    </div>
+                </div>
+                <div class="footer">
+                    <p><strong>DECLARATION:</strong> I hereby declare that all the information and documents provided above
+                        are true and correct to the best of my knowledge. I consent to the use of these details for the
+                        requested application/service.</p>
+                    <div class="sig-line">
+                        <div class="sig-box">Date &amp; Place</div>
+                        <div class="sig-box">Customer Signature / Thumb Impression</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD FOOTER ===== -->
+    <footer class="page-footer no-print">
+        &copy; 2026 Digital India CSC-VLE Services &mdash; Jana Seba Kendra <br>
+        <span style="font-size: 11px; opacity: 0.6; margin-top: 5px; display: inline-block;">Official Professional Dashboard</span>
+    </footer>
+
+    <script>
+        // ===== ORIGINAL SCRIPTS (completely untouched) =====
+        function generateAutoRefNo() {
+            const mobileInput = document.getElementById('mobileNo').value || '';
+            const dateInput = document.getElementById('currentDate').value;
+            const dobInput = document.getElementById('dob').value;
+
+            let mobilePart = '';
+            if (mobileInput.length > 4) {
+                mobilePart = mobileInput.slice(-4);
+            } else {
+                mobilePart = mobileInput;
+            }
+
+            let yearPart = '';
+            if (dateInput) {
+                yearPart = new Date(dateInput).getFullYear().toString();
+            }
+
+            let dobDayPart = '';
+            if (dobInput) {
+                dobDayPart = String(new Date(dobInput).getDate()).padStart(2, '0');
+            }
+
+            let finalRef = '';
+            if (mobilePart || yearPart || dobDayPart) {
+                finalRef = `${mobilePart}${yearPart}${dobDayPart}`;
+            }
+
+            document.getElementById('refNo').value = finalRef;
+            generateBarcode();
+        }
+
+        function generateBarcode() {
+            const aadhaar = document.getElementById('aadhaarNo').value || '';
+            const refNo = document.getElementById('refNo').value || '';
+
+            let barcodeValue = aadhaar || 'AADHAAR';
+            if (refNo) {
+                barcodeValue += '-' + refNo;
+            } else if (!aadhaar) {
+                barcodeValue = 'DATA-PENDING';
+            }
+
+            JsBarcode("#barcode", barcodeValue, {
+                format: "CODE128",
+                lineColor: "#000",
+                width: 1,
+                height: 40,
+                displayValue: true,
+                fontSize: 10,
+                margin: 5
+            });
+        }
+
+        window.onload = function () {
+            generateAutoRefNo();
+        };
+
+        function clearData() {
+            document.getElementById('customerForm').reset();
+            generateAutoRefNo();
+        }
+
+        function downloadPDF() {
+            window.scrollTo(0, 0);
+            var inputs = document.querySelectorAll('input');
+            inputs.forEach(function (input) {
+                if (input.type === 'text' || input.type === 'number' || input.type === 'date') { input.setAttribute('value', input.value); }
+                if (input.type === 'checkbox' || input.type === 'radio') { if (input.checked) input.setAttribute('checked', 'checked'); else input.removeAttribute('checked'); }
+            });
+            var element = document.getElementById('form-content');
+            var opt = { margin: 0, filename: 'Customer_Data_Entry.pdf', image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+
+</body>
+
+</html>

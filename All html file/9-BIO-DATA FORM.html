@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>A4 Bio-Data Interactive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .a4-container {
+            width: 210mm;
+            height: 297mm;
+            padding: 12mm 15mm;
+            background: white;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .header-banner {
+            background-color: #c45a11;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Interactive Photo Box */
+        .photo-frame {
+            float: right;
+            width: 100px;
+            height: 120px;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Keeps aspect ratio and fills the box */
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .field-row {
+            display: flex;
+            margin-bottom: 10px;
+            clear: both;
+        }
+
+        .label {
+            width: 140px;
+            font-weight: bold;
+        }
+
+        .value {
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+            height: 16px;
+        }
+
+        .row-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .half-field {
+            display: flex;
+            width: 48%;
+        }
+
+        h3 {
+            text-align: center;
+            font-size: 15px;
+            margin: 15px 0 8px 0;
+            border-bottom: 1.5px solid #333;
+            display: inline-block;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 6px;
+            font-size: 12px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        input {
+            border: none;
+            width: 100%;
+            font-size: 12px;
+            outline: none;
+            background: transparent;
+        }
+
+        .declaration {
+            margin-top: 25px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .footer-section {
+            position: absolute;
+            bottom: 15mm;
+            left: 15mm;
+            right: 15mm;
+        }
+
+        .sig-box {
+            float: right;
+            text-align: center;
+            width: 140px;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            font-weight: bold;
+        }
+
+        .no-print-btn {
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                background: white;
+            }
+
+            .no-print-btn {
+                display: none !important;
+            }
+
+            .a4-container {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="no-print-btn" onclick="window.print()">Print or Save as PDF</button>
+
+    <div class="a4-container">
+        <div class="header-banner">BIO DATA</div>
+
+        <input type="file" id="fileInput" accept="image/jpeg, image/jpg">
+        <div class="photo-frame" id="photoBox" onclick="document.getElementById('fileInput').click();">
+            <span id="photoText">CLICK TO<br>ADD PHOTO</span>
+        </div>
+
+        <div class="field-row">
+            <div class="label">Name</div>: <div class="value"><input type="text"></div>
+        </div>
+        <div class="field-row">
+            <div class="label">Father's Name</div>: <div class="value"><input type="text"></div>
+        </div>
+        <div class="field-row">
+            <div class="label">Mother's Name</div>: <div class="value"><input type="text"></div>
+        </div>
+        <div class="field-row">
+            <div class="label">Mobile</div>: <div class="value"><input type="text"></div>
+        </div>
+        <div class="field-row">
+            <div class="label">Email id</div>: <div class="value"><input type="text"></div>
+        </div>
+
+        <div class="row-group">
+            <div class="half-field">
+                <div class="label">Gender</div>: <div class="value"><input type="text"></div>
+            </div>
+            <div class="half-field">
+                <div class="label">Date of Birth</div>: <div class="value"><input type="text"></div>
+            </div>
+        </div>
+
+        <div class="row-group">
+            <div class="half-field">
+                <div class="label">Marital Status</div>: <div class="value"><input type="text"></div>
+            </div>
+            <div class="half-field">
+                <div class="label">Religion</div>: <div class="value"><input type="text"></div>
+            </div>
+        </div>
+
+        <div class="row-group">
+            <div class="half-field">
+                <div class="label">Nationality</div>: <div class="value"><input type="text"></div>
+            </div>
+            <div class="half-field">
+                <div class="label">Languages</div>: <div class="value"><input type="text"></div>
+            </div>
+        </div>
+
+        <h3>Education</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Level</th>
+                    <th>Institute Name</th>
+                    <th style="width:80px">Year</th>
+                    <th style="width:80px">Marks %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>10th-High School</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>+2 Education</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>Graduation</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Experience</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:40px">S No</th>
+                    <th>Company Name</th>
+                    <th>Position</th>
+                    <th style="width:120px">Period</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="field-row">
+            <div class="label">Address</div>: <div class="value"><input type="text"></div>
+        </div>
+        <div class="field-row">
+            <div class="label"></div>&nbsp;&nbsp;<div class="value"><input type="text"></div>
+        </div>
+
+        <div class="declaration">
+            <p><b>Declaration:</b> I hereby declare that the information provided here is true to the best of my
+                knowledge.</p>
+        </div>
+
+        <div class="footer-section">
+            <div style="float:left;">
+                <p>Place: ___________</p>
+                <p>Date: ___________</p>
+            </div>
+            <div class="sig-box">Signature</div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const photoBox = document.getElementById('photoBox');
+        const photoText = document.getElementById('photoText');
+
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Replace text with the selected image
+                    photoBox.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

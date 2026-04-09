@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="or">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ration Card Application - Baliapal</title>
+    <script src="https://cdn.jsdelivr.net/npm/sanscript@1.1.0/sanscript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            /* A4 width roughly */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #1a1a1a;
+        }
+
+        .print-container {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .btn-print {
+            background-color: #f59e0b;
+            /* Matching CSC theme */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-print:hover {
+            background-color: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .paper {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-height: 297mm;
+            /* Standard A4 height */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            text-decoration: underline;
+            color: #111827;
+        }
+
+        .address-block {
+            margin-bottom: 15px;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .subject {
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 8px 0;
+            border-top: 2px solid #f1f5f9;
+            border-bottom: 2px solid #f1f5f9;
+            font-size: 1.05em;
+            color: #1e293b;
+        }
+
+        .content-body {
+            text-align: justify;
+            font-size: 1em;
+            line-height: 1.65;
+            margin-bottom: 15px;
+        }
+
+        /* Entry data text color set to Black */
+        input[type="text"] {
+            border: none;
+            border-bottom: 1.5px dashed #64748b;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1em;
+            padding: 2px 5px;
+            outline: none;
+            color: #000000;
+            font-weight: 600;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-bottom: 1.5px solid #2563eb;
+        }
+
+        .w-full {
+            width: 98%;
+            margin-top: 8px;
+        }
+
+        .w-md {
+            width: 280px;
+        }
+
+        .w-sm {
+            width: 160px;
+        }
+
+        .footer-grid {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .signature-section {
+            text-align: right;
+        }
+
+        .attachments {
+            margin-top: 15px;
+            border-top: 2px dashed #cbd5e1;
+            padding-top: 12px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+                /* Setting margin to 0 hides default browser headers/footers (date, title, URL) */
+            }
+
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 15mm;
+                /* Move the margin to body padding so content doesn't hit the edge */
+                max-width: 100%;
+            }
+
+            .print-container,
+            .hint-box {
+                display: none !important;
+            }
+
+            .paper {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                min-height: auto;
+                border-radius: 0;
+            }
+
+            input[type="text"] {
+                border-bottom: 1px solid #000;
+                /* Solid line for printing */
+                padding: 0 5px;
+            }
+        }
+
+        .hint-box {
+            background: #fffbeb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="print-container">
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+
+    <div class="hint-box">
+        <span style="font-size: 1.2em;">💡</span>
+        <div>
+            <strong>ଟାଇପିଂ ସୂଚନା (Typing Hint):</strong> English ରେ ଲେଖି Space ଦବାନ୍ତୁ, ଏହା ଓଡ଼ିଆ ହୋଇଯିବ । (ଉଦାହରଣ:
+            "baliapal" + Space = ବାଲିଆପାଳ)
+        </div>
+    </div>
+
+    <div class="paper">
+        <div class="header">ଦରଖାସ୍ତ</div>
+
+        <div class="address-block">
+            ମାନନୀୟ / ମାନନୀୟା,<br>
+            ବ୍ଲକ ଯୋଗାଣ ଅଧିକାରୀ / ମାର୍କେଟିଂ ଇନ୍ସପେକ୍ଟର (M.I) ବାଲିଆପାଳ, ବାଲେଶ୍ବର ।
+        </div>
+
+        <div class="subject">
+            ବିଷୟ : ରେସନ କାର୍ଡ ପ୍ରାପ୍ତି ପରେ ପରିବାର ରେ ଅନ୍ୟ ସଦାଷୟା /ସଦାଷୟ ଙ୍କ ନାମ ସଂଯୋଗ ନିମନ୍ତେ
+        </div>
+
+        <div class="content-body">
+            ମହାଶୟ,<br>
+            ବିନୀତ ନିବେଦନ ସହିତ ମୁଁ <input type="text" class="w-md" onkeyup="processOdia(this, event)"> (ନିଜ ନାମ ଲେଖନ୍ତୁ), ଗ୍ରାମ: <input type="text" class="w-sm" onkeyup="processOdia(this, event)">, ପଞ୍ଚାୟତ: <input type="text" class="w-sm" onkeyup="processOdia(this, event)"> ର ସ୍ଥାୟୀ ବାସିନ୍ଦା ଅଟେ। ମୋର ରେସନ କାର୍ଡ ନମ୍ବରଟି ହେଉଛି <input type="text" class="w-md" onkeyup="processOdia(this, event)">।<br>
+            ମୋ ପରିବାରରେ ନୂତନ ଭାବେ ଜନ୍ମ ଗ୍ରହଣ କରିଥିବା ଶିଶୁ / ନବବିବାହିତା ପତ୍ନୀ (ଯାହା ପ୍ରଯୁଜ୍ୟ ତାହା ଲେଖନ୍ତୁ) ଙ୍କ ନାମ ପରିବାରର ରେସନ କାର୍ଡରେ ଯୋଗ କରିବା ପାଇଁ ଆବଶ୍ୟକ ହେଉଛି। ତାଙ୍କର ବିବରଣୀ ନିମ୍ନରେ ଦିଆଗଲା:<br><br>
+
+            ସଦସ୍ୟଙ୍କ ନାମ: <input type="text" class="w-md" onkeyup="processOdia(this, event)"><br>
+            ପିତା/ସ୍ୱାମୀଙ୍କ ନାମ: <input type="text" class="w-md" onkeyup="processOdia(this, event)"><br>
+            ଆଧାର କାର୍ଡ ନମ୍ବର: <input type="text" class="w-md" onkeyup="processOdia(this, event)"><br>
+            ମୁଖ୍ୟ ସଦସ୍ୟଙ୍କ ସହ ସମ୍ପର୍କ: <input type="text" class="w-md" onkeyup="processOdia(this, event)"><br><br>
+
+            ଅତଏବ, ଆପଣଙ୍କୁ ବିନୀତ ଅନୁରୋଧ କରୁଛି କି, ଆବଶ୍ୟକୀୟ ଯାଞ୍ଚ କରି ଉକ୍ତ ସଦସ୍ୟଙ୍କ ନାମ ମୋର ରେସନ କାର୍ଡରେ ସଂଯୋଗ କରିବାକୁ ଆଜ୍ଞା ହେଲେ ମୁଁ ଆପଣଙ୍କ ନିକଟରେ ଚିରକୃତଜ୍ଞ ରହିବି।
+        </div>
+
+        <div class="footer-grid">
+            <div>
+                ତାରିଖ: <input type="text" class="w-sm" onkeyup="processOdia(this, event)"><br>
+                ସ୍ଥାନ: <input type="text" class="w-sm" onkeyup="processOdia(this, event)">
+            </div>
+            <div class="signature-section">
+                ଆପଣଙ୍କର ବିଶ୍ବସ୍ତ<br><br><br>
+                ନାମ: <input type="text" class="w-md" onkeyup="processOdia(this, event)"><br>
+                ମୋବାଇଲ୍ ନମ୍ବର: <input type="text" class="w-md" onkeyup="processOdia(this, event)">
+            </div>
+        </div>
+
+        <div class="attachments">
+            <strong>ସଂଲଗ୍ନ କାଗଜପତ୍ର :</strong><br>
+            01. <input type="text" class="w-full" onkeyup="processOdia(this, event)"><br>
+            02. <input type="text" class="w-full" onkeyup="processOdia(this, event)"><br>
+            03. <input type="text" class="w-full" onkeyup="processOdia(this, event)">
+        </div>
+    </div>
+
+    <script>
+        async function processOdia(el, event) {
+            // Check if space bar is pressed
+            if (event.keyCode === 32) {
+                let words = el.value.split(" ");
+                let lastWordIndex = words.length - 2; // word before space
+                let lastWord = words[lastWordIndex];
+
+                if (lastWord && lastWord.trim() !== "") {
+                    // Pre-check if it's already non-English or numbers
+                    if (!/[a-zA-Z]/.test(lastWord)) return;
+
+                    try {
+                        let response = await fetch(`https://inputtools.google.com/request?text=${encodeURIComponent(lastWord)}&itc=or-t-i0-und&num=1`);
+                        let data = await response.json();
+
+                        // Successfully fetched transliteration from Google API
+                        if (data && data[0] === "SUCCESS" && data[1] && data[1][0] && data[1][0][1] && data[1][0][1][0]) {
+                            let odiaWord = data[1][0][1][0];
+                            words[lastWordIndex] = odiaWord;
+                        } else {
+                            // Fallback to strict ITRANS
+                            words[lastWordIndex] = Sanscript.t(lastWord, 'itrans', 'oriya');
+                        }
+                    } catch (e) {
+                        // Offline or network error fallback
+                        words[lastWordIndex] = Sanscript.t(lastWord, 'itrans', 'oriya');
+                    }
+
+                    let cursorPos = el.selectionStart;
+                    el.value = words.join(" ");
+                    el.selectionStart = el.selectionEnd = el.value.length; // Jump to end of word space
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

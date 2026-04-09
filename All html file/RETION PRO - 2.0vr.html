@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETION PRO 2.0 | Ration Data Management System – Odisha PDS</title>
+    <meta name="description" content="Official Ration Data Management Portal – NFSA & SFSS Services, Odisha PDS. Version 2.0 Pro.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* ══════════════════════════════════════════════
+       TOKENS — Official Government PDS Theme
+    ══════════════════════════════════════════════ */
+    :root {
+        /* Core brand */
+        --navy:        #0a1f44;
+        --navy-deep:   #061230;
+        --navy-mid:    #0e2d5e;
+        --navy-light:  #1a3f7a;
+        --saffron:     #e85d04;
+        --saffron-2:   #f48c06;
+        --green:       #1a6b3c;
+        --green-light: #25a55e;
+        --gold:        #f5a623;
+
+        /* Neutrals */
+        --white:  #ffffff;
+        --off-white: #f4f6fa;
+        --grey-1: #e8edf5;
+        --grey-2: #c5cedc;
+        --grey-3: #8094b4;
+        --grey-4: #5a6e8c;
+        --grey-5: #3a4f72;
+
+        /* Layout */
+        --sidebar-w: 270px;
+        --topbar-h: 58px;
+        --govbar-h: 40px;
+        --radius-sm: 6px;
+        --radius:    10px;
+        --radius-lg: 14px;
+
+        /* Shadows */
+        --shadow-card: 0 2px 12px rgba(10,31,68,0.12), 0 1px 4px rgba(10,31,68,0.08);
+        --shadow-lg:   0 8px 32px rgba(10,31,68,0.18);
+    }
+
+    /* ══════════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body {
+        font-family: 'Noto Sans', 'Inter', sans-serif;
+        background: var(--off-white);
+        color: var(--navy);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background: var(--grey-1); }
+    ::-webkit-scrollbar-thumb { background: var(--grey-2); border-radius:10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--navy-light); }
+
+    /* ══════════════════════════════════════════════
+       GOV TOP STRIP
+    ══════════════════════════════════════════════ */
+    .gov-strip {
+        height: var(--govbar-h);
+        background: var(--navy-deep);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        flex-shrink: 0;
+        border-bottom: 2px solid var(--saffron);
+        z-index: 100;
+    }
+    .gov-strip-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.65);
+        letter-spacing: 0.04em;
+    }
+    .gov-emblem {
+        width: 26px; height: 26px;
+        background: radial-gradient(circle, var(--gold) 30%, var(--saffron) 100%);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.7rem; font-weight: 900; color: var(--navy-deep);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(245,166,35,0.5);
+    }
+    .gov-strip-right {
+        display: flex; align-items: center; gap: 16px;
+    }
+    .gov-link {
+        font-size: 0.7rem; color: rgba(255,255,255,0.5);
+        font-weight:500; cursor: pointer;
+        transition: color 0.2s;
+    }
+    .gov-link:hover { color: var(--gold); }
+    .sep { color: rgba(255,255,255,0.2); }
+
+    /* live indicator */
+    .live-badge {
+        display: flex; align-items: center; gap: 5px;
+        background: rgba(37,165,94,0.18);
+        border: 1px solid rgba(37,165,94,0.4);
+        padding: 3px 10px; border-radius: 50px;
+        font-size: 0.65rem; font-weight: 700; color: #4ade80;
+        letter-spacing: 0.06em;
+    }
+    .live-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 8px #4ade80;
+        animation: blink 1.8s ease-in-out infinite;
+    }
+    @keyframes blink {
+        0%,100% { opacity:1; }
+        50% { opacity:0.3; }
+    }
+
+    /* ══════════════════════════════════════════════
+       MAIN TOP BAR
+    ══════════════════════════════════════════════ */
+    .topbar {
+        height: var(--topbar-h);
+        background: var(--navy);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 22px 0 0;
+        flex-shrink: 0;
+        z-index: 90;
+        box-shadow: 0 2px 12px rgba(6,18,48,0.5);
+    }
+    .topbar-brand {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        background: var(--saffron);
+        padding: 0 22px;
+        gap: 12px;
+        min-width: var(--sidebar-w);
+        flex-shrink: 0;
+        position: relative;
+    }
+    .topbar-brand::after {
+        content: '';
+        position: absolute;
+        right: -14px; top: 0; bottom: 0;
+        width: 14px;
+        background: var(--saffron);
+        clip-path: polygon(0 0, 0 100%, 100% 50%);
+    }
+    .brand-icon {
+        width: 36px; height: 36px;
+        background: var(--navy-deep);
+        border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 900; font-size: 0.85rem; color: var(--gold);
+        letter-spacing: -0.03em;
+        flex-shrink: 0;
+        border: 1.5px solid rgba(245,166,35,0.4);
+    }
+    .brand-text-top { font-size: 0.68rem; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.04em; }
+    .brand-text-main { font-size: 1rem; font-weight: 800; color: #fff; letter-spacing: -0.01em; line-height: 1.1; }
+
+    .topbar-center {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        gap: 24px;
+    }
+    .breadcrumb {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.8rem; color: rgba(255,255,255,0.5);
+    }
+    .breadcrumb .active-bc { color: #fff; font-weight: 600; }
+    .bc-sep { color: rgba(255,255,255,0.25); font-size: 0.65rem; }
+
+    .topbar-right {
+        display: flex; align-items: center; gap: 12px;
+    }
+    .topbar-badge {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 5px 14px; border-radius: 6px;
+        font-size: 0.72rem; font-weight: 700;
+        color: var(--gold); letter-spacing: 0.06em;
+    }
+    .topbar-version {
+        font-size: 0.7rem; font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        border-left: 1px solid rgba(255,255,255,0.15);
+        padding-left: 12px;
+    }
+
+    /* ══════════════════════════════════════════════
+       BODY LAYOUT (sidebar + content)
+    ══════════════════════════════════════════════ */
+    .body-layout {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* ══════════════════════════════════════════════
+       SIDEBAR (now handled above)
+    ══════════════════════════════════════════════ */
+    .sidebar {
+        width: var(--sidebar-w);
+        background: var(--navy-mid);
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        box-shadow: 2px 0 12px rgba(6,18,48,0.25);
+        z-index: 80;
+    }
+
+    .sidebar-section {
+        padding: 20px 14px 8px;
+    }
+    .sidebar-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: rgba(255,255,255,0.3);
+        font-weight: 700;
+        padding: 0 8px;
+        margin-bottom: 10px;
+    }
+
+    .nav-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+        display: flex; align-items: center; gap: 11px;
+        padding: 11px 14px;
+        border-radius: var(--radius-sm);
+        color: rgba(255,255,255,0.6);
+        font-size: 0.88rem; font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: 1px solid transparent;
+        position: relative;
+    }
+    .nav-item svg { width:17px; height:17px; flex-shrink:0; }
+    .nav-item:hover {
+        background: rgba(255,255,255,0.06);
+        color: #fff;
+        border-color: rgba(255,255,255,0.08);
+    }
+    .nav-item.active {
+        background: var(--saffron);
+        color: #fff;
+        font-weight: 700;
+        border-color: rgba(255,255,255,0.15);
+        box-shadow: 0 4px 16px rgba(232,93,4,0.35);
+    }
+
+    /* dropdown */
+    .nav-dropdown { display: flex; flex-direction: column; gap: 2px; }
+    .dropdown-trigger-btn {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 11px 14px;
+        border-radius: var(--radius-sm);
+        color: rgba(255,255,255,0.6);
+        font-size: 0.88rem; font-weight: 500;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+    .dropdown-trigger-btn .nav-item-left { display:flex; align-items:center; gap:11px; }
+    .dropdown-trigger-btn svg.icon { width:17px; height:17px; flex-shrink:0; }
+    .arrow { width:13px; height:13px; transition: transform 0.3s; }
+    .nav-dropdown:hover .arrow { transform: rotate(180deg); }
+    .dropdown-trigger-btn:hover { background: rgba(255,255,255,0.06); color:#fff; border-color:rgba(255,255,255,0.08); }
+
+    .dropdown-panel {
+        display: none;
+        flex-direction: column;
+        gap: 2px;
+        padding: 4px 0 4px 28px;
+        animation: fadeSlide 0.22s ease;
+    }
+    .nav-dropdown:hover .dropdown-panel { display: flex; }
+    @keyframes fadeSlide {
+        from { opacity:0; transform: translateY(-6px); }
+        to   { opacity:1; transform: translateY(0); }
+    }
+
+    .dd-link {
+        display: flex; align-items: center; gap: 8px;
+        padding: 9px 14px;
+        border-radius: var(--radius-sm);
+        color: rgba(255,255,255,0.5);
+        font-size: 0.82rem; font-weight: 500;
+        transition: all 0.2s;
+        border-left: 2px solid transparent;
+    }
+    .dd-link::before {
+        content: '';
+        width: 4px; height: 4px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        flex-shrink: 0;
+        transition: all 0.2s;
+    }
+    .dd-link:hover {
+        color: #fff;
+        border-left-color: var(--saffron);
+        padding-left: 18px;
+    }
+    .dd-link:hover::before { background: var(--saffron); }
+
+    /* sidebar divider */
+    .sidebar-div {
+        height: 1px;
+        background: rgba(255,255,255,0.06);
+        margin: 8px 16px;
+    }
+
+    /* sidebar bottom button */
+    .sidebar-bottom {
+        margin-top: auto;
+        padding: 16px 14px 20px;
+    }
+    .verify-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        background: linear-gradient(135deg, var(--green), var(--green-light));
+        color: #fff;
+        font-weight: 700; font-size: 0.84rem;
+        padding: 13px 16px;
+        border-radius: var(--radius-sm);
+        letter-spacing: 0.01em;
+        box-shadow: 0 4px 18px rgba(26,107,60,0.4);
+        transition: all 0.25s;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+    .verify-btn svg { width:16px; height:16px; flex-shrink:0; }
+    .verify-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(26,107,60,0.55);
+        background: linear-gradient(135deg, #1d7a44, #2cc570);
+    }
+
+    /* ══════════════════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════════════════ */
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* page header band */
+    .page-header {
+        background: var(--white);
+        border-bottom: 3px solid var(--grey-1);
+        padding: 18px 30px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-shrink: 0;
+        position: sticky; top: 0; z-index: 50;
+        box-shadow: 0 2px 8px rgba(10,31,68,0.06);
+    }
+    .page-header-left { display: flex; flex-direction: column; gap: 3px; }
+    .page-eyebrow {
+        font-size: 0.68rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.15em;
+        color: var(--saffron);
+    }
+    .page-h1 {
+        font-size: 1.3rem; font-weight: 800;
+        color: var(--navy-deep); letter-spacing: -0.02em;
+    }
+    .page-sub {
+        font-size: 0.78rem; color: var(--grey-3); margin-top: 2px;
+    }
+    .page-header-right { display: flex; align-items:center; gap: 10px; }
+
+    .ph-badge {
+        display: flex; align-items: center; gap: 7px;
+        padding: 7px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 0.76rem; font-weight: 700;
+        letter-spacing: 0.04em;
+        border: 1.5px solid;
+    }
+    .ph-badge.green {
+        background: #f0faf4;
+        border-color: #a7e8c4;
+        color: var(--green);
+    }
+    .ph-badge.orange {
+        background: #fff7f0;
+        border-color: #ffd4b0;
+        color: var(--saffron);
+    }
+    .ph-badge svg { width:13px; height:13px; }
+
+    /* ══════════════════════════════════════════════
+       SCROLL AREA
+    ══════════════════════════════════════════════ */
+    .scroll-inner {
+        padding: 24px 30px 30px;
+        flex: 1;
+    }
+
+    /* welcome strip */
+    .welcome-strip {
+        background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #0f3568 100%);
+        border-radius: var(--radius-lg);
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+    .ws-deco {
+        position: absolute;
+        right: -40px; top: -40px;
+        width: 220px; height: 220px;
+        border: 30px solid rgba(255,255,255,0.04);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+    .ws-deco-2 {
+        position: absolute;
+        right: 80px; bottom: -60px;
+        width: 160px; height: 160px;
+        border: 20px solid rgba(232,93,4,0.08);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+    /* wheat/grain SVG deco */
+    .ws-grain {
+        position: absolute;
+        right: 28px; top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.06;
+        pointer-events: none;
+    }
+    .ws-grain svg { width: 100px; height: 100px; }
+
+    .ws-left { position: relative; z-index:2; }
+    .ws-eyebrow {
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+        text-transform: uppercase; color: var(--gold);
+        margin-bottom: 6px;
+    }
+    .ws-title {
+        font-size: 1.4rem; font-weight: 800;
+        color: #fff; letter-spacing: -0.02em;
+        line-height: 1.2; margin-bottom: 6px;
+    }
+    .ws-sub {
+        font-size: 0.82rem; color: rgba(255,255,255,0.55);
+        line-height: 1.6; max-width: 420px;
+    }
+    .ws-right { position: relative; z-index:2; flex-shrink:0; }
+
+    .stat-chips {
+        display: flex; flex-direction: column; gap: 10px;
+    }
+    .stat-chip {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        display: flex; align-items: center; gap: 10px;
+        min-width: 180px;
+    }
+    .stat-icon {
+        width: 32px; height: 32px; border-radius: 6px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+    .stat-icon.orange { background: rgba(232,93,4,0.25); color: var(--saffron-2); }
+    .stat-icon.green  { background: rgba(37,165,94,0.20); color: var(--green-light); }
+    .stat-icon svg { width:16px; height:16px; }
+    .stat-info-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; }
+    .stat-info-val   { font-size: 0.88rem; font-weight:700; color:#fff; margin-top:2px; }
+
+    /* ══════════════════════════════════════════════
+       CARDS SECTION HEADER
+    ══════════════════════════════════════════════ */
+    .section-hdr {
+        display: flex; align-items: center; gap: 12px;
+        margin-bottom: 16px;
+    }
+    .section-hdr-line {
+        flex: 1; height: 1px;
+        background: linear-gradient(90deg, var(--grey-1), transparent);
+    }
+    .section-hdr-label {
+        font-size: 0.7rem; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 0.18em;
+        color: var(--grey-3);
+        white-space: nowrap;
+    }
+
+    /* cards grid */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+        gap: 20px;
+    }
+
+    /* ══════════════════════════════════════════════
+       SERVICE CARDS
+    ══════════════════════════════════════════════ */
+    .card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        border: 1.5px solid var(--grey-1);
+        overflow: hidden;
+        box-shadow: var(--shadow-card);
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--grey-2);
+    }
+
+    /* card top accent band */
+    .card-band {
+        height: 5px;
+        width: 100%;
+    }
+    .card.nfsa .card-band { background: linear-gradient(90deg, var(--navy), var(--saffron)); }
+    .card.sfss .card-band { background: linear-gradient(90deg, var(--green), var(--saffron-2)); }
+
+    .card-inner { padding: 22px 24px 24px; }
+
+    /* card header */
+    .card-hdr {
+        display: flex; align-items: center; gap: 14px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1.5px solid var(--grey-1);
+    }
+    .card-hdr-icon {
+        width: 48px; height: 48px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+    .card.nfsa .card-hdr-icon { background: #eef3ff; color: var(--navy); }
+    .card.sfss .card-hdr-icon { background: #edfaf3; color: var(--green); }
+    .card-hdr-icon svg { width:24px; height:24px; }
+
+    .card-hdr-info { flex:1; min-width:0; }
+    .card-scheme-tag {
+        display: inline-block;
+        font-size: 0.62rem; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 0.12em;
+        padding: 2px 8px; border-radius: 4px;
+        margin-bottom: 4px;
+    }
+    .card.nfsa .card-scheme-tag { background:#fff0e8; color:var(--saffron); }
+    .card.sfss .card-scheme-tag { background:#e8f5ee; color:var(--green); }
+
+    .card-title {
+        font-size: 1.1rem; font-weight: 800;
+        color: var(--navy-deep); letter-spacing: -0.01em;
+    }
+    .card-subtitle { font-size: 0.75rem; color: var(--grey-3); margin-top:2px; }
+
+    .card-count {
+        font-size: 0.7rem; font-weight: 700;
+        color: var(--grey-3);
+        background: var(--off-white);
+        padding: 4px 10px;
+        border-radius: 50px;
+        border: 1px solid var(--grey-1);
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+    }
+
+    /* action rows */
+    .action-list { display:flex; flex-direction:column; gap:8px; }
+
+    .action-row {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 16px;
+        border-radius: var(--radius-sm);
+        border: 1.5px solid var(--grey-1);
+        background: var(--off-white);
+        transition: all 0.22s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .action-row::before {
+        content: '';
+        position: absolute; left:0; top:0; bottom:0;
+        width: 0;
+        transition: width 0.25s ease;
+    }
+    .card.nfsa .action-row::before { background: var(--navy); }
+    .card.sfss .action-row::before { background: var(--green); }
+
+    .action-row:hover {
+        background: var(--white);
+        border-color: var(--grey-2);
+        transform: translateX(4px);
+        box-shadow: 0 4px 14px rgba(10,31,68,0.10);
+    }
+    .action-row:hover::before { width: 3px; }
+
+    .action-num {
+        width: 30px; height: 30px;
+        border-radius: 6px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.72rem; font-weight: 800;
+        flex-shrink: 0;
+        letter-spacing: 0.02em;
+    }
+    .card.nfsa .action-num { background: #eef3ff; color: var(--navy); }
+    .card.sfss .action-num { background: #edfaf3; color: var(--green); }
+
+    .action-info { flex:1; min-width:0; }
+    .action-name { font-size: 0.9rem; font-weight: 700; color: var(--navy-deep); }
+    .action-desc { font-size: 0.74rem; color: var(--grey-3); margin-top:3px; }
+
+    .action-btn {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 0.76rem; font-weight: 700;
+        padding: 7px 14px; border-radius: 5px;
+        flex-shrink: 0;
+        transition: all 0.2s;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+    }
+    .action-btn svg { width:12px; height:12px; }
+
+    .card.nfsa .action-btn { background: #eef3ff; color:var(--navy); border:1.5px solid #d0dbf5; }
+    .card.sfss .action-btn { background: #edfaf3; color:var(--green); border:1.5px solid #b8e8cf; }
+
+    .card.nfsa .action-row:hover .action-btn { background: var(--navy); color:#fff; border-color:var(--navy); box-shadow: 0 4px 12px rgba(10,31,68,0.3); }
+    .card.sfss .action-row:hover .action-btn { background: var(--green); color:#fff; border-color:var(--green); box-shadow: 0 4px 12px rgba(26,107,60,0.3); }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
+    .footer {
+        background: var(--navy-deep);
+        border-top: 3px solid var(--saffron);
+        padding: 14px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-shrink: 0;
+    }
+    .footer-left {
+        font-size: 0.74rem; color: rgba(255,255,255,0.45);
+        line-height: 1.5;
+    }
+    .footer-left strong { color: rgba(255,255,255,0.75); font-weight:600; }
+    .footer-right { display:flex; gap:10px; align-items:center; }
+    .f-pill {
+        font-size: 0.65rem; font-weight: 700;
+        padding: 4px 10px; border-radius: 4px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .f-pill.orange { background: rgba(232,93,4,0.2); color:var(--saffron-2); border:1px solid rgba(232,93,4,0.3); }
+    .f-pill.green  { background: rgba(37,165,94,0.15); color:#4ade80; border:1px solid rgba(37,165,94,0.3); }
+
+    /* ══════════════════════════════════════════════
+       TICKER RIBBON
+    ══════════════════════════════════════════════ */
+    .ticker-wrap {
+        width: 100%;
+        background: #fff8ee;
+        border-top: 1px solid #fde4b0;
+        border-bottom: 2px solid #f5a623;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        height: 36px;
+        flex-shrink: 0;
+    }
+    .ticker-label {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: var(--saffron);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        padding: 0 14px;
+        height: 100%;
+        white-space: nowrap;
+        z-index: 2;
+    }
+    .ticker-label svg { width:13px; height:13px; flex-shrink:0; }
+    .ticker-track {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+    }
+    .ticker-text {
+        display: inline-block;
+        white-space: nowrap;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: #7c4a00;
+        animation: tickerScroll 38s linear infinite;
+        padding-left: 100%;
+    }
+    .ticker-text strong { font-weight: 700; color: var(--saffron); margin-right: 4px; }
+    @keyframes tickerScroll {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+
+    /* ══════════════════════════════════════════════
+       MOBILE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 800px) {
+        body { overflow-y: auto; overflow-x: hidden; }
+        .gov-strip-right { display: none; }
+        .sidebar { display: none; }
+        .topbar-brand { min-width: auto; }
+        .topbar-brand::after { display:none; }
+        .scroll-inner { padding: 16px; }
+        .cards-grid { grid-template-columns: 1fr; }
+        .welcome-strip { flex-direction: column; }
+        .ws-right { width:100%; }
+        .stat-chips { flex-direction:row; }
+        .footer { flex-direction:column; text-align:center; }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  GOVERNMENT TOP STRIP   ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <div class="gov-strip">
+        <div class="gov-strip-left">
+            <div class="gov-emblem">ℹ</div>
+            <span>Not a Govt. Page &nbsp;|&nbsp; User Define Retion Services</span>
+        </div>
+        <div class="gov-strip-right">
+            <span class="gov-link">Help &amp; Support</span>
+            <span class="sep">|</span>
+            <span class="gov-link">Screen Reader</span>
+            <span class="sep">|</span>
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                LIVE PORTAL
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║       TOP BAR           ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <!-- Sidebar toggle button -->
+            <button class="sidebar-toggle" id="sidebarToggleBtn" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+                <svg id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <div class="brand-icon">RP</div>
+            <div>
+                <div class="brand-text-top">User Define Retion Services</div>
+                <div class="brand-text-main">RETION PRO</div>
+            </div>
+        </div>
+        <div class="topbar-center">
+            <div class="breadcrumb">
+                <span>Home</span>
+                <span class="bc-sep">›</span>
+                <span>PDS Management</span>
+                <span class="bc-sep">›</span>
+                <span class="active-bc">Operational Dashboard</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <a href="after_log.html" style="background: linear-gradient(135deg, var(--gold), #ffb21c); color: var(--navy); font-size: 0.72rem; font-weight: 800; padding: 6px 14px; border-radius: 6px; letter-spacing: 0.03em; box-shadow: 0 3px 10px rgba(245,166,35,0.3); text-decoration: none; transition: transform 0.2s; display: flex; align-items: center; gap: 6px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+                Back to Home Dashboard
+            </a>
+            <div class="topbar-badge" style="margin-left: 6px;">PRO 2.0</div>
+            <div class="topbar-version">Ver 2.0vr</div>
+        </div>
+    </div>
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║      BODY LAYOUT        ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <div class="body-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="mainSidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-label">Main Menu</div>
+                <ul class="nav-list">
+                    <li>
+                        <a href="#" class="nav-item active" id="nav-dashboard" data-tip="Dashboard">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                            </svg>
+                            <span class="nav-item-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-dropdown">
+                        <div class="dropdown-trigger-btn" id="nav-pdf-toggle" data-tip="PDF Forms">
+                            <div class="nav-item-left">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                <span class="nav-item-text">PDF Forms</span>
+                            </div>
+                            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown-panel">
+                            <a class="dd-link" href="https://studiographic10-wq.github.io/urllinkuser/all%20html%20file/ration_application_form.html" target="_blank" id="dlink-dilit">
+                                Dilit Member Application
+                            </a>
+                            <a class="dd-link" href="https://studiographic10-wq.github.io/urllinkuser/all%20html%20file/Retion%20form02.html" target="_blank" id="dlink-add">
+                                Add Member Application
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-div"></div>
+
+            <div class="sidebar-section" style="padding-top:12px;">
+                <div class="sidebar-label">Portal Info</div>
+                <ul class="nav-list" style="gap:4px;">
+                    <li class="nav-dropdown">
+                        <div class="dropdown-trigger-btn" data-tip="NFSA &amp; SFSS">
+                            <div class="nav-item-left">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                <span class="nav-item-text">NFSA &amp; SFSS Services</span>
+                            </div>
+                            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown-panel">
+                            <a class="dd-link" href="#" id="nav-nfsa" onclick="scrollToSection('card-nfsa', this); return false;">
+                                NFSA Services
+                            </a>
+                            <a class="dd-link" href="#" id="nav-sfss" onclick="scrollToSection('card-sfss', this); return false;">
+                                SFSS Services
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="https://www.foododisha.in/" target="_blank" class="nav-item" data-tip="Official PDS Portal" style="font-size:0.78rem; gap:8px; padding:8px 12px; text-decoration:none; cursor:pointer;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;color:rgba(255,255,255,0.55);">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <polyline points="9 12 11 14 15 10"/>
+                            </svg>
+                            <span class="nav-item-text" style="color:rgba(255,255,255,0.65);">Official PDS Portal</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="https://www.pdsodisha.gov.in/NFSA/NFSACardsBeneficiaries/NFSACardsBeneficiaryVIEW"
+                   target="_blank" class="verify-btn" id="btn-verify-dealer" data-tip="Verify Dealer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <polyline points="9 12 11 14 15 10"/>
+                    </svg>
+                    <span class="btn-text">Verify Dealer &amp; Beneficiary</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+
+            <!-- page header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <div class="page-eyebrow">📋 Ration Distribution Management</div>
+                    <h1 class="page-h1">Operational Overview</h1>
+                    <div class="page-sub">NFSA &amp; SFSS ration card services — enrollment, updates &amp; downloads</div>
+                </div>
+                <div class="page-header-right">
+                    <div class="ph-badge green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <polyline points="9 12 11 14 15 10"/>
+                        </svg>
+                        System Active
+                    </div>
+                    <div class="ph-badge orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        PDS Live
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── DISCLAIMER TICKER RIBBON ── -->
+            <div class="ticker-wrap">
+                <div class="ticker-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Disclaimer
+                </div>
+                <div class="ticker-track">
+                    <span class="ticker-text">
+                        <strong>&#9432; NOTICE:</strong>
+                        Disclaimer: This is not an official government website. It is an independent platform designed to help users easily find and access information from official sources.
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &#11835;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <strong>&#9432; NOTICE:</strong>
+                        Disclaimer: This is not an official government website. It is an independent platform designed to help users easily find and access information from official sources.
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &#11835;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <strong>&#9432; NOTICE:</strong>
+                        Disclaimer: This is not an official government website. It is an independent platform designed to help users easily find and access information from official sources.
+                    </span>
+                </div>
+            </div>
+
+            <div class="scroll-inner">
+
+                <!-- welcome strip -->
+                <div class="welcome-strip">
+                    <div class="ws-deco"></div>
+                    <div class="ws-deco-2"></div>
+                    <!-- grain icon background -->
+                    <div class="ws-grain">
+                        <svg viewBox="0 0 100 100" fill="currentColor" style="color:white;">
+                            <ellipse cx="50" cy="50" rx="8" ry="22" transform="rotate(-30 50 50)"/>
+                            <ellipse cx="50" cy="50" rx="8" ry="22" transform="rotate(30 50 50)"/>
+                            <ellipse cx="50" cy="50" rx="8" ry="22" transform="rotate(90 50 50)"/>
+                            <line x1="50" y1="20" x2="50" y2="80" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="ws-left">
+                        <div class="ws-eyebrow">🌾 Not a Govt. Page — User Define Retion Services</div>
+                        <div class="ws-title">Ration Data Management System</div>
+                        <div class="ws-sub">Manage ration card enrollment, beneficiary updates, and digital card downloads for NFSA &amp; SFSS schemes across Odisha.</div>
+                    </div>
+                    <div class="ws-right">
+                        <div class="stat-chips">
+                            <div class="stat-chip">
+                                <div class="stat-icon orange">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="stat-info-label">NFSA Portal</div>
+                                    <div class="stat-info-val">4 Services</div>
+                                </div>
+                            </div>
+                            <div class="stat-chip">
+                                <div class="stat-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                        <path d="M9 9h6M9 12h6M9 15h4"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="stat-info-label">SFSS Portal</div>
+                                    <div class="stat-info-val">4 Services</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section header -->
+                <div class="section-hdr">
+                    <div class="section-hdr-label">🍚 Ration Services</div>
+                    <div class="section-hdr-line"></div>
+                </div>
+
+                <!-- cards grid -->
+                <div class="cards-grid" id="services-grid">
+
+                    <!-- ── NFSA CARD ── -->
+                    <div class="card nfsa" id="card-nfsa">
+                        <div class="card-band"></div>
+                        <div class="card-inner">
+                            <div class="card-hdr">
+                                <div class="card-hdr-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </div>
+                                <div class="card-hdr-info">
+                                    <div class="card-scheme-tag">NFSA Scheme</div>
+                                    <div class="card-title">NFSA Services</div>
+                                    <div class="card-subtitle">National Food Security Act — Odisha PDS</div>
+                                </div>
+                                <div class="card-count">4 Services</div>
+                            </div>
+                            <div class="action-list">
+                                <a href="https://pdsodisha.gov.in/NFSA/CitizenshipEnrollmentNew/CitizenshipEnrollmentNew" target="_blank" class="action-row" id="nfsa-new-card">
+                                    <div class="action-num">01</div>
+                                    <div class="action-info">
+                                        <div class="action-name">New Ration Card</div>
+                                        <div class="action-desc">Citizenship enrollment — apply for new NFSA card</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://pdsodisha.gov.in/NFSA/GetBeneficiaryDetailsByFormNo/GetMemberAdditionDetailsView" target="_blank" class="action-row" id="nfsa-update">
+                                    <div class="action-num">02</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Update Members</div>
+                                        <div class="action-desc">Add or modify family member data</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://pdsodisha.gov.in/NFSA/GetBeneficiaryDetailsByFormNo/GetBeneficiaryDetailsByFormNoView" target="_blank" class="action-row" id="nfsa-remove">
+                                    <div class="action-num">03</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Remove Members</div>
+                                        <div class="action-desc">Delete member entries from NFSA record</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://www.pdsodisha.gov.in/NFSA/DownloadRationCard/PublicRationCardDownload" target="_blank" class="action-row" id="nfsa-download">
+                                    <div class="action-num">04</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Download Card</div>
+                                        <div class="action-desc">Print digital NFSA ration card voucher</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── SFSS CARD ── -->
+                    <div class="card sfss" id="card-sfss">
+                        <div class="card-band"></div>
+                        <div class="card-inner">
+                            <div class="card-hdr">
+                                <div class="card-hdr-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                        <path d="M9 9h6M9 12h6M9 15h4"/>
+                                    </svg>
+                                </div>
+                                <div class="card-hdr-info">
+                                    <div class="card-scheme-tag">SFSS Scheme</div>
+                                    <div class="card-title">SFSS Services</div>
+                                    <div class="card-subtitle">State Food Security Scheme — Odisha PDS</div>
+                                </div>
+                                <div class="card-count">4 Services</div>
+                            </div>
+                            <div class="action-list">
+                                <a href="https://pdsodisha.gov.in/SFSS/CitizenshipStateEnrollmentNew/CitizenshipStateEnrollmentNewView" target="_blank" class="action-row" id="sfss-new-card">
+                                    <div class="action-num">01</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Apply New Card</div>
+                                        <div class="action-desc">State Food Security Scheme enrollment</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://pdsodisha.gov.in/SFSS/CitizenshipSFSSBeneficiaryUpdateSFSS/citizenshipSFSSBeneficiaryUpdateView" target="_blank" class="action-row" id="sfss-update">
+                                    <div class="action-num">02</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Update Beneficiary</div>
+                                        <div class="action-desc">Modify existing SFSS beneficiary records</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://pdsodisha.gov.in/SFSS/GetBeneficiaryAllDetailssSFSS/GetBeneficiaryAllDetailsSFSSView" target="_blank" class="action-row" id="sfss-delete">
+                                    <div class="action-num">03</div>
+                                    <div class="action-info">
+                                        <div class="action-name">Member Deletion</div>
+                                        <div class="action-desc">Remove beneficiaries from SFSS record</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                                <a href="https://www.pdsodisha.gov.in/SFSS/CitizenShipDownloadRationCardSFSS/CitizenShipDownloadRationCardSFSSView" target="_blank" class="action-row" id="sfss-ecard">
+                                    <div class="action-num">04</div>
+                                    <div class="action-info">
+                                        <div class="action-name">E-Card Download</div>
+                                        <div class="action-desc">Secure SFSS digital card retrieval</div>
+                                    </div>
+                                    <div class="action-btn">
+                                        Open
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /cards-grid -->
+            </div><!-- /scroll-inner -->
+
+            <!-- footer -->
+            <div class="footer">
+                <div class="footer-left">
+                    &copy; 2026 &nbsp;<strong>Ration Data Management System</strong> &mdash;
+                    Not a Govt. Page &nbsp;|&nbsp; User Define Retion Services &nbsp;|&nbsp; All rights reserved.
+                </div>
+                <div class="footer-right">
+                    <div class="f-pill orange">Version 2.0 Pro</div>
+                    <div class="f-pill green">Not Govt.</div>
+                </div>
+            </div>
+
+        </div><!-- /content -->
+    </div><!-- /body-layout -->
+
+</body>
+
+<script>
+    const sidebar   = document.getElementById('mainSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    // Icons
+    const hamburgerPath = `
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>`;
+    const arrowPath = `
+        <polyline points="15 18 9 12 15 6"/>`;
+
+    let minimized = false;
+
+    toggleBtn.addEventListener('click', function () {
+        minimized = !minimized;
+        sidebar.classList.toggle('minimized', minimized);
+        toggleIcon.innerHTML = minimized ? arrowPath : hamburgerPath;
+        toggleBtn.style.transform = minimized ? 'rotate(0deg)' : '';
+    });
+
+    /* ── Scroll to NFSA / SFSS card ── */
+    function scrollToSection(cardId, linkEl) {
+        // Set active dd-link state
+        document.querySelectorAll('.dd-link').forEach(l => l.style.color = '');
+        if (linkEl) { linkEl.style.color = 'var(--gold)'; }
+
+        const card = document.getElementById(cardId);
+        if (!card) return;
+
+        // Smooth scroll inside .content div
+        const scrollContainer = document.querySelector('.content');
+        const cardTop = card.offsetTop - scrollContainer.offsetTop;
+        scrollContainer.scrollTo({ top: cardTop - 20, behavior: 'smooth' });
+
+        // Flash highlight on card
+        card.style.transition = 'box-shadow 0.1s, transform 0.1s';
+        card.style.boxShadow = '0 0 0 3px var(--saffron), 0 12px 40px rgba(232,93,4,0.25)';
+        card.style.transform = 'translateY(-4px)';
+        setTimeout(() => {
+            card.style.boxShadow = '';
+            card.style.transform = '';
+            if (linkEl) linkEl.style.color = '';
+        }, 1800);
+    }
+</script>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF FORM - CSC VLE Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        :root {
+            --primary: #f5a623;
+            --primary-hover: #e08000;
+            --secondary: #003399;
+            --accent: #001f4d;
+            --bg-body: #f4f7fb;
+            --bg-surface: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.96);
+            --text-main: #1e2a3a;
+            --text-muted: #6b7280;
+            --border-color: rgba(0, 31, 77, 0.12);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 31, 77, 0.1);
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #dce8f5 0%, #eef2f8 50%, #d8e6f3 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(23, 66, 121, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(23, 66, 121, 0.05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #001f4d 0%, #003399 60%, #0050cc 100%);
+            backdrop-filter: blur(12px);
+            border-bottom: 3px solid var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(23, 66, 121, 0.25);
+            color: white;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title span {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .news-btn {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .news-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .header-logo img {
+            height: 40px;
+            border-radius: 6px;
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            background: white;
+            padding: 2px;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #001f4d 0%, #002266 60%, #001f4d 100%);
+            border-right: 1.5px solid rgba(255,255,255,0.12);
+            box-shadow: 4px 0 24px rgba(0, 31, 77, 0.35);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-btn ion-icon {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s;
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(3px);
+        }
+
+        .category-btn.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .category-btn.active ion-icon {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+        }
+
+        /* Running Ad Strip Style Refinement */
+        .running-strip-container {
+            width: 100%;
+            background: #ffffff;
+            color: var(--accent);
+            padding: 12px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            font-size: 13.5px;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(245, 166, 35, 0.35);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .running-strip-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollStrip 30s linear infinite;
+        }
+
+        .running-strip-text ion-icon {
+            color: var(--primary);
+        }
+
+        .running-strip-text:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollStrip {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #001f4d -10%, #003399 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 8px 32px rgba(0, 31, 77, 0.15);
+        }
+        
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, rgba(23,66,121,0.5) 0%, transparent 50%);
+        }
+
+        .hero-text {
+            position: absolute;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 0 rgba(0,0,0,0.95), 0 6px 30px rgba(0,0,0,0.6);
+            letter-spacing: 1px;
+            font-family: 'Orbitron', 'Outfit', sans-serif;
+            text-transform: uppercase;
+        }
+        
+        .hero-text h1 span {
+            color: var(--primary);
+        }
+
+        .hero-text p {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Forms Section */
+        .forms-section {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title ion-icon {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        /* Form Card Professional Redesign */
+        .form-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 24px 20px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(23, 66, 121, 0.08), 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .form-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1e88e5, #f59e0b);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 12px 30px rgba(23, 66, 121, 0.15), 0 4px 10px rgba(0,0,0,0.05);
+            background: #ffffff;
+        }
+
+        .form-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .form-icon-wrap {
+            width: 54px;
+            height: 54px;
+            background: rgba(23, 66, 121, 0.06);
+            border: 1px solid rgba(23, 66, 121, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .form-card:hover .form-icon-wrap {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: scale(1.08);
+        }
+
+        .form-icon-wrap ion-icon {
+            font-size: 28px;
+            color: var(--secondary);
+        }
+
+        .form-number {
+            background: rgba(23, 66, 121, 0.08);
+            color: var(--text-light);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-top: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s, color 0.3s;
+        }
+
+        .form-card:hover .card-footer {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .card-footer ion-icon {
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .page-footer {
+            background: linear-gradient(0deg, rgba(23, 66, 121, 0.05) 0%, transparent 100%);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        /* Hide elements based on filter */
+        .form-card.hidden {
+            display: none;
+        }
+
+        /* Tags for visual distinction */
+        .tag-pdf .form-icon-wrap ion-icon { color: #ef4444; }
+        .tag-excel .form-icon-wrap ion-icon { color: #10b981; }
+        .tag-word .form-icon-wrap ion-icon { color: #3b82f6; }
+
+        @media (max-width: 900px) {
+            .layout-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1.5px solid rgba(255,255,255,0.12);
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            .sidebar-title {
+                width: 100%;
+            }
+            .category-btn {
+                width: auto;
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .forms-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-title { font-size: 16px; }
+            .hero-text h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-left">
+            <a href="my_new_app.html" class="back-btn" data-lang="back-btn" style="background: linear-gradient(135deg, #f5a623, #ffb21c); color: #001f4d; border: none; font-weight: 800; font-family: 'Inter', sans-serif;">
+                <ion-icon name="arrow-back-outline" style="stroke-width: 32px;"></ion-icon> Back to App Store
+            </a>
+            <div class="page-title">
+                Document Center
+                <span>Professional Form Repository</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="news_blog.html" target="_blank" class="news-btn" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); font-family: 'Inter', sans-serif;">
+                <ion-icon name="newspaper-outline"></ion-icon> NEWS BLOG
+            </a>
+            <div class="header-logo" style="width: 44px; height: 44px; background: #fff; border-radius: 50%; border: 3px solid #f5a623; display: flex; align-items: center; justify-content: center;">
+                <img src="../Assets/Logo.png" alt="Logo" style="width: 80%; border:none; padding:0;">
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-container">
+        <!-- Sidebar Dashboard -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Categories</div>
+            <button class="category-btn active" data-filter="all">
+                <ion-icon name="grid-outline"></ion-icon> All Forms
+            </button>
+            <button class="category-btn" data-filter="pdf">
+                <ion-icon name="document-text-outline" style="color:#ef4444;"></ion-icon> 01 - PDF FORMs
+            </button>
+            <button class="category-btn" data-filter="excel">
+                <ion-icon name="stats-chart-outline" style="color:#10b981;"></ion-icon> 02 - EXCEL FORMs
+            </button>
+            <button class="category-btn" data-filter="word">
+                <ion-icon name="document-outline" style="color:#3b82f6;"></ion-icon> 03 - WORD FORMs
+            </button>
+        </aside>
+
+        <!-- Main Display Dashboard -->
+        <main class="main-content">
+            
+            <!-- Running Ad Strip -->
+            <div class="running-strip-container">
+                <div class="running-strip-text">
+                    <ion-icon name="information-circle-outline" style="vertical-align: middle; margin-right: 5px; font-size: 16px;"></ion-icon>
+                    Please Note: This is an independent, non-government portal. We simplify the process of navigating, finding, and formatting data sourced from official government websites for your convenience.
+                </div>
+            </div>
+
+            <!-- Hero Banner -->
+            <div class="hero-banner">
+                <!-- Using a subtle gradient/pattern instead of a broken image for a pro look -->
+                <div style="position:absolute; inset:0; background: radial-gradient(circle at center, transparent 0%, #0f172a 100%), linear-gradient(90deg, rgba(37,99,235,0.1) 0%, rgba(15,23,42,0.1) 100%);"></div>
+                <div class="hero-text">
+                    <h1 id="dashboard-title">All Documents</h1>
+                    <p id="dashboard-subtitle">Browse all available type of formats in a One Place</p>
+                </div>
+            </div>
+
+            <div class="forms-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <ion-icon name="folder-open-outline"></ion-icon>
+                        <span id="section-label">Available Files</span>
+                    </div>
+                </div>
+
+                <div class="forms-grid" id="forms-grid">
+                    
+                    <!-- 01 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="https://drive.google.com/file/d/1O2pZqa4_C8M5Bh8UqKqnJIhTZDCn95j7/view?usp=drive_link" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">01</span>
+                        </div>
+                        <div class="form-name">Madhu Babu Pension Form</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 02 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="https://drive.google.com/file/d/1-YyOVoX7TyzAPPci-wqt6WEhx3r_E46v/view?usp=drive_link" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">02</span>
+                        </div>
+                        <div class="form-name">Panchayat Permission Form</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 03 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="https://drive.google.com/file/d/1ugDPxWF68pzTAVFOK-EsAgaT4hKC2UN8/view?usp=drive_link" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">03</span>
+                        </div>
+                        <div class="form-name">SUBHADRA FORM</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 04 WORD -->
+                    <a class="form-card tag-word" data-category="word" href="https://docs.google.com/document/d/1U0R42yTG4pNqckLixBgvHFBA_sq2T56u/edit?usp=drive_link&ouid=114351147938480335992&rtpof=true&sd=true" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document"></ion-icon></div>
+                            <span class="form-number">04</span>
+                        </div>
+                        <div class="form-name">LPG MOU</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download DOCX</div>
+                    </a>
+
+                    <!-- 05 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="FARMAR%20FORM3.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">05</span>
+                        </div>
+                        <div class="form-name">FARMAR ID-FORM</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 06 EXCEL -->
+                    <a class="form-card tag-excel" data-category="excel" href="master_customer_form.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="stats-chart"></ion-icon></div>
+                            <span class="form-number">06</span>
+                        </div>
+                        <div class="form-name">Master Customer Data Entry Form</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download XLSX</div>
+                    </a>
+
+                    <!-- 07 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="birth_certificate_form.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">07</span>
+                        </div>
+                        <div class="form-name">Birth Application Form</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 08 EXCEL -->
+                    <a class="form-card tag-excel" data-category="excel" href="bill2.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="stats-chart"></ion-icon></div>
+                            <span class="form-number">08</span>
+                        </div>
+                        <div class="form-name">VLE Money Receive</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download XLSX</div>
+                    </a>
+
+                    <!-- 09 WORD -->
+                    <a class="form-card tag-word" data-category="word" href="9-BIO-DATA FORM.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document"></ion-icon></div>
+                            <span class="form-number">09</span>
+                        </div>
+                        <div class="form-name">BIO-DATA FORM</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download DOCX</div>
+                    </a>
+
+                    <!-- 10 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="new_farmar_id.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">10</span>
+                        </div>
+                        <div class="form-name">NEW FARMAR ID</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 11 EXCEL -->
+                    <a class="form-card tag-excel" data-category="excel" href="GST_BILL.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="stats-chart"></ion-icon></div>
+                            <span class="form-number">11</span>
+                        </div>
+                        <div class="form-name">GST BILL</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download XLSX</div>
+                    </a>
+
+                    <!-- 12 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="ration_application_form.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">12</span>
+                        </div>
+                        <div class="form-name">Ration Application Form</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 13 EXCEL -->
+                    <a class="form-card tag-excel" data-category="excel" href="SHG%20DATA%20_%202.0.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="stats-chart"></ion-icon></div>
+                            <span class="form-number">13</span>
+                        </div>
+                        <div class="form-name">SHG DATA _ 2.0</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download XLSX</div>
+                    </a>
+
+                    <!-- 14 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="Retion form02.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">14</span>
+                        </div>
+                        <div class="form-name">Retion form02</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                    <!-- 15 PDF -->
+                    <a class="form-card tag-pdf" data-category="pdf" href="AFFIDAVIT-FORM.html" target="_blank">
+                        <div class="card-header">
+                            <div class="form-icon-wrap"><ion-icon name="document-text"></ion-icon></div>
+                            <span class="form-number">15</span>
+                        </div>
+                        <div class="form-name">AFFIDAVIT FORM</div>
+                        <div class="card-footer"><ion-icon name="download-outline"></ion-icon> View & Download PDF</div>
+                    </a>
+
+                </div>
+            </div>
+            
+            <footer class="page-footer">
+                &copy; 2026 Digital India CSC-VLE Services &mdash; Jana Seba Kendra <br>
+                <span style="font-size: 11px; opacity: 0.6; margin-top: 5px; display: inline-block;">Official Professional Dashboard</span>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.category-btn');
+            const cards = document.querySelectorAll('.form-card');
+            const dashboardTitle = document.getElementById('dashboard-title');
+            const dashboardSubtitle = document.getElementById('dashboard-subtitle');
+            
+            // Map filters to Titles
+            const titleMap = {
+                'all': { title: 'All Documents', subtitle: 'Browse all available type of formats in a One Place' },
+                'pdf': { title: 'PDF Forms', subtitle: 'Standardized Portable Document Formats' },
+                'excel': { title: 'Excel Forms', subtitle: 'Spreadsheets and Data Entry Forms' },
+                'word': { title: 'Word Forms', subtitle: 'Editable Document Statements and MOUs' }
+            };
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+                    
+                    // Update header text
+                    dashboardTitle.textContent = titleMap[filter].title;
+                    dashboardTitle.style.animation = 'none';
+                    dashboardTitle.offsetHeight; /* trigger reflow */
+                    dashboardTitle.style.animation = 'fadeIn 0.5s ease forwards';
+                    
+                    dashboardSubtitle.textContent = titleMap[filter].subtitle;
+
+                    // Filter cards
+                    cards.forEach(card => {
+                        if (filter === 'all') {
+                            card.classList.remove('hidden');
+                        } else {
+                            if (card.getAttribute('data-category') === filter) {
+                                card.classList.remove('hidden');
+                            } else {
+                                card.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+
+</html>
