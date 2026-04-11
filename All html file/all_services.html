@@ -1307,25 +1307,45 @@
         <aside style="width: 260px; background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); flex-shrink: 0; border: 1px solid rgba(0,51,153,.1);">
             <h3 style="color: var(--navy); margin-bottom: 18px; font-size: .95rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--gold); padding-bottom: 8px; display: inline-block;">Categories</h3>
             <style>
-                .cat-menu { display: flex; flex-direction: column; gap: 8px; }
+                .cat-menu { display: flex; flex-direction: column; gap: 10px; }
                 .cat-menu a { 
-                    display: block; padding: 12px 16px; 
-                    background: #f8fafc; color: var(--navy); 
-                    text-decoration: none; border-radius: 10px; 
-                    font-weight: 700; font-size: .88rem;
-                    border: 1px solid #e2e8f0;
-                    transition: all 0.2s ease; 
+                    display: flex;
+                    align-items: center;
+                    padding: 14px 18px; 
+                    background: #ffffff; color: var(--navy); 
+                    text-decoration: none; border-radius: 12px; 
+                    font-weight: 700; font-size: .9rem;
+                    border: 1px solid #edf2f7;
+                    transition: all 0.3s ease; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
                 .cat-menu a:hover {
-                    background: var(--navy); color: #fff;
-                    transform: translateX(4px);
-                    border-color: var(--navy);
-                    box-shadow: 0 4px 12px rgba(0,51,153,.2);
+                    background: #f8fafc; color: var(--midblue);
+                    transform: translateX(6px);
+                    border-color: var(--midblue);
+                    box-shadow: 0 4px 12px rgba(0,51,153,0.1);
                 }
                 .cat-menu a.active { 
-                    background: linear-gradient(135deg, var(--gold), #e08000); 
-                    color: #fff; border-color: #d48f1c;
-                    box-shadow: 0 4px 12px rgba(245,166,35,.3);
+                    background: linear-gradient(135deg, var(--navy), var(--blue)); 
+                    color: #fff; border-color: var(--navy);
+                    box-shadow: 0 6px 15px rgba(0,31,77,0.25);
+                    transform: translateX(4px);
+                }
+                .cat-menu a.active span { color: var(--gold); }
+
+                .cat-menu a.official-login {
+                    background: linear-gradient(135deg, #fff5eb, #fff);
+                    border: 1px dashed #ff6600;
+                    color: #e65c00;
+                    margin-bottom: 8px;
+                    justify-content: center;
+                    font-weight: 800;
+                }
+                .cat-menu a.official-login:hover {
+                    background: #ff6600;
+                    color: #fff;
+                    border-style: solid;
+                    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.35);
                 }
                 
                 .page-title-banner { 
@@ -1351,12 +1371,8 @@
                     .page-title-banner { flex-direction: column; text-align: center; gap: 16px; padding: 24px; }
                 }
             </style>
-            <div class="cat-menu">
-                <a href="#" class="active">Government Portals</a>
-                <a href="#">Certificate Services</a>
-                <a href="#">Financial Services</a>
-                <a href="#">Utility Payments</a>
-                <a href="#">Other Links</a>
+            <div class="cat-menu" id="categoryMenu">
+                <!-- Categories will be injected here -->
             </div>
         </aside>
 
@@ -1364,18 +1380,112 @@
         <div style="flex: 1; width: 100%;">
             <div class="page-title-banner">
                 <div>
-                    <h2 style="font-size: 1.7rem; letter-spacing: 1px; font-weight: 800;">All Services Links</h2>
-                    <p style="opacity: 0.85; font-size: .9rem; margin-top: 6px;">Select a category on the left to access categorized direct links.</p>
+                    <h2 style="font-size: 1.6rem; letter-spacing: 0.5px; font-weight: 800;">Digital Services Gateway</h2>
+                    <p style="opacity: 0.9; font-size: .85rem; margin-top: 4px;">Access all centralized and state government portals from one secure location.</p>
                 </div>
-                <a href="after_log.html" class="back-home-btn"><span>⬅</span> Back to Home Dashboard</a>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div style="position: relative;">
+                        <input type="text" id="serviceSearch" placeholder="Search services..." style="padding: 10px 16px 10px 40px; border-radius: 8px; border: none; font-size: .85rem; width: 240px; outline: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5;">🔍</span>
+                    </div>
+                    <a href="after_log.html" class="back-home-btn"><span>⬅</span> Dashboard</a>
+                </div>
             </div>
             
-            <div style="background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); min-height: 480px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,51,153,.1);">
-                <div style="text-align: center;">
-                    <div style="font-size: 40px; margin-bottom: 14px;">📂</div>
-                    <p style="color: var(--gray); font-size: 1.05rem; font-weight: 600;">Please select a category from the sidebar menu to view the options mapping.</p>
+            <div id="servicesContainer" style="background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); min-height: 480px; border: 1px solid rgba(0,51,153,.1);">
+                <div id="servicesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+                    <!-- Services will be injected here -->
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0;">
+                        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;">📂</div>
+                        <h3 style="color: var(--navy); margin-bottom: 8px;">Welcome to Services Portal</h3>
+                        <p style="color: var(--gray);">Please select a category from the left menu to view available services.</p>
+                    </div>
                 </div>
             </div>
+
+            <style>
+                .service-card {
+                    background: #fff;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 12px;
+                    padding: 20px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    text-decoration: none;
+                    border-left: 5px solid #cbd5e1;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .service-card:hover {
+                    border-color: var(--midblue);
+                    border-left-color: var(--gold);
+                    background: #fdfdfd;
+                    transform: translateY(-4px) scale(1.02);
+                    box-shadow: 0 12px 24px rgba(0,51,153,0.12);
+                }
+                .service-card::after {
+                    content: '';
+                    position: absolute;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: linear-gradient(135deg, rgba(245,166,35,0.05) 0%, transparent 100%);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                .service-card:hover::after {
+                    opacity: 1;
+                }
+                .service-card .icon {
+                    font-size: 24px;
+                    background: #f1f5f9;
+                    width: 50px; height: 50px;
+                    display: flex; align-items: center; justify-content: center;
+                    border-radius: 12px;
+                    color: var(--navy);
+                    flex-shrink: 0;
+                    transition: all 0.3s ease;
+                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+                }
+                .service-card:hover .icon {
+                    background: var(--navy);
+                    color: var(--gold);
+                    transform: rotate(5deg);
+                }
+                .service-card h4 {
+                    font-size: .95rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                    margin: 0;
+                    line-height: 1.4;
+                    flex: 1;
+                }
+                .service-card .btn-link {
+                    font-size: .7rem;
+                    font-weight: 800;
+                    color: var(--midblue);
+                    background: rgba(0,80,204,0.08);
+                    padding: 4px 10px;
+                    border-radius: 6px;
+                    white-space: nowrap;
+                    transition: all 0.2s ease;
+                }
+                .service-card:hover .btn-link {
+                    background: var(--gold);
+                    color: var(--navy);
+                }
+                #servicesGrid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    gap: 16px;
+                }
+                @media (max-width: 640px) {
+                    #servicesGrid {
+                        grid-template-columns: 1fr;
+                    }
+                    .service-card { padding: 16px; }
+                }
+            </style>
         </div>
     </main>
 
@@ -1454,7 +1564,7 @@
                 if (mainFeatures) mainFeatures.style.display = 'block';
                 if (sbToggle)     sbToggle.style.display     = 'flex';
             } else {
-                // Guest / Not Logged In
+                // Guest / Not Logged In - Hide features until login
                 if (hdrNav)       hdrNav.style.display       = 'none';
                 if (hdrUserChip)  hdrUserChip.style.display  = 'none';
                 if (hdrLoginBtn)  hdrLoginBtn.style.display  = 'inline-flex';
@@ -1501,11 +1611,13 @@
             const sb      = document.getElementById('profileSidebar');
             const btn     = document.getElementById('sidebarToggle');
             const overlay = document.getElementById('sidebarOverlay');
-            sb.classList.remove('open');
-            btn.classList.remove('open');
-            overlay.classList.remove('show');
+            if (sb) sb.classList.remove('open');
+            if (btn) {
+                btn.classList.remove('open');
+                btn.textContent = '👤';
+            }
+            if (overlay) overlay.classList.remove('show');
             document.body.classList.remove('sb-open');
-            btn.textContent = '👤';
         }
 
         function logoutUser() {
@@ -1513,76 +1625,205 @@
             window.location.reload();
         }
 
-        // Load profile on page load
         loadProfile();
 
-        /* ── Bottom nav active highlight ── */
-        document.querySelectorAll('.bnav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        /* ── Services logic ── */
+        const servicesData = {
+            "Civic Services": [
+                { name: "Ration Card Download", link: "https://www.pdsodisha.gov.in/NFSA/DownloadRationCard/PublicRationCardDownload" },
+                { name: "Voter Services", link: "https://voters.eci.gov.in/" },
+                { name: "Odisha Citizen Portal", link: "https://citizenportal-op.gov.in/Citizen/Login.aspx" },
+                { name: "UIDAI (Aadhaar)", link: "https://uidai.gov.in/en/" },
+                { name: "CEO Odisha Voter Search", link: "https://ceoodisha.nic.in/en/search-your-name-2002/" },
+                { name: "Birth & Death", link: "https://www.birthdeath.odisha.gov.in/" },
+                { name: "Jeevan Pramaan", link: "https://jeevanpramaan.gov.in/v1.0/ppouser/login" },
+                { name: "Bhulekh Odisha", link: "https://bhulekh.ori.nic.in/RoRView.aspx" },
+                { name: "e-District Odisha", link: "https://edistrict.odisha.gov.in/loginWindow.do" },
+                { name: "Subhadra Yojana", link: "https://subhadra.odisha.gov.in/" },
+                { name: "IGR Odisha", link: "https://www.igrodisha.gov.in/" },
+                { name: "PMAY Urban", link: "https://pmay-urban.gov.in/" },
+                { name: "Gopabandhu Jan Arogya", link: "https://gjay.odisha.gov.in/home" },
+                { name: "Madhubabu Bardhakya Pention", link: "https://ssepd.gov.in:8443/swp/applyBeneficiaryApplication.htm?lang=en" },
+                { name: "SSEPD Services (Beneficiary)", link: "https://ssepd.odisha.gov.in/or/ssedp-beneficiary-services" },
+                { name: "SUGAM Odisha", link: "https://sugam.odisha.gov.in/website/home" },
+                { name: "District Employment Registrar", link: "https://empmission.odisha.gov.in/Exchange/employment.jsp" }
+            ],
+            "Business & Tax": [
+                { name: "PAN Service (UTIITSL)", link: "https://www.myutiitsl.com/panonlineservices/CSCLogin" },
+                { name: "Income Tax", link: "https://www.incometax.gov.in/iec/foportal/" },
+                { name: "Udyam Registration", link: "https://udyamregistration.gov.in/UdyamRegistration.aspx" },
+                { name: "NSDL / e-Gov", link: "https://egovcsc.csccloud.in/nsdl/" },
+                { name: "CSC Bazaar", link: "https://eseva.csccloud.in/cscbazaar/default.aspx" },
+                { name: "DigiName", link: "https://www.diginame.in/" },
+                { name: "CSC Services MOP", link: "https://services.csccloud.in/MOP/Default.aspx" },
+                { name: "PM MUDRA Yojana", link: "https://www.mudra.org.in/" },
+                { name: "FOOD LICENCE", link: "https://foscos.fssai.gov.in/" },
+                { name: "GST Portal", link: "https://www.gst.gov.in/" },
+                { name: "CSC Safar", link: "https://cscsafar.in/" }
+            ],
+            "Central/Premium": [
+                { name: "Ayushman Bharat", link: "https://beneficiary.nha.gov.in/" },
+                { name: "IRCTC Agent", link: "https://registration.csccloud.in/irctc/Default.aspx" },
+                { name: "Parivahan Sewa", link: "https://parivahansewas.com/" },
+                { name: "Passport Seva", link: "https://www.passportindia.gov.in/psp" },
+                { name: "CSC Health", link: "https://connect.csc.gov.in/account/authorize?response_type=code&client_id=ca1b3b40-66f2-4069-d88e-a921bfcdec3c&redirect_uri=http://cschealth.in/Admin/vle_login&state=78570" },
+                { name: "ABHA Card", link: "https://abha.abdm.gov.in/abha/v3" },
+                { name: "PMJAY Grievance", link: "https://cgrms.pmjay.gov.in/GRMS/loginnew.htm" },
+                { name: "UMANG", link: "https://web.umang.gov.in/landing/" },
+                { name: "DIGI-LOCKER", link: "https://www.digilocker.gov.in/" },
+                { name: "HDFC Bank Login", link: "https://agentapp.ddp.hdfcbank.com/ddp-agent-portal/ddp/login" }
+            ],
+            "Utilities & Banking": [
+                { name: "NPCI", link: "https://www.npci.org.in/" },
+                { name: "TPNODL", link: "https://www.tpnodl.com/" },
+                { name: "HDFC Ergo CSC", link: "https://hepgw.hdfcergo.com/CSChdfcergo/cscconnect.aspx" },
+                { name: "SBI General", link: "https://dip.sbigeneral.in/Dashboard" },
+                { name: "IFFCO Tokio Motor", link: "https://online.iffcotokio.co.in/itgicscportal/vehicle.do" },
+                { name: "Bajaj Allianz", link: "https://webservices.bajajallianz.com/CSC/login.jsp" },
+                { name: "CSC BC/BF Onboarding", link: "https://onboarding-bcbf.cscacademy.org/?source=idp" },
+                { name: "PM Maandhan", link: "https://maandhan.in/maandhan/login" }
+            ],
+            "Farmer & Labor": [
+                { name: "CM Kisan Odisha", link: "https://cmkisan.odisha.gov.in/" },
+                { name: "Nirman Shramik", link: "https://nirmanshramik.odisha.gov.in/website/welcome" },
+                { name: "Agrisnet Farmer", link: "https://agrisnetodisha.ori.nic.in/stock/farmer/FarmerInquiry.aspx" },
+                { name: "PM Kisan", link: "https://pmkisan.gov.in/" },
+                { name: "e-Shram", link: "https://eshram.gov.in/" },
+                { name: "NFDP (Fisheries)", link: "https://nfdp.dof.gov.in/nfdp/" },
+                { name: "MGNREGA", link: "https://nregastrep.nic.in/netnrega/loginframegp.aspx?page=C&state_code=24" }
+            ],
+            "Education & Training": [
+                { name: "National Scholarship", link: "https://scholarships.gov.in/" },
+                { name: "APAAR", link: "https://apaar.csccloud.in/" },
+                { name: "DigiPaathshala", link: "https://digipaathshala.cscacademy.org/" },
+                { name: "CSC Olympiad", link: "https://cscolympiad.org/" },
+                { name: "OSSSC", link: "https://www.osssc.gov.in/Public/OSSSC/Default.aspx" },
+                { name: "CHSE Odisha", link: "https://chseodisha.nic.in/" },
+                { name: "BSE Odisha", link: "https://bseodisha.nic.in/" },
+                { name: "SAMS Odisha", link: "https://www.samsodisha.gov.in/" },
+                { name: "Odisha Adarsha Vidyalaya", link: "https://oav.edu.in/" },
+                { name: "Navodaya Vidyalaya", link: "https://navodaya.gov.in/nvs/nvs-school/Cuttack/en/admission/Admission-Notifications/" },
+                { name: "Banishree Scholarship", link: "https://ssepd.gov.in:8443/swp/applyBanishreeScholarshipScheme.htm" }
+            ]
+        };
 
-        /* \u2500\u2500 Hero Slider JS \u2500\u2500 */
-        (function() {
-            const slides  = document.querySelectorAll('.slide');
-            const dotsEl  = document.getElementById('sliderDots');
-            const TOTAL   = slides.length;
-            let   current = 0;
-            let   timer;
+        let activeCategory = "ALL SERVICES";
 
-            // Activate first slide
-            slides[0].classList.add('active');
-
-            // Build pill dots
-            slides.forEach(function(_, i) {
-                const d = document.createElement('button');
-                d.className = 'slider-dot' + (i === 0 ? ' active' : '');
-                d.setAttribute('aria-label', 'Slide ' + (i + 1));
-                d.addEventListener('click', function() { stopAuto(); goTo(i); startAuto(); });
-                dotsEl.appendChild(d);
-            });
-
-            function goTo(n) {
-                slides[current].classList.remove('active');
-                document.querySelectorAll('.slider-dot')[current].classList.remove('active');
-                current = (n + TOTAL) % TOTAL;
-                slides[current].classList.add('active');
-                document.querySelectorAll('.slider-dot')[current].classList.add('active');
-            }
-
-            function nextSlideRandom() {
-                goTo(current + 1);
-                scheduleNext();
-            }
-
-            function scheduleNext() {
-                const randomDelay = Math.floor(Math.random() * 3000) + 4000; // 4s to 7s
-                timer = setTimeout(nextSlideRandom, randomDelay);
-            }
-
-            function startAuto() { scheduleNext(); }
-            function stopAuto()  { clearTimeout(timer); }
-
-            document.getElementById('heroSlider').addEventListener('mouseenter', stopAuto);
-            document.getElementById('heroSlider').addEventListener('mouseleave', startAuto);
-
-            startAuto();
-
-            window.sliderMove = function(dir) { stopAuto(); goTo(current + dir); startAuto(); };
-        })();
-
-        /* Header Dropdown Toggle */
-        function toggleHeaderDropdown(e) {
-            e.stopPropagation();
-            const drop = document.getElementById('hdrDropdown');
-            if (drop) drop.classList.toggle('show');
+        function getCategoryIcon(cat) {
+            const icons = {
+                "ALL SERVICES": "📦",
+                "Civic Services": "🏛️",
+                "Business & Tax": "💼",
+                "Central/Premium": "🌟",
+                "Utilities & Banking": "🏦",
+                "Farmer & Labor": "🌾",
+                "Education & Training": "🎓"
+            };
+            return icons[cat] || "📁";
         }
-        document.addEventListener('click', function() {
-            const drop = document.getElementById('hdrDropdown');
-            if (drop) drop.classList.remove('show');
-        });
+
+        function renderCategories() {
+            const menu = document.getElementById('categoryMenu');
+            if (!menu) return;
+            menu.innerHTML = '';
+
+            // 1. Add the Official Login button first
+            const loginBtn = document.createElement('a');
+            loginBtn.href = "https://connect.csc.gov.in/account/authorize?response_type=code&client_id=0f8ca686-5a31-46b8-bb51-d9834ba9fa9d&redirect_uri=https%3A%2F%2Fdigitalseva.csc.gov.in%2Fauth%2Fcallback%2F&state=71585";
+            loginBtn.target = "_blank";
+            loginBtn.className = "official-login";
+            loginBtn.innerHTML = "🔑 CSC OFFICIAL LOG-IN";
+            menu.appendChild(loginBtn);
+
+            // 2. Define category list starting with ALL SERVICES
+            const categories = ["ALL SERVICES", ...Object.keys(servicesData)];
+
+            // 3. Add the dynamic categories
+            categories.forEach(cat => {
+                const a = document.createElement('a');
+                a.href = "#";
+                const icon = getCategoryIcon(cat);
+                a.innerHTML = `<span style="margin-right:8px;">${icon}</span> ${cat}`;
+                if (cat === activeCategory) a.className = "active";
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    activeCategory = cat;
+                    showServices();
+                    document.querySelectorAll('.cat-menu a').forEach(item => item.classList.remove('active'));
+                    a.classList.add('active');
+                };
+                menu.appendChild(a);
+            });
+        }
+
+        function getServiceIcon(name) {
+            const n = name.toLowerCase();
+            if (n.includes('aadhaar')) return '🆔';
+            if (n.includes('voter')) return '🗳️';
+            if (n.includes('ration')) return '📋';
+            if (n.includes('birth') || n.includes('death')) return '📜';
+            if (n.includes('pan')) return '💳';
+            if (n.includes('tax') || n.includes('gst')) return '💰';
+            if (n.includes('scholarship')) return '🎓';
+            if (n.includes('kisan') || n.includes('farmer') || n.includes('mgnrega')) return '🌾';
+            if (n.includes('bank') || n.includes('hdfc') || n.includes('sbi')) return '🏦';
+            if (n.includes('irctc') || n.includes('parivahan') || n.includes('passport')) return '✈️';
+            if (n.includes('insurance') || n.includes('ergo') || n.includes('allianz') || n.includes('tokio')) return '🛡️';
+            if (n.includes('health') || n.includes('abha') || n.includes('ayushman')) return '🏥';
+            if (n.includes('udyam') || n.includes('business')) return '🏢';
+            if (n.includes('result') || n.includes('chse') || n.includes('bse') || n.includes('sams')) return '📊';
+            if (n.includes('pension')) return '👴';
+            if (n.includes('yojana') || n.includes('subhadra')) return '📜';
+            if (n.includes('shram')) return '👷';
+            if (n.includes('license') || n.includes('fssai')) return '📄';
+            return '🔗';
+        }
+
+        function showServices(query = "") {
+            const grid = document.getElementById('servicesGrid');
+            if (!grid) return;
+            
+            let data = [];
+            if (activeCategory === "ALL SERVICES") {
+                // Flatten all categories into one single array
+                data = Object.values(servicesData).flat();
+            } else {
+                data = servicesData[activeCategory] || [];
+            }
+            
+            grid.innerHTML = '';
+            
+            const filtered = data.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray);">No services found.</div>`;
+                return;
+            }
+
+            filtered.forEach(service => {
+                const card = document.createElement('a');
+                card.className = 'service-card';
+                card.href = service.link;
+                card.target = "_blank";
+                
+                const icon = getServiceIcon(service.name);
+
+                card.innerHTML = `
+                    <div class="icon">${icon}</div>
+                    <h4>${service.name}</h4>
+                    <div class="btn-link">OPEN ↗</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        const searchInput = document.getElementById('serviceSearch');
+        if (searchInput) {
+            searchInput.oninput = (e) => showServices(e.target.value);
+        }
+
+        renderCategories();
+        showServices();
     </script>
 
 </body>

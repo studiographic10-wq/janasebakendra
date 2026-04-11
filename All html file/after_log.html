@@ -1116,21 +1116,216 @@
            RESPONSIVE
         ═══════════════════════════════════════════ */
         @media (max-width: 768px) {
-            header { padding: 0 14px; }
-            .hdr-nav, .hdr-logout-btn { display: none; }
-            .hdr-text h1 { font-size: .82rem; }
-            .welcome-banner { padding: 24px 20px; flex-direction: column; text-align: center; }
+            header { 
+                padding: 0 12px; 
+                height: 60px; /* Slimmer header for mobile */
+            }
+            :root {
+                --header-h: 60px;
+            }
+            .hdr-nav, .hdr-logout-ico { display: none; } /* Hide logout ico in header, use bottom nav */
+            .hdr-brand { gap: 10px; }
+            .hdr-lock { width: 40px; height: 40px; border-width: 2px; }
+            .hdr-text h1 { font-size: 0.75rem; letter-spacing: 0.5px; }
+            .hdr-text span { font-size: 0.6rem; }
+            .hdr-user-info { display: none; } /* Hide name in header to save space */
+            
+            .welcome-banner { padding: 20px 15px; flex-direction: column; text-align: center; border-radius: 15px; gap: 15px; }
+            .banner-icon { width: 60px; height: 60px; font-size: 28px; }
             .welcome-banner::after { display: none; }
-            .welcome-banner h2 { font-size: 1.3rem; }
-            main { padding: 24px 12px 20px; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            footer { padding: 12px 14px; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
-            .footer-right { justify-content: center; }
+            .welcome-banner h2 { font-size: 1.2rem; }
+            .welcome-banner p { font-size: 0.8rem; }
+            
+            main { padding: 15px 12px 80px; } /* Extra bottom padding for bottom nav */
+            
+            .about-section { padding: 20px 18px; border-radius: 12px; }
+            .about-grid { gap: 15px; }
+            .about-card { padding: 15px; }
+            
+            .photo-card { border-radius: 15px; }
+            .photo-info { padding: 15px; }
+            .photo-info h3 { font-size: 0.9rem; }
+            
+            footer { padding: 20px 15px 90px; text-align: center; }
+            .footer-right { margin-top: 10px; }
+            
             body.sb-open main { margin-left: 0; }
-            .pm-grid { grid-template-columns: 1fr; }
-            .pm-body { padding: 18px 18px; }
+            .pm-grid { grid-template-columns: 1fr; gap: 10px; }
+            .pm-body { padding: 15px; }
+            .pm-field { padding: 12px; }
+
+            /* ── MOBILE BOTTOM NAV ── */
+            .mobile-bottom-nav {
+                display: flex !important;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 65px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-top: 1px solid rgba(0, 51, 153, 0.1);
+                z-index: 1000;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0 5px;
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.08);
+            }
+            .bnav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: var(--gray);
+                gap: 4px;
+                width: 20%;
+                transition: all 0.2s ease;
+            }
+            .bnav-item i {
+                font-size: 1.2rem;
+                transition: transform 0.2s ease;
+            }
+            .bnav-item span {
+                font-size: 0.6rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
+            .bnav-item.active {
+                color: var(--midblue);
+            }
+            .bnav-item.active i {
+                transform: translateY(-2px);
+                color: var(--gold);
+            }
+            .bnav-item.active span {
+                color: var(--navy);
+            }
+        }
+
+        /* Desktop Hidden Bottom Nav */
+        .mobile-bottom-nav { display: none; }
+        /* ═══════════════════════════════════════════
+           GOVT SERVICES DASHBOARD (Small & Clean)
+        ═══════════════════════════════════════════ */
+        #govt-dashboard {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(0,51,153,.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .db-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .db-title::before {
+            content: '🏛️';
+            font-size: 1.2rem;
+        }
+
+        .db-nav-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .db-nav-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .db-nav-btn.active {
+            background: linear-gradient(135deg, var(--gold), #ff8c00);
+            border-color: transparent;
+            color: var(--navy);
+            box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
+        }
+
+        .db-services-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .db-services-grid.active {
+            display: grid;
+        }
+
+        .db-service-card {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 15px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1.5px solid transparent;
+            min-height: 110px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: dbFadeInUp 0.4s ease forwards;
+        }
+
+        .db-service-card:hover {
+            background: #ffffff;
+            border-color: var(--gold);
+            box-shadow: 0 6px 15px rgba(245, 166, 35, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .db-icon-circle {
+            width: 42px;
+            height: 42px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+
+        .db-service-label {
+            color: var(--navy);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            line-height: 1.2;
+            letter-spacing: 0.3px;
+        }
+
+        @keyframes dbFadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .db-services-grid { grid-template-columns: repeat(3, 1fr); }
+            .db-nav-btn { font-size: 0.65rem; padding: 6px 12px; }
         }
     </style>
+
 </head>
 <body>
 
@@ -1150,8 +1345,17 @@
         </div>
 
         <div class="sb-details">
-            <div class="sb-section-label">Profile Details</div>
+            <div class="sb-section-label">Navigation Menu</div>
+            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <a href="after_log.html" class="sb-logout" style="background: rgba(245,166,35,0.1); border-color: var(--gold); color: #fff; text-decoration: none; display: block; padding: 10px; margin: 0;">🏠 Home</a>
+                <a href="all_services.html" class="sb-logout" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: block; padding: 10px; margin: 0;">🔗 All Services</a>
+                <a href="RETION PRO - 2.0vr.html" class="sb-logout" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: block; padding: 10px; margin: 0;">📋 Ration Service</a>
+                <a href="my_new_app.html" class="sb-logout" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: block; padding: 10px; margin: 0;">📱 My New App</a>
+                <a href="news_blog.html" class="sb-logout" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; text-decoration: none; display: block; padding: 10px; margin: 0;">📰 Blogs & News</a>
+            </div>
 
+            <div class="sb-section-label">Profile Details</div>
+            
             <div class="sb-row">
                 <span class="sb-ico">🏠</span>
                 <div class="sb-info">
@@ -1367,6 +1571,21 @@
                 <strong>Please Note:</strong> We are Village Level Entrepreneurs (VLE) helping the community access digital India services more easily. We are not government officials.
             </div>
 
+            <!-- Govt Services Dashboard Integration -->
+            <div id="govt-dashboard" style="display: none;">
+                <div class="db-title">Government Services Portal Access</div>
+                
+                <div class="db-nav-header">
+                    <button class="db-nav-btn active" onclick="showDbSection('central', this)">Central Govt.</button>
+                    <button class="db-nav-btn" onclick="showDbSection('state', this)">Odisha State</button>
+                    <button class="db-nav-btn" onclick="showDbSection('jobs', this)">Job Inquiry</button>
+                </div>
+
+                <div id="central" class="db-services-grid active"></div>
+                <div id="state" class="db-services-grid"></div>
+                <div id="jobs" class="db-services-grid"></div>
+            </div>
+
             <div style="margin-top: 30px; text-align: center;">
                 <img src="../Assets/photo06.png" alt="Important Information" style="max-width: 100%; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.05);">
             </div>
@@ -1426,6 +1645,33 @@
         </div>
 
     </main>
+
+    <!-- ══════════════════════════════════
+         MOBILE BOTTOM NAVIGATION
+    ══════════════════════════════════ -->
+    <nav class="mobile-bottom-nav">
+        <a href="after_log.html" class="bnav-item active">
+            <i>🏠</i>
+            <span>Home</span>
+        </a>
+        <a href="all_services.html" class="bnav-item">
+            <i>🔗</i>
+            <span>Services</span>
+        </a>
+        <a href="my_new_app.html" class="bnav-item">
+            <i>📱</i>
+            <span>App</span>
+        </a>
+        <a href="news_blog.html" class="bnav-item">
+            <i>📰</i>
+            <span>Blog</span>
+        </a>
+        <a href="javascript:void(0)" class="bnav-item" onclick="toggleSidebar()">
+            <i>👤</i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
 
     <!-- ══════════════════════════════════
          FOOTER (above bottom nav)
@@ -1493,6 +1739,7 @@
             const hdrLoginBtn  = document.getElementById('hdrLoginBtn');
             const mainFeatures = document.getElementById('mainFeatures');
             const sbToggle     = document.getElementById('sidebarToggle');
+            const mobileBnav   = document.querySelector('.mobile-bottom-nav');
             
             if (p.email) {
                 // Logged In
@@ -1501,15 +1748,97 @@
                 if (hdrLoginBtn)  hdrLoginBtn.style.display  = 'none';
                 if (mainFeatures) mainFeatures.style.display = 'block';
                 if (sbToggle)     sbToggle.style.display     = 'flex';
+                if (mobileBnav)   mobileBnav.style.display   = 'flex';
+                
+                // Show govt dashboard only for logged in
+                const govtDb = document.getElementById('govt-dashboard');
+                if (govtDb) govtDb.style.display = 'block';
             } else {
-                // Guest / Not Logged In
+                // Guest / Not Logged In - Hide features until login
                 if (hdrNav)       hdrNav.style.display       = 'none';
                 if (hdrUserChip)  hdrUserChip.style.display  = 'none';
                 if (hdrLoginBtn)  hdrLoginBtn.style.display  = 'inline-flex';
                 if (mainFeatures) mainFeatures.style.display = 'none';
                 if (sbToggle)     sbToggle.style.display     = 'none';
+                if (mobileBnav)   mobileBnav.style.display   = 'none';
+
+                // Hide govt dashboard for guests
+                const govtDb = document.getElementById('govt-dashboard');
+                if (govtDb) govtDb.style.display = 'none';
             }
         }
+
+        /* ── GOVT DASHBOARD LOGIC ── */
+        const centralData = [
+            { name: "Aadhaar", icon: "🆔", url: "https://uidai.gov.in/" },
+            { name: "Ayushman", icon: "🏥", url: "https://pmjay.gov.in/" },
+            { name: "Jeevan Pramaan", icon: "📄", url: "https://jeevanpramaan.gov.in/" },
+            { name: "PM Ujjwala", icon: "🔥", url: "https://pmuy.gov.in/" },
+            { name: "HP Gas", icon: "⛽", url: "https://myhpgas.in/" },
+            { name: "NPS", icon: "📈", url: "https://npstrust.org.in/" },
+            { name: "PAN", icon: "💳", url: "https://onlineservices.nsdl.com/" },
+            { name: "Passport", icon: "✈️", url: "https://passportindia.gov.in/" },
+            { name: "e-Shram", icon: "👷", url: "https://eshram.gov.in/" },
+            { name: "PM-Maandhan", icon: "💰", url: "https://maandhan.in/" },
+            { name: "PM-KISAN", icon: "🌾", url: "https://pmkisan.gov.in/" },
+            { name: "PM-SVANidhi", icon: "🛒", url: "https://pmsvanidhi.mohua.gov.in/" },
+            { name: "PM-Vishwakarma", icon: "🛠️", url: "https://pmvishwakarma.gov.in/" },
+            { name: "Fasal Bima", icon: "⛈️", url: "https://pmfby.gov.in/" },
+            { name: "Udyam", icon: "🏢", url: "https://udyamregistration.gov.in/" },
+            { name: "GST Portal", icon: "📑", url: "https://www.gst.gov.in/" },
+            { name: "UMANG", icon: "📱", url: "https://web.umang.gov.in/" }
+        ];
+
+        const odishaData = [
+            { name: "Odisha One", icon: "☝️", url: "https://www.odishaone.gov.in/" },
+            { name: "Odisha Police", icon: "👮", url: "https://www.odishapolice.gov.in/" },
+            { name: "Bhulekh", icon: "🗺️", url: "http://bhulekh.ori.nic.in/" },
+            { name: "e-District", icon: "🏛️", url: "https://edistrict.odisha.gov.in/" },
+            { name: "Main Portal", icon: "🌐", url: "https://www.odisha.gov.in/" },
+            { name: "Subhadra", icon: "💎", url: "#" },
+            { name: "Jan Arogya", icon: "🩺", url: "#" },
+            { name: "Employment", icon: "👔", url: "https://empmissionodisha.gov.in/" },
+            { name: "SAMS", icon: "🎓", url: "https://samsodisha.gov.in/" },
+            { name: "Results", icon: "📊", url: "http://orissaresults.nic.in/" },
+            { name: "CHSC", icon: "🏫", url: "https://chseodisha.nic.in/" },
+            { name: "Kendriya B.", icon: "🎒", url: "#" },
+            { name: "Job Card", icon: "📁", url: "#" },
+            { name: "MGNREGA", icon: "⚒️", url: "https://nrega.nic.in/" }
+        ];
+
+        const jobsData = [
+            { name: "SSC", icon: "📋", url: "https://ssc.nic.in/" },
+            { name: "UPSC", icon: "✒️", url: "https://www.upsc.gov.in/" },
+            { name: "Railway", icon: "🚆", url: "https://www.rrcb.gov.in/" },
+            { name: "Odisha Jobs", icon: "🔍", url: "https://www.ossc.gov.in/" }
+        ];
+
+        function populateDb(data, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            data.forEach((s, i) => {
+                const card = document.createElement('a');
+                card.href = s.url;
+                card.target = "_blank";
+                card.className = "db-service-card";
+                card.style.animationDelay = (i * 0.03) + 's';
+                card.innerHTML = `<div class="db-icon-circle">${s.icon}</div><div class="db-service-label">${s.name}</div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function showDbSection(id, btn) {
+            document.querySelectorAll('.db-services-grid').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.db-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Initialize Dashboard
+        populateDb(centralData, 'central');
+        populateDb(odishaData, 'state');
+        populateDb(jobsData, 'jobs');
 
         /* ── Profile Modal ── */
         function openProfileModal() {
