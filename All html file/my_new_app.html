@@ -7,6 +7,7 @@
     <meta name="description" content="Official digital service portal of CSC Baliapal Janaseba Kendra – PDF forms, Ration services, supported software and more.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         /* ═══════════════════════════════════════════
@@ -86,25 +87,61 @@
             align-items: center;
             gap: 14px;
         }
+
+        /* ── PRO Official Lock Icon ── */
+        .hdr-lock-outer {
+            position: relative;
+            flex-shrink: 0;
+            width: 54px; height: 54px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hdr-lock-outer::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--gold) 0deg,
+                #ffdd77 90deg,
+                rgba(245,166,35,0.15) 180deg,
+                var(--gold) 360deg
+            );
+            animation: spinRingHdr 3s linear infinite;
+            z-index: 0;
+        }
+        .hdr-lock-outer::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            background: var(--navy);
+            z-index: 1;
+        }
+        @keyframes spinRingHdr {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
         .hdr-lock {
-            width: 50px; height: 50px;
-            background: #ffffff;
-            border: 2.5px solid var(--gold);
+            width: 48px; height: 48px;
+            background: linear-gradient(145deg, #ffffff 0%, #f0f5ff 100%);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 14px rgba(245,166,35,.5);
+            box-shadow: 0 0 0 2px rgba(245,166,35,.5), 0 4px 14px rgba(245,166,35,.5), inset 0 2px 3px rgba(255,255,255,.9);
             flex-shrink: 0;
             overflow: hidden;
-            animation: lockBounce 3s ease-in-out infinite;
+            animation: lockGlow 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
         }
         .hdr-lock img {
-            width: 85%;
+            width: 82%;
             height: auto;
             object-fit: contain;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,.2));
         }
-        @keyframes lockBounce {
-            0%,100% { transform: translateY(0); }
-            50%      { transform: translateY(-3px); }
+        @keyframes lockGlow {
+            0%,100% { box-shadow: 0 0 0 2px rgba(245,166,35,.5), 0 4px 14px rgba(245,166,35,.4), inset 0 2px 3px rgba(255,255,255,.9); }
+            50%      { box-shadow: 0 0 0 4px rgba(245,166,35,.25), 0 0 28px rgba(245,166,35,.6), 0 6px 20px rgba(245,166,35,.5), inset 0 2px 3px rgba(255,255,255,.9); }
         }
         .hdr-text h1 {
             font-size: .98rem;
@@ -1116,20 +1153,55 @@
         /* ═══════════════════════════════════════════
            RESPONSIVE
         ═══════════════════════════════════════════ */
+        /* ── Mobile Bottom Nav ── */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 64px;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,51,153,.1);
+            z-index: 1000;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 4px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .bnav-item {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-decoration: none; color: var(--gray);
+            gap: 3px; width: 19%;
+            transition: all 0.25s ease;
+            padding: 8px 2px;
+            border-radius: 12px;
+        }
+        .bnav-item i { font-size: 1.1rem; transition: transform 0.25s ease; }
+        .bnav-item span { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+        .bnav-item.active { color: var(--midblue); }
+        .bnav-item.active i { transform: translateY(-2px); color: var(--gold); }
+        .bnav-item.active span { color: var(--navy); }
+
         @media (max-width: 768px) {
-            header { padding: 0 14px; }
-            .hdr-nav, .hdr-logout-btn { display: none; }
-            .hdr-text h1 { font-size: .82rem; }
-            .welcome-banner { padding: 24px 20px; flex-direction: column; text-align: center; }
-            .welcome-banner::after { display: none; }
-            .welcome-banner h2 { font-size: 1.3rem; }
-            main { padding: 24px 12px 20px; }
+            header { padding: 0 12px; }
+            .hdr-nav, .hdr-logout-ico { display: none; }
+            .hdr-brand { gap: 8px; }
+            .hdr-text h1 { font-size: 0.75rem; }
+            .hdr-text span { display: none; }
             .services-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            footer { padding: 12px 14px; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+            footer { padding: 14px 14px 90px; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
             .footer-right { justify-content: center; }
             body.sb-open main { margin-left: 0; }
             .pm-grid { grid-template-columns: 1fr; }
-            .pm-body { padding: 18px 18px; }
+            .pm-body { padding: 16px; }
+            .mobile-bottom-nav { display: flex !important; }
+            .page-title-banner { flex-direction: column; text-align: center; gap: 14px; padding: 20px; }
+            .services-container { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 400px) {
+            .services-container { grid-template-columns: repeat(1, 1fr); }
         }
     </style>
 </head>
@@ -1194,10 +1266,12 @@
     ══════════════════════════════════ -->
     <header>
         <div class="hdr-brand">
-            <div class="hdr-lock"><img src="../Assets/Logo.png" alt="Logo"></div>
+            <div class="hdr-lock-outer">
+                <div class="hdr-lock"><img src="../Assets/Logo.png" alt="CSC Logo"></div>
+            </div>
             <div class="hdr-text">
                 <h1>CSC Baliapal Janaseba Kendra</h1>
-                <span>Graphic Digital Service Portal · Baliapal</span>
+                <span>Pro Official Portal · Baliapal</span>
             </div>
         </div>
 
@@ -1301,12 +1375,12 @@
     </div>
 
     <!-- ══════════════════════════════════
-         MAIN CONTENT AREA WITH CATEOGRY SIDEBAR
+         MAIN CONTENT AREA WITH CATEGORY SIDEBAR
     ══════════════════════════════════ -->
     <main style="display: flex; gap: 24px; align-items: flex-start; max-width: 1200px; margin: 40px auto; padding: 0 20px;">
         <!-- LEFT SIDEBAR -->
         <aside style="width: 260px; background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); flex-shrink: 0; border: 1px solid rgba(0,51,153,.1);">
-            <h3 style="color: var(--navy); margin-bottom: 18px; font-size: .95rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--gold); padding-bottom: 8px; display: inline-block;">APP NAME & VERTIONS</h3>
+            <h3 style="color: var(--navy); margin-bottom: 18px; font-size: .95rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--gold); padding-bottom: 8px; display: inline-block;">📱 APP MODULES & VERSIONS</h3>
             <style>
                 .cat-menu { display: flex; flex-direction: column; gap: 8px; }
                 .cat-menu a { 
@@ -1442,11 +1516,12 @@
                 }
             </style>
             <div class="cat-menu">
-                <a href="#" class="active" onclick="switchAppTab(event, 'ecard')">E-CARD LEOUT</a>
-                <a href="#" onclick="switchAppTab(event, 'idcard')">ID CARD BULDER</a>
-                <a href="#" onclick="switchAppTab(event, 'affidavit')">AFIDEBIT FORM</a>
-                <a href="AFFIDAVIT-FORM.html">PAN-AFFIDAVIT 1.0</a>
-                <a href="pdf_form.html">PDF FORM LIBERI</a>
+                <a href="#" class="active" onclick="switchAppTab(event, 'ecard')">ℹ️ ABOUT OUR SERVICES</a>
+                <a href="#" onclick="switchAppTab(event, 'idcard')">🪪 ID CARD BUILDER</a>
+                <a href="#" onclick="switchAppTab(event, 'affidavit')">📄 AFFIDAVIT FORM</a>
+                <a href="AFFIDAVIT-FORM.html">📋 PAN-AFFIDAVIT 1.0</a>
+                <a href="pdf_form.html">📁 PDF FORM LIBRARY</a>
+                <a href="E-CARD-3.0.html">🎴 E-CARD LAYOUT</a>
             </div>
         </aside>
 
@@ -1535,7 +1610,7 @@
                         <div class="card card-2 anim anim-d1">
                             <div class="card-header">Online PDF Forms</div>
                             <i class="fa-solid fa-file-pdf icon-top"></i>
-                            <p>Download the latest updated PDF forms for Bills,Applicetions, Ration Card Forms and State Government schemes.</p>
+                            <p>Download the latest updated PDF forms for Bills, Applications, Ration Card Forms and State Government schemes.</p>
                             <div class="card-footer-shape"></div>
                             <div class="logo-circle">
                                 <i class="fa-solid fa-download" style="color: var(--color-2); font-size: 1.8rem;"></i>
@@ -1563,20 +1638,22 @@
                 `;
             } else if (type === 'idcard') {
                 icon = '🪪';
-                message = 'ID CARD BULDER launched. Enter details to build your card.';
+                message = 'ID Card Builder launched. Enter details to build your ID card.';
                 rightContent.innerHTML = `
                     <div style="text-align: center; animation: fadeSlideUp .4s ease; padding: 40px;">
                         <div style="font-size: 40px; margin-bottom: 14px;">${icon}</div>
                         <p style="color: var(--gray); font-size: 1.05rem; font-weight: 600;">${message}</p>
+                        <a href="id-card-generator.html" style="display:inline-block; margin-top:16px; background: linear-gradient(135deg, var(--navy), var(--blue)); color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:700; font-size:.9rem;">🚀 Open ID Card Builder</a>
                     </div>
                 `;
             } else if (type === 'affidavit') {
                 icon = '📄';
-                message = 'AFIDEBIT FORM portal opened. Ready for data entry.';
+                message = 'Affidavit Form portal opened. Ready for data entry.';
                 rightContent.innerHTML = `
                     <div style="text-align: center; animation: fadeSlideUp .4s ease; padding: 40px;">
                         <div style="font-size: 40px; margin-bottom: 14px;">${icon}</div>
                         <p style="color: var(--gray); font-size: 1.05rem; font-weight: 600;">${message}</p>
+                        <a href="AFFIDAVIT-FORM.html" style="display:inline-block; margin-top:16px; background: linear-gradient(135deg, var(--navy), var(--blue)); color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:700; font-size:.9rem;">📋 Open Affidavit Form</a>
                     </div>
                 `;
             }
@@ -1584,7 +1661,33 @@
     </script>
 
     <!-- ══════════════════════════════════
-         FOOTER (above bottom nav)
+         MOBILE BOTTOM NAVIGATION
+    ══════════════════════════════════ -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="after_log.html" class="bnav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="all_services.html" class="bnav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Services</span>
+        </a>
+        <a href="my_new_app.html" class="bnav-item active">
+            <i class="fas fa-mobile-alt"></i>
+            <span>App</span>
+        </a>
+        <a href="news_blog.html" class="bnav-item">
+            <i class="fas fa-newspaper"></i>
+            <span>Blog</span>
+        </a>
+        <a href="javascript:void(0)" class="bnav-item" onclick="toggleSidebar()">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- ══════════════════════════════════
+         FOOTER
     ══════════════════════════════════ -->
     <footer>
         <div class="footer-left">

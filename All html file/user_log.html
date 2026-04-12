@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSC Baliapal – Secure User Access</title>
     <meta name="description" content="Secure login and registration portal for CSC Baliapal Janaseba Kendra digital services.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --navy:    #001f4d;
             --blue:    #003399;
+            --midblue: #0050cc;
             --gold:    #f5a623;
+            --gold-dk: #c47d00;
             --light:   #e8f0fe;
             --white:   #ffffff;
             --gray:    #6b7280;
@@ -18,7 +21,7 @@
             --error:   #dc2626;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
         body {
             font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -26,249 +29,562 @@
             background: #001f4d url('../Assets/photo 08.png') no-repeat center center / cover;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Align left */
-            padding: 24px 8%; /* Spacer from the left edge */
+            justify-content: flex-start;
+            padding: 24px 8%;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Group the logo and card together */
-        .login-wrapper {
-            width: 100%;
-            max-width: 460px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* premium dark gradient overlay over the image */
+        /* Gradient overlay */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, rgba(0,31,77,0.92) 0%, rgba(0,51,153,0.80) 50%, rgba(0,80,204,0.65) 100%);
+            background: linear-gradient(135deg, rgba(0,15,60,0.95) 0%, rgba(0,51,153,0.85) 50%, rgba(0,80,204,0.70) 100%);
             z-index: 0;
         }
 
-        /* floating subtle light glows */
+        /* Floating glows */
         body::after {
             content: '';
             position: fixed;
             inset: 0;
             background-image:
-                radial-gradient(circle at 15% 25%, rgba(245,166,35,.25) 0%, transparent 45%),
-                radial-gradient(circle at 85% 70%, rgba(255,255,255,.15) 0%, transparent 40%);
+                radial-gradient(circle at 12% 22%, rgba(245,166,35,.35) 0%, transparent 42%),
+                radial-gradient(circle at 88% 75%, rgba(0,200,255,.15) 0%, transparent 40%),
+                radial-gradient(circle at 55% 90%, rgba(0,51,153,.2) 0%, transparent 35%);
             pointer-events: none;
             z-index: 0;
+            animation: glowPulse 8s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%,100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
 
-        /* ── Logo Badge ── */
+        /* Animated particle dots */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: rgba(245,166,35,0.6);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* Group the logo and card together */
+        .login-wrapper {
+            width: 100%;
+            max-width: 470px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ── PRO OFFICIAL LOCK BADGE ── */
         .page-badge {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
             animation: fadeDown .7s ease both;
         }
+
+        /* Outer ring with spinning gradient */
+        .lock-outer-ring {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 14px;
+        }
+        .lock-outer-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--gold) 0deg,
+                #ffdd77 90deg,
+                rgba(245,166,35,0.2) 180deg,
+                var(--gold) 360deg
+            );
+            animation: spinRing 3s linear infinite;
+            z-index: 0;
+        }
+        .lock-outer-ring::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: rgba(0,20,60,0.9);
+            z-index: 1;
+        }
+        @keyframes spinRing {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
         .lock-icon {
-            width: 72px; height: 72px;
-            background: #ffffff;
-            border: 2.5px solid var(--gold);
+            width: 84px; height: 84px;
+            background: linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%);
             border-radius: 50%;
             display: inline-flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 24px rgba(245,166,35,.5);
-            margin-bottom: 10px;
+            box-shadow:
+                0 0 0 3px rgba(245,166,35,0.5),
+                0 12px 40px rgba(0,0,0,0.5),
+                inset 0 2px 4px rgba(255,255,255,0.8);
             overflow: hidden;
-            animation: pulseLock 2.5s ease-in-out infinite;
+            animation: lockPulse 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
         }
         .lock-icon img {
-            width: 85%;
+            width: 82%;
             height: auto;
             object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
-        @keyframes pulseLock {
-            0%,100% { box-shadow: 0 8px 24px rgba(245,166,35,.5); transform: scale(1); }
-            50%      { box-shadow: 0 12px 36px rgba(245,166,35,.8); transform: scale(1.06); }
-        }
-        .page-badge h1 { color: var(--white); font-size: 1.02rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .page-badge p  { color: rgba(255,255,255,.75); font-size: .76rem; margin-top: 4px; letter-spacing: 1px; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
 
-        /* ── Card ── (White with golden border effect) */
-        .auth-card {
-            background: #ffffff;
-            border: 2px solid var(--gold);
+        /* Inner glow ring on lock */
+        .lock-icon::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.6) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        @keyframes lockPulse {
+            0%,100% {
+                box-shadow: 0 0 0 3px rgba(245,166,35,0.5), 0 12px 40px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.8);
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(245,166,35,0.25), 0 0 60px rgba(245,166,35,0.4), 0 16px 50px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.8);
+                transform: translateY(-4px) scale(1.04);
+            }
+        }
+
+        /* PRO badge below icon */
+        .pro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--gold), #ffb21c);
+            color: var(--navy);
+            font-size: .62rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 3px 12px;
             border-radius: 20px;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(245,166,35,0.4);
+        }
+        .pro-badge i { font-size: .6rem; }
+
+        .page-badge h1 {
+            color: var(--white); 
+            font-size: 1.05rem; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            margin-top: 10px;
+        }
+        .page-badge p  { 
+            color: rgba(255,255,255,.70); 
+            font-size: .76rem; 
+            margin-top: 4px; 
+            letter-spacing: .8px; 
+        }
+
+        /* ── Glassmorphism Auth Card ── */
+        .auth-card {
+            background: rgba(255,255,255,0.97);
+            border: 1px solid rgba(245,166,35,0.4);
+            border-radius: 24px;
             padding: 36px 34px 28px;
-            box-shadow: 0 24px 60px rgba(0,0,0,.6);
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(255,255,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.8);
             animation: fadeUp .7s .1s ease both;
             position: relative;
             overflow: hidden;
         }
+
+        /* Gold shimmer top bar */
         .auth-card::before {
             content:'';
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
-            background-size: 200%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy), var(--gold), #ffdd00, var(--gold), var(--navy));
+            background-size: 300%;
             animation: shimmer 3s linear infinite;
         }
-        @keyframes shimmer { 0% { background-position:0% 0; } 100% { background-position:200% 0; } }
+
+        /* Subtle corner decoration */
+        .auth-card::after {
+            content: '🔐';
+            position: absolute;
+            right: -10px; bottom: -10px;
+            font-size: 80px;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        @keyframes shimmer { 0% { background-position:0% 0; } 100% { background-position:300% 0; } }
 
         .card-header { text-align: center; margin-bottom: 22px; }
-        .card-header h2 { color: var(--navy); font-size: 1.4rem; font-weight: 800; letter-spacing: .5px; }
+        .card-header h2 { color: var(--navy); font-size: 1.45rem; font-weight: 800; letter-spacing: .5px; }
         .card-header p  { color: var(--gray); font-size: .82rem; margin-top: 5px; }
+
+        /* ── Right Side Promo Cards ── */
+        .right-info-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2vw; /* Reduced to provide more flex width for the 4 inline items */
+            z-index: 10;
+        }
+        @media (max-width: 1024px) {
+            body { flex-direction: column; justify-content: flex-start; padding-top: 50px; }
+            .right-info-panel { padding-left: 0; padding-top: 50px; width: 100%; display: none; /* Hidden on mobile to keep login fast/clean */ }
+        }
+        @media (min-width: 1025px) {
+            body { justify-content: space-between; }
+        }
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 boxes strictly in one line */
+            gap: 1cm; /* EXACT 1cm GAP AS REQUESTED */
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeUp .8s .3s ease both;
+        }
+        .svc-promo-card {
+            position: relative;
+            background: rgba(255,255,255,0.95);
+            border-radius: 14px;
+            text-align: center;
+            padding: 40px 6px 20px; /* Reduced paddings since boxes are thinner */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            margin-top: 35px; /* Overhang space for smaller circle */
+        }
+        .svc-promo-card:hover { transform: translateY(-5px); }
+        
+        .svc-promo-card::before {
+            content: ''; position: absolute;
+            top: 3px; left: 3px; right: 3px; bottom: 3px;
+            border-radius: 11px;
+            border: 2px solid transparent; 
+            pointer-events: none; z-index: 1;
+        }
+
+        .svc-promo-card .logo-circle {
+            position: absolute;
+            top: -35px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 70px; /* Scaled down for thinner box */
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .svc-promo-card .logo-circle::after {
+            content: ''; position: absolute;
+            bottom: -7px; left: 50%; transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 11px solid; z-index: -1;
+        }
+        .svc-promo-card .logo-inner {
+            width: 48px; height: 48px; /* Scaled down */
+            background: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; border: 2px solid;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        .svc-promo-card h3 { font-size: .8rem; color: #222; margin-bottom: 6px; font-weight: 800; text-transform: uppercase; letter-spacing: .2px; }
+        .svc-promo-card p { font-size: .65rem; color: #555; line-height: 1.4; font-weight: 600; padding: 0 2px; }
+
+        .svc-promo-card .card-num {
+            position: absolute;
+            bottom: 3px; right: 3px;
+            width: 38px; height: 38px;
+            color: #fff; font-weight: 900; font-size: .85rem;
+            display: flex; align-items: flex-end; justify-content: flex-end;
+            padding: 0 7px 5px 0;
+            border-radius: 35px 0 11px 0;
+            z-index: 2;
+        }
+
+        /* ----- Color Themes ----- */
+        .svc-promo-card.c1::before { border-color: #cc0000; }
+        .svc-promo-card.c1 .logo-circle { background: #cc0000; }
+        .svc-promo-card.c1 .logo-circle::after { border-top-color: #cc0000; }
+        .svc-promo-card.c1 .logo-inner i { color: #cc0000; }
+        .svc-promo-card.c1 .logo-inner { border-color: #cc0000; }
+        .svc-promo-card.c1 .card-num { background: #cc0000; }
+
+        .svc-promo-card.c2::before { border-color: #fbbc04; }
+        .svc-promo-card.c2 .logo-circle { background: #fbbc04; }
+        .svc-promo-card.c2 .logo-circle::after { border-top-color: #fbbc04; }
+        .svc-promo-card.c2 .logo-inner i { color: #fbbc04; }
+        .svc-promo-card.c2 .logo-inner { border-color: #fbbc04; }
+        .svc-promo-card.c2 .card-num { background: #fbbc04; }
+
+        .svc-promo-card.c3::before { border-color: #7cb342; }
+        .svc-promo-card.c3 .logo-circle { background: #7cb342; }
+        .svc-promo-card.c3 .logo-circle::after { border-top-color: #7cb342; }
+        .svc-promo-card.c3 .logo-inner i { color: #7cb342; }
+        .svc-promo-card.c3 .logo-inner { border-color: #7cb342; }
+        .svc-promo-card.c3 .card-num { background: #7cb342; }
+
+        .svc-promo-card.c4::before { border-color: #039be5; }
+        .svc-promo-card.c4 .logo-circle { background: #039be5; }
+        .svc-promo-card.c4 .logo-circle::after { border-top-color: #039be5; }
+        .svc-promo-card.c4 .logo-inner i { color: #039be5; }
+        .svc-promo-card.c4 .logo-inner { border-color: #039be5; }
+        .svc-promo-card.c4 .card-num { background: #039be5; }
 
         /* ── Mode Tabs ── */
         .mode-tabs {
             display: flex;
             background: var(--light);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            gap: 4px;
         }
         .mode-tab {
-            flex: 1; padding: 9px; text-align: center;
-            border-radius: 8px; font-size: .84rem; font-weight: 600;
-            cursor: pointer; transition: all .3s;
+            flex: 1; padding: 10px; text-align: center;
+            border-radius: 9px; font-size: .84rem; font-weight: 700;
+            cursor: pointer; transition: all .3s cubic-bezier(.4,0,.2,1);
             color: var(--gray); border: none; background: transparent;
             font-family: inherit;
         }
         .mode-tab.active {
-            background: var(--navy); color: var(--white);
-            box-shadow: 0 4px 12px rgba(0,51,153,.3);
+            background: linear-gradient(135deg, var(--navy), var(--midblue));
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(0,51,153,.35);
+            transform: scale(1.02);
         }
 
         /* ── Section divider ── */
         .section-divider {
-            font-size: .72rem;
-            font-weight: 700;
+            font-size: .7rem;
+            font-weight: 800;
             color: var(--navy);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 4px 0 14px;
+            margin: 6px 0 14px;
         }
         .section-divider::before, .section-divider::after {
             content:''; flex:1; height:1px;
-            background: linear-gradient(90deg, transparent, rgba(0,51,153,.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,51,153,.18), transparent);
         }
 
         /* ── Input groups ── */
-        .input-group { margin-bottom: 15px; }
+        .input-group { margin-bottom: 14px; }
         .input-group label {
-            display: block; font-size: .81rem;
-            font-weight: 600; color: #374151; margin-bottom: 6px;
+            display: block; font-size: .80rem;
+            font-weight: 700; color: #374151; margin-bottom: 6px;
+            display: flex; align-items: center; gap: 5px;
         }
         .input-wrap { position: relative; }
-        .input-wrap span.ico {
-            position: absolute; left: 12px; top: 50%;
+        .input-wrap .ico {
+            position: absolute; left: 13px; top: 50%;
             transform: translateY(-50%); font-size: 15px;
             color: var(--gray); pointer-events: none;
+            transition: color .25s;
         }
         .input-wrap input {
-            width: 100%; padding: 11px 13px 11px 38px;
-            border: 1.5px solid #d1d5db; border-radius: 9px;
+            width: 100%; padding: 12px 14px 12px 40px;
+            border: 1.5px solid #e2e8f0; border-radius: 10px;
             font-size: .92rem; font-family: inherit; color: #111827;
-            transition: border-color .25s, box-shadow .25s;
-            background: #f9fafb;
+            transition: border-color .25s, box-shadow .25s, background .25s;
+            background: #f8fafc;
         }
         .input-wrap input::placeholder { color: #9ca3af; }
         .input-wrap input:focus {
-            outline: none; border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(0,51,153,.12);
+            outline: none; border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(245,166,35,.15);
             background: var(--white);
         }
+        .input-wrap input:focus + .ico,
+        .input-wrap input:focus ~ .ico { color: var(--gold); }
 
         /* Extra registration fields shown/hidden */
         .reg-only { display: none; }
 
         /* ── Button ── */
         .submit-btn {
-            width: 100%; padding: 13px;
-            background: linear-gradient(135deg, var(--navy), var(--blue));
-            color: var(--white); border: none; border-radius: 10px;
-            font-size: .98rem; font-weight: 700; font-family: inherit;
-            cursor: pointer; letter-spacing: .5px;
-            transition: all .3s; box-shadow: 0 6px 20px rgba(0,51,153,.35);
-            margin-top: 4px;
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 50%, var(--midblue) 100%);
+            background-size: 200%;
+            color: var(--white); border: none; border-radius: 12px;
+            font-size: .98rem; font-weight: 800; font-family: inherit;
+            cursor: pointer; letter-spacing: .8px;
+            transition: all .3s;
+            box-shadow: 0 6px 24px rgba(0,51,153,.4), inset 0 1px 0 rgba(255,255,255,.2);
+            margin-top: 6px;
+            position: relative;
+            overflow: hidden;
         }
-        .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,51,153,.45); }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.12) 50%, rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            transition: transform .5s ease;
+        }
+        .submit-btn:hover::before { transform: translateX(100%); }
+        .submit-btn:hover:not(:disabled) { 
+            transform: translateY(-2px); 
+            box-shadow: 0 12px 32px rgba(0,51,153,.5); 
+            background-position: right center;
+        }
         .submit-btn:active:not(:disabled) { transform: translateY(0); }
         .submit-btn:disabled { background: #9ca3af; box-shadow: none; cursor: not-allowed; }
 
         /* ── Status ── */
         #statusMsg {
             display: none; margin-top: 14px;
-            padding: 11px 14px; border-radius: 8px;
-            font-size: .84rem; font-weight: 500; text-align: center;
+            padding: 12px 16px; border-radius: 10px;
+            font-size: .84rem; font-weight: 600; text-align: center;
+            animation: fadeSlideUp .3s ease;
         }
+        @keyframes fadeSlideUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
         #statusMsg.success { background:#dcfce7; color:var(--success); border:1px solid #bbf7d0; }
         #statusMsg.error   { background:#fee2e2; color:var(--error);   border:1px solid #fecaca; }
         #statusMsg.info    { background:#dbeafe; color:#1d4ed8;        border:1px solid #bfdbfe; }
 
         /* ── Toggle hint ── */
         .card-footer-note { text-align: center; margin-top: 18px; font-size: .78rem; color: var(--gray); }
-        .card-footer-note a { color: var(--blue); text-decoration: none; font-weight: 600; }
+        .card-footer-note a { color: var(--blue); text-decoration: none; font-weight: 700; }
         .card-footer-note a:hover { text-decoration: underline; }
 
         /* ── Site credit ── */
         .site-credit {
-            margin-top: 20px; color: rgba(255,255,255,.45);
-            font-size: .74rem; text-align: center;
-            animation: fadeUp .7s .25s ease both;
+            margin-top: 20px; color: rgba(255,255,255,.40);
+            font-size: .72rem; text-align: center;
+            animation: fadeUp .7s .3s ease both;
         }
 
-        @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeDown { from { opacity:0; transform:translateY(-24px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeUp   { from { opacity:0; transform:translateY(24px);  } to { opacity:1; transform:translateY(0); } }
 
         /* ── Back Button ── */
         .back-btn {
             position: absolute;
-            top: 24px;
-            left: 24px;
+            top: 20px; left: 20px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
             color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 8px 18px;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: .85rem;
-            font-weight: 600;
+            font-size: .83rem;
+            font-weight: 700;
             transition: all .25s ease;
             z-index: 20;
+            letter-spacing: .3px;
         }
         .back-btn:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.22);
+            border-color: rgba(245,166,35,0.5);
             transform: translateX(-3px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.3);
         }
 
-        @media (max-width:768px) {
-            body { justify-content: center; padding: 24px 20px; align-items: center; }
-            .login-wrapper { max-width: 440px; margin-top: 40px; }
-            .back-btn { top: 16px; left: 16px; }
+        /* Security badge strip */
+        .security-strip {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
         }
-        @media (max-width:480px) { .auth-card { padding: 26px 18px 22px; } }
+        .sec-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .68rem;
+            font-weight: 700;
+            color: rgba(255,255,255,.55);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+        .sec-badge i { color: var(--gold); font-size: .75rem; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            body { justify-content: center; padding: 80px 16px 24px; align-items: flex-start; }
+            .login-wrapper { max-width: 100%; }
+            .back-btn { top: 14px; left: 14px; padding: 7px 13px; font-size: .78rem; }
+            .auth-card { padding: 28px 20px 22px; border-radius: 20px; }
+            .lock-icon { width: 72px; height: 72px; }
+        }
+        @media (max-width: 400px) {
+            .auth-card { padding: 22px 16px 18px; }
+            .mode-tab { font-size: .78rem; padding: 8px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Particles background -->
+    <div class="particles" id="particles"></div>
+
     <!-- Back to Dashboard -->
     <a href="after_log.html" class="back-btn">
-        <span style="font-size: 1.1rem;">←</span> Return to Portal
+        <i class="fas fa-arrow-left"></i> Return to Portal
     </a>
 
     <div class="login-wrapper">
-        <!-- Logo Badge -->
+        <!-- PRO Official Lock Badge -->
         <div class="page-badge">
-            <div class="lock-icon"><img src="../Assets/Logo.png" alt="Logo"></div>
+            <div class="lock-outer-ring">
+                <div class="lock-icon">
+                    <img src="../Assets/Logo.png" alt="CSC Logo">
+                </div>
+            </div>
+            <div>
+                <div class="pro-badge">
+                    <i class="fas fa-shield-alt"></i> Pro Official Portal
+                </div>
+            </div>
             <h1>CSC Baliapal Janaseba Kendra</h1>
-            <p>Secure Digital Services Portal</p>
+            <p>🔐 Secure Digital Services Portal · Verified Access</p>
+        </div>
+
+        <!-- Security badges -->
+        <div class="security-strip">
+            <div class="sec-badge"><i class="fas fa-lock"></i> SSL Secured</div>
+            <div class="sec-badge"><i class="fas fa-user-shield"></i> 256-bit Encrypted</div>
+            <div class="sec-badge"><i class="fas fa-check-circle"></i> CSC Verified</div>
         </div>
 
         <!-- Auth Card -->
@@ -278,87 +594,150 @@
                 <p id="subText">Sign in to access all portal features</p>
             </div>
 
-        <!-- Mode Tabs -->
-        <div class="mode-tabs">
-            <button class="mode-tab active" id="loginTab"    onclick="setMode('login')">🔑 Sign In</button>
-            <button class="mode-tab"        id="registerTab" onclick="setMode('register')">📋 Register</button>
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" id="loginTab"    onclick="setMode('login')">
+                    <i class="fas fa-key" style="margin-right:6px;font-size:.8rem;"></i>Sign In
+                </button>
+                <button class="mode-tab"        id="registerTab" onclick="setMode('register')">
+                    <i class="fas fa-user-plus" style="margin-right:6px;font-size:.8rem;"></i>Register
+                </button>
+            </div>
+
+            <form id="mainAuthForm" novalidate>
+
+                <!-- REGISTRATION-ONLY FIELDS -->
+                <div class="reg-only" id="regFields">
+                    <div class="section-divider">Personal Details</div>
+
+                    <div class="input-group">
+                        <label for="userName"><i class="fas fa-user" style="color:var(--gold);font-size:.8rem;"></i> Full Name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="userName" placeholder="Enter your full name" autocomplete="name">
+                            <i class="fas fa-user ico"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="userAddress"><i class="fas fa-map-marker-alt" style="color:var(--gold);font-size:.8rem;"></i> Address</label>
+                        <div class="input-wrap">
+                            <input type="text" id="userAddress" placeholder="Village / Town, District">
+                            <i class="fas fa-home ico"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="userCscId"><i class="fas fa-id-card" style="color:var(--gold);font-size:.8rem;"></i> CSC ID</label>
+                        <div class="input-wrap">
+                            <input type="text" id="userCscId" placeholder="e.g. MP100000001CSC">
+                            <i class="fas fa-id-badge ico"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="userMob"><i class="fas fa-mobile-alt" style="color:var(--gold);font-size:.8rem;"></i> Mobile Number</label>
+                        <div class="input-wrap">
+                            <input type="tel" id="userMob" placeholder="10-digit mobile number" maxlength="10">
+                            <i class="fas fa-phone ico"></i>
+                        </div>
+                    </div>
+
+                    <div class="section-divider">Login Credentials</div>
+                </div>
+
+                <!-- EMAIL & PASSWORD (always shown) -->
+                <div class="input-group">
+                    <label for="userEmail"><i class="fas fa-envelope" style="color:var(--gold);font-size:.8rem;"></i> Email Address</label>
+                    <div class="input-wrap">
+                        <input type="email" id="userEmail" placeholder="you@example.com" required autocomplete="email">
+                        <i class="fas fa-envelope ico"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="userPass"><i class="fas fa-lock" style="color:var(--gold);font-size:.8rem;"></i> Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="userPass" placeholder="Enter your password" required autocomplete="current-password">
+                        <i class="fas fa-lock ico"></i>
+                    </div>
+                </div>
+
+                <button type="submit" id="actionBtn" class="submit-btn">
+                    <i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In
+                </button>
+            </form>
+
+            <div id="statusMsg"></div>
+
+            <div class="card-footer-note">
+                <span id="toggleHint">New user? <a href="#" onclick="setMode('register'); return false;">Create an account</a></span>
+            </div>
         </div>
-
-        <form id="mainAuthForm" novalidate>
-
-            <!-- ── REGISTRATION-ONLY FIELDS ── -->
-            <div class="reg-only" id="regFields">
-                <div class="section-divider">Personal Details</div>
-
-                <div class="input-group">
-                    <label for="userName">Full Name</label>
-                    <div class="input-wrap">
-                        <span class="ico">👤</span>
-                        <input type="text" id="userName" placeholder="Enter your full name" autocomplete="name">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="userAddress">Address</label>
-                    <div class="input-wrap">
-                        <span class="ico">🏠</span>
-                        <input type="text" id="userAddress" placeholder="Village / Town, District">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="userCscId">CSC ID</label>
-                    <div class="input-wrap">
-                        <span class="ico">🪪</span>
-                        <input type="text" id="userCscId" placeholder="e.g. MP100000001CSC">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="userMob">Mobile Number</label>
-                    <div class="input-wrap">
-                        <span class="ico">📱</span>
-                        <input type="tel" id="userMob" placeholder="10-digit mobile number" maxlength="10">
-                    </div>
-                </div>
-
-                <div class="section-divider">Login Credentials</div>
-            </div>
-
-            <!-- ── EMAIL & PASSWORD (shown always) ── -->
-            <div class="input-group">
-                <label for="userEmail">Email Address</label>
-                <div class="input-wrap">
-                    <span class="ico">✉️</span>
-                    <input type="email" id="userEmail" placeholder="you@example.com" required autocomplete="email">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="userPass">Password</label>
-                <div class="input-wrap">
-                    <span class="ico">🔒</span>
-                    <input type="password" id="userPass" placeholder="Enter your password" required autocomplete="current-password">
-                </div>
-            </div>
-
-            <button type="submit" id="actionBtn" class="submit-btn">🔑 Sign In</button>
-        </form>
-
-        <div id="statusMsg"></div>
-
-        <div class="card-footer-note">
-            <span id="toggleHint">New user? <a href="#" onclick="setMode('register'); return false;">Create an account</a></span>
+        
+        <!-- Site Credit -->
+        <div class="site-credit">
+            <i class="fas fa-copyright" style="font-size:.65rem; margin-right:3px;"></i> 2026 Graphic Digital Service Portal &nbsp;·&nbsp; All Rights Reserved
         </div>
     </div>
-    
-    <!-- Site Credit inside the wrapper -->
-    <div class="site-credit">
-        © 2026 Graphic Digital Service Portal · All Rights Reserved
+
+    <!-- ── Right Side Promos ── -->
+    <div class="right-info-panel">
+        <div class="services-container">
+            <div class="svc-promo-card c1">
+                <div class="logo-circle">
+                    <div class="logo-inner"><i class="fa-solid fa-globe"></i></div>
+                </div>
+                <h3>Online Links</h3>
+                <p>Access all important government &amp; educational web portals instantly from one single dashboard.</p>
+                <div class="card-num">01</div>
+            </div>
+
+            <div class="svc-promo-card c2">
+                <div class="logo-circle">
+                    <div class="logo-inner"><i class="fa-solid fa-file-pdf"></i></div>
+                </div>
+                <h3>Online PDF Forms</h3>
+                <p>Download the latest updated PDF forms for Bills, Applications, Ration Cards and Schemes.</p>
+                <div class="card-num">02</div>
+            </div>
+
+            <div class="svc-promo-card c3">
+                <div class="logo-circle">
+                    <div class="logo-inner"><i class="fa-solid fa-laptop-code"></i></div>
+                </div>
+                <h3>CSC Services</h3>
+                <p>Providing essential digital services like Bill Payments, Insurances, and Banking to every citizen.</p>
+                <div class="card-num">03</div>
+            </div>
+
+            <div class="svc-promo-card c4">
+                <div class="logo-circle">
+                    <div class="logo-inner"><i class="fa-solid fa-fingerprint"></i></div>
+                </div>
+                <h3>Digital India</h3>
+                <p>Empowering rural areas through digital literacy and high-speed online registration services.</p>
+                <div class="card-num">04</div>
+            </div>
+        </div>
     </div>
-</div>
 
     <script>
+        /* ── Floating particles ── */
+        (function() {
+            const container = document.getElementById('particles');
+            const count = 18;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = p.style.height = (Math.random() * 3 + 1.5) + 'px';
+                p.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                p.style.background = Math.random() > 0.6 ? 'rgba(245,166,35,0.5)' : 'rgba(100,180,255,0.3)';
+                container.appendChild(p);
+            }
+        })();
+
         let currentMode = 'login';
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0tUjOnslrRUyhboL5rB2UqJUHE9czTwyPT1haV8sCa2imCVfFWkrPoYrVV29LYwXf/exec";
 
@@ -379,7 +758,7 @@
                 regFields.style.display = 'block';
                 title.innerText = 'Create Account';
                 sub.innerText   = 'Register to access all portal features';
-                btn.innerHTML   = '📋 Create Account';
+                btn.innerHTML   = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
                 hint.innerHTML  = "Already registered? <a href='#' onclick=\"setMode('login'); return false;\">Sign In</a>";
                 loginTab.classList.remove('active');
                 regTab.classList.add('active');
@@ -387,7 +766,7 @@
                 regFields.style.display = 'none';
                 title.innerText = 'Welcome Back';
                 sub.innerText   = 'Sign in to access all portal features';
-                btn.innerHTML   = '🔑 Sign In';
+                btn.innerHTML   = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
                 hint.innerHTML  = "New user? <a href='#' onclick=\"setMode('register'); return false;\">Create an account</a>";
                 regTab.classList.remove('active');
                 loginTab.classList.add('active');
@@ -396,7 +775,7 @@
 
         function showStatus(msg, type) {
             const el = document.getElementById('statusMsg');
-            el.innerText = msg;
+            el.innerHTML = msg;
             el.className = type;
             el.style.display = 'block';
         }
@@ -419,16 +798,15 @@
 
                 if (!name) { showStatus('⚠️ Please enter your full name.', 'error'); return; }
 
-                // Save profile to localStorage keyed by email
                 const profile = { name, address, cscId, mob, email };
                 const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
                 users[email] = profile;
                 localStorage.setItem('csc_users', JSON.stringify(users));
 
                 btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Saving…';
                 showStatus('⏳ Saving registration…', 'info');
 
-                // Send to Google Apps Script
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -441,7 +819,7 @@
                     setTimeout(() => setMode('login'), 2200);
                 })
                 .catch(() => {
-                    showStatus('✅ Registration saved locally! You can sign in now.', 'success');
+                    showStatus('✅ Registration saved! You can sign in now.', 'success');
                     btn.disabled = false;
                     setTimeout(() => setMode('login'), 2200);
                 });
@@ -449,9 +827,9 @@
             /* ── LOGIN ── */
             } else {
                 btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Connecting…';
                 showStatus('⏳ Connecting to server…', 'info');
 
-                // Load profile from localStorage
                 const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
                 if (users[email]) {
                     localStorage.setItem('csc_loggedIn', JSON.stringify(users[email]));
@@ -464,16 +842,17 @@
                     body: JSON.stringify({ action: 'login', email, password: pass })
                 })
                 .then(() => {
-                    // If no local profile exists, store minimal info
                     if (!users[email]) {
                         localStorage.setItem('csc_loggedIn', JSON.stringify({ email, name: '', address: '', cscId: '', mob: '' }));
                     }
                     showStatus('✅ Login successful! Redirecting…', 'success');
+                    btn.innerHTML = '<i class="fas fa-check" style="margin-right:8px;"></i>Success!';
                     setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
                 })
                 .catch(() => {
                     showStatus('❌ Connection error. Please try again.', 'error');
                     btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
                 });
             }
         });
