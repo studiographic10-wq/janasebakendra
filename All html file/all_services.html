@@ -1120,6 +1120,22 @@ const servicesData = {
         { name:"Odisha Adarsha Vidyalaya",   link:"https://oav.edu.in/" },
         { name:"Navodaya Vidyalaya",         link:"https://navodaya.gov.in/nvs/nvs-school/Cuttack/en/admission/Admission-Notifications/" },
         { name:"Banishree Scholarship",      link:"https://ssepd.gov.in:8443/swp/applyBanishreeScholarshipScheme.htm" }
+    ],
+    "Internal Tools & Forms": [
+        { name:"E-CARD printing 3.0",        link:"E-CARD-3.0.html" },
+        { name:"Pro ID Card Generator",      link:"id-card-generator.html" },
+        { name:"GST Billing Pro",            link:"GST_BILL.html" },
+        { name:"Cash Memo Generator",        link:"CSC Auto-Calculate Cash Memo.html" },
+        { name:"Online Affidavit Form",      link:"AFFIDAVIT-FORM.html" },
+        { name:"Bio-Data Form Generator",    link:"9-BIO-DATA FORM.html" },
+        { name:"Birth Certificate Form",     link:"birth_certificate_form.html" },
+        { name:"Farmer Registration Form",   link:"FARMAR FORM3.html" },
+        { name:"Farmer ID Generator",        link:"farmar_id_form.html" },
+        { name:"SHG Data Management",        link:"SHG DATA _ 2.0.html" },
+        { name:"Master Customer Form",       link:"master_customer_form.html" },
+        { name:"All-Purpose Master Form",    link:"master_form_allpurpose.html" },
+        { name:"Ration Card Application",    link:"ration_application_form.html" },
+        { name:"PDF Form Hub",               link:"pdf_form.html" }
     ]
 };
 
@@ -1132,7 +1148,8 @@ const catMeta = {
     "Central / Premium":   { icon:"🌟", color:"#f59e0b" },
     "Utilities & Banking": { icon:"🏦", color:"#7c3aed" },
     "Farmer & Labour":     { icon:"🌾", color:"#10b981" },
-    "Education & Training":{ icon:"🎓", color:"#ec4899" }
+    "Education & Training":{ icon:"🎓", color:"#ec4899" },
+    "Internal Tools & Forms":{ icon:"🛠️", color:"#f59e0b" }
 };
 
 function getServiceIcon(name) {
@@ -1156,6 +1173,11 @@ function getServiceIcon(name) {
     if (n.includes('shram')||n.includes('labour')||n.includes('nirman')) return '👷';
     if (n.includes('license')||n.includes('fssai')) return '📄';
     if (n.includes('digi')) return '📱';
+    if (n.includes('bill')||n.includes('memo')||n.includes('gst')) return '🧾';
+    if (n.includes('card')||n.includes('id')||n.includes('e-card')) return '🪪';
+    if (n.includes('form')||n.includes('affidavit')||n.includes('application')) return '📝';
+    if (n.includes('bio-data')) return '👤';
+    if (n.includes('shg')||n.includes('report')) return '📊';
     return '🔗';
 }
 
