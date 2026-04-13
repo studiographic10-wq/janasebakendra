@@ -821,7 +821,7 @@
         })();
 
         let currentMode = 'login';
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0tUjOnslrRUyhboL5rB2UqJUHE9czTwyPT1haV8sCa2imCVfFWkrPoYrVV29LYwXf/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzrCl3QzxEIbDNVuVZ_DkVADoxxQ76GsiDoi5-BOUirG7EF1ETPsyoJtt--kOyVtiMXw/exec";
 
         function setMode(mode) {
             currentMode = mode;
@@ -893,19 +893,43 @@
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'signup', email, password: pass, name, address, cscId, mobile: mob })
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ 
+                        action: 'signup', 
+                        email: email, 
+                        password: pass, 
+                        name: name,
+                        userName: name,
+                        Name: name,
+                        fullName: name,
+                        address: address, 
+                        cscId: cscId, 
+                        mobile: mob 
+                    })
                 })
-                .then(() => {
-                    showStatus('✅ Registration successful! You can now sign in.', 'success');
-                    btn.disabled = false;
-                    setTimeout(() => setMode('login'), 2200);
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.status === "success") {
+                        showStatus('✅ Registration successful! Accessing your portal...', 'success');
+                        
+                        // Set the logged in session immediately with the new data
+                        localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
+                        
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Account Created';
+                        setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
+                    } else {
+                        const errorMsg = data && data.message ? data.message : 'Registration could not be completed at this time.';
+                        showStatus('⚠️ ' + errorMsg, 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
+                    }
                 })
-                .catch(() => {
-                    showStatus('✅ Registration saved! You can sign in now.', 'success');
+                .catch(err => {
+                    console.error('Registration Error:', err);
+                    showStatus('⚠️ Connection Error. Please verify if your account was created or try again.', 'error');
                     btn.disabled = false;
-                    setTimeout(() => setMode('login'), 2200);
+                    btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
                 });
 
             /* ── LOGIN ── */
@@ -914,16 +938,6 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Authenticating…';
                 showStatus('<i class="fas fa-circle-notch fa-spin"></i> Securely verifying your credentials…', 'info');
 
-                const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
-                
-                // For demo/simulated login if the email exists in local storage
-                if (users[email]) {
-                    localStorage.setItem('csc_loggedIn', JSON.stringify(users[email]));
-                } else {
-                    // Default session for new logins during development
-                    localStorage.setItem('csc_loggedIn', JSON.stringify({ email, name: email.split('@')[0], address: 'Not Set', cscId: 'TEMP-USER', mob: '0000000000' }));
-                }
-
                 // If Remember Me is checked
                 if (document.getElementById('rememberMe').checked) {
                     localStorage.setItem('csc_remembered_email', email);
@@ -931,22 +945,41 @@
                     localStorage.removeItem('csc_remembered_email');
                 }
 
-                fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'login', email, password: pass })
+                // Verify with Google Sheets using GET (Most reliable for reading from GAS)
+                const verifyUrl = `${SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`;
+                
+                fetch(verifyUrl)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.status === "success") {
+                        // Data found and password matches
+                        // The user profile returned from the sheet
+                        const userProfile = {
+                            email: data.user.email || email,
+                            name: data.user.name || email.split('@')[0],
+                            address: data.user.address || 'Verified',
+                            cscId: data.user.cscId || 'VERIFIED',
+                            mob: data.user.mobile || data.user.mob || '–'
+                        };
+                        
+                        localStorage.setItem('csc_loggedIn', JSON.stringify(userProfile));
+                        
+                        showStatus('<i class="fas fa-check-double"></i> Authentication successful! Redirecting...', 'success');
+                        btn.innerHTML = '<i class="fas fa-shield-check" style="margin-right:8px;"></i>Access Granted';
+                        btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+                        setTimeout(() => { window.location.href = 'after_log.html'; }, 1200);
+                    } else {
+                        // Email not found or password incorrect
+                        showStatus('⚠️ You are not a Registered User, Register Your Self', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
+                    }
                 })
-                .then(() => {
-                    showStatus('<i class="fas fa-check-double"></i> Authentication successful! Redirecting...', 'success');
-                    btn.innerHTML = '<i class="fas fa-shield-check" style="margin-right:8px;"></i>Access Granted';
-                    btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
-                    setTimeout(() => { window.location.href = 'after_log.html'; }, 1200);
-                })
-                .catch(() => {
-                    // Fallback to offline/mock success for UI demonstration if network fails but local storage is OK
-                    showStatus('<i class="fas fa-check"></i> Session established in offline mode.', 'success');
-                    setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
+                .catch(err => {
+                    console.error('Verification Error:', err);
+                    showStatus('⚠️ You are not a Registered User, Register Your Self', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
                 });
             }
         });
