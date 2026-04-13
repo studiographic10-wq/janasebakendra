@@ -921,89 +921,6 @@
             font-size: .68rem;
         }
 
-
-        /* ═══════════════════════════════════════════
-           SCROLLING SIDEBAR (Blog Style)
-        ═══════════════════════════════════════════ */
-        .content-wrapper {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .sidebar {
-            width: 320px;
-            background: #ffffff;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 51, 153, 0.1);
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0, 51, 153, 0.05);
-            position: sticky;
-            top: 200px;
-            flex-shrink: 0;
-            overflow: hidden;
-            color: var(--text);
-            margin-top: 40px;
-        }
-        .sidebar-title {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1.5px solid var(--gold);
-            padding-bottom: 10px;
-        }
-        .sidebar-scroll-area {
-            height: 420px;
-            overflow: hidden;
-            position: relative;
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-            mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-        }
-        .sidebar-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 10px 0;
-            margin: 0;
-            animation: scrollVertical 25s linear infinite;
-        }
-        .sidebar-scroll-area:hover .sidebar-list { animation-play-state: paused; }
-        @keyframes scrollVertical {
-            0% { transform: translateY(420px); }
-            100% { transform: translateY(-100%); }
-        }
-        .sidebar-list li { border-bottom: 1px solid rgba(0,0,0,0.04); padding-bottom: 12px; }
-        .sidebar-list li:last-child { border-bottom: none; }
-        .sidebar-list a {
-            text-decoration: none;
-            color: #4b5563;
-            font-size: 13.5px;
-            font-weight: 600;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            transition: all 0.3s;
-            line-height: 1.4;
-        }
-        .sidebar-list a::before { content: '→'; color: var(--gold); font-weight: bold; }
-        .sidebar-list a:hover { color: var(--midblue); transform: translateX(4px); }
-        .sidebar-list .highlight-link { color: #dc2626; font-weight: 800; }
-        .sidebar-list .highlight-link::before { content: '🔥'; }
-
-        @media (max-width: 1150px) {
-            .content-wrapper { flex-direction: column; gap: 0; }
-            .sidebar { width: 100%; position: relative; top: 0; margin-top: 20px; display: none; }
-        }
-
         /* ═══════════════════════════════════════════
            ANIMATIONS
         ═══════════════════════════════════════════ */
@@ -1588,7 +1505,7 @@
 
     <aside class="profile-sidebar" id="profileSidebar">
         <div class="sb-avatar">
-            <div class="sb-avatar-circle"><img src="../Assets/Logo.png" alt="Logo" style="width: 70%; height: auto; object-fit: contain;"></div>
+            <div class="sb-avatar-circle">👤</div>
             <div class="sb-name" id="sbName">–</div>
             <div class="sb-email" id="sbEmail">–</div>
             <div class="sb-badge">🔐 Verified User</div>
@@ -1651,7 +1568,7 @@
     <header>
         <div class="hdr-brand">
             <div class="hdr-lock-outer">
-                <div class="hdr-lock"><img src="../Assets/Logo.png" alt="Logo" style="width: 85%; height: auto; object-fit: contain;"></div>
+                <div class="hdr-lock"><i class="fa-solid fa-lock" style="color: var(--blue); font-size: 22px;"></i></div>
             </div>
             <div class="hdr-text">
                 <h1>CSC Baliapal Janaseba Kendra</h1>
@@ -1811,23 +1728,9 @@
     </div>
 
     <!-- ══════════════════════════════════
-         MAIN CONTENT WRAPPER
+         MAIN
     ══════════════════════════════════ -->
-    <div class="content-wrapper">
-        
-        <!-- Left Scrolling Sidebar -->
-        <aside class="sidebar anim anim-d1">
-            <div class="sidebar-title">📌 Important Links</div>
-            <div class="sidebar-scroll-area">
-                <ul class="sidebar-list" id="sidebarLinkList">
-                    <li style="text-align:center; padding-top:20px; color:var(--gray); font-size:12px;">
-                        <i class="fas fa-spinner fa-spin"></i> Loading links...
-                    </li>
-                </ul>
-            </div>
-        </aside>
-
-        <main style="flex: 1; min-width: 0;">
+    <main>
 
         <!-- ═════════════════════════════════
              ABOUT US SECTION
@@ -1937,7 +1840,6 @@
         </div>
 
     </main>
-    </div>
 
     <!-- ══════════════════════════════════
          MOBILE BOTTOM NAVIGATION
@@ -2253,46 +2155,6 @@
             const drop = document.getElementById('hdrDropdown');
             if (drop) drop.classList.remove('show');
         });
-
-        /* ── Scrolling Sidebar Link Fetch Logic ── */
-        async function fetchSidebarLinks() {
-            const API_URL = "https://script.google.com/macros/s/AKfycby7aqBacioTCw0VIf1pI_eGp9Vxfk-487pWbdugP84iqgVFu1Y6_q7iMRDHLBPLKnWLtw/exec";
-            const sidebarList = document.getElementById('sidebarLinkList');
-            
-            try {
-                const res = await fetch(API_URL + "?type=links");
-                const links = await res.json();
-                
-                if (!links || links.length === 0) {
-                    sidebarList.innerHTML = `<li style="text-align:center; color:var(--gray); font-size:12px; border:none;">No active links found.</li>`;
-                    return;
-                }
-
-                sidebarList.innerHTML = '';
-                links.forEach(link => {
-                    const isHighlight = link.isHighlight === true || link.isHighlight === 'true';
-                    sidebarList.innerHTML += `
-                        <li>
-                            <a href="${link.url}" target="_blank" class="${isHighlight ? 'highlight-link' : ''}">
-                                ${link.title}
-                            </a>
-                        </li>
-                    `;
-                });
-
-                // Re-trigger animation to ensure smooth loop
-                sidebarList.style.animation = 'none';
-                sidebarList.offsetHeight; 
-                sidebarList.style.animation = null;
-
-            } catch (err) {
-                console.error("Sidebar Fetch Error:", err);
-                sidebarList.innerHTML = `<li style="text-align:center; color:var(--gray); font-size:11px; border:none;">Failed to load cloud updates.</li>`;
-            }
-        }
-
-        // Initialize sidebar fetch
-        window.addEventListener('load', fetchSidebarLinks);
     </script>
 
 </body>
