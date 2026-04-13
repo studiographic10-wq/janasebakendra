@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSC Baliapal – Secure User Access</title>
-    <meta name="description" content="Secure login and registration portal for CSC Baliapal Janaseba Kendra digital services.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="Secure login and registration portal for CSC Baliapal Janaseba Kendra digital services.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --navy:    #000b1d;
-            --blue:    #003399;
+            --navy: #000b1d;
+            --blue: #003399;
             --midblue: #0050cc;
-            --gold:    #f5a623;
+            --gold: #f5a623;
             --gold-light: #ffc25b;
             --gold-dk: #c47d00;
-            --light:   #f0f4ff;
-            --white:   #ffffff;
-            --gray:    #6b7280;
+            --light: #f0f4ff;
+            --white: #ffffff;
+            --gray: #6b7280;
             --gray-light: #9ca3af;
             --success: #059669;
-            --error:   #dc2626;
+            --error: #dc2626;
             --glass-bg: rgba(255, 255, 255, 0.94);
             --glass-border: rgba(245, 166, 35, 0.3);
         }
 
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -44,7 +53,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, rgba(0,15,60,0.95) 0%, rgba(0,51,153,0.85) 50%, rgba(0,80,204,0.70) 100%);
+            background: linear-gradient(135deg, rgba(0, 15, 60, 0.95) 0%, rgba(0, 51, 153, 0.85) 50%, rgba(0, 80, 204, 0.70) 100%);
             z-index: 0;
         }
 
@@ -54,16 +63,24 @@
             position: fixed;
             inset: 0;
             background-image:
-                radial-gradient(circle at 12% 22%, rgba(245,166,35,.35) 0%, transparent 42%),
-                radial-gradient(circle at 88% 75%, rgba(0,200,255,.15) 0%, transparent 40%),
-                radial-gradient(circle at 55% 90%, rgba(0,51,153,.2) 0%, transparent 35%);
+                radial-gradient(circle at 12% 22%, rgba(245, 166, 35, .35) 0%, transparent 42%),
+                radial-gradient(circle at 88% 75%, rgba(0, 200, 255, .15) 0%, transparent 40%),
+                radial-gradient(circle at 55% 90%, rgba(0, 51, 153, .2) 0%, transparent 35%);
             pointer-events: none;
             z-index: 0;
             animation: glowPulse 8s ease-in-out infinite;
         }
+
         @keyframes glowPulse {
-            0%,100% { opacity: 0.8; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         /* Animated particle dots */
@@ -74,18 +91,34 @@
             pointer-events: none;
             overflow: hidden;
         }
+
         .particle {
             position: absolute;
-            width: 3px; height: 3px;
-            background: rgba(245,166,35,0.6);
+            width: 3px;
+            height: 3px;
+            background: rgba(245, 166, 35, 0.6);
             border-radius: 50%;
             animation: floatUp linear infinite;
         }
+
         @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-20px) scale(1.5);
+                opacity: 0;
+            }
         }
 
         /* Group the logo and card together */
@@ -109,53 +142,63 @@
             position: relative;
             margin-bottom: 14px;
         }
+
         .lock-outer-ring::before {
             content: '';
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            background: conic-gradient(
-                var(--gold) 0deg,
-                #ffdd77 90deg,
-                rgba(245,166,35,0.2) 180deg,
-                var(--gold) 360deg
-            );
+            background: conic-gradient(var(--gold) 0deg,
+                    #ffdd77 90deg,
+                    rgba(245, 166, 35, 0.2) 180deg,
+                    var(--gold) 360deg);
             animation: spinRing 3s linear infinite;
             z-index: 0;
         }
+
         .lock-outer-ring::after {
             content: '';
             position: absolute;
             inset: -2px;
             border-radius: 50%;
-            background: rgba(0,20,60,0.9);
+            background: rgba(0, 20, 60, 0.9);
             z-index: 1;
         }
+
         @keyframes spinRing {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .lock-icon {
-            width: 84px; height: 84px;
+            width: 84px;
+            height: 84px;
             background: linear-gradient(145deg, #ffffff 0%, #f0f4ff 100%);
             border-radius: 50%;
-            display: inline-flex; align-items: center; justify-content: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             box-shadow:
-                0 0 0 4px rgba(245,166,35,0.4),
-                0 20px 50px rgba(0,0,0,0.5),
-                inset 0 2px 4px rgba(255,255,255,1);
+                0 0 0 4px rgba(245, 166, 35, 0.4),
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 1);
             overflow: hidden;
             animation: lockPulse 3.5s ease-in-out infinite;
             position: relative;
             z-index: 2;
-            border: 1px solid rgba(255,255,255,0.8);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
+
         .lock-icon img {
             width: 82%;
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         /* Inner glow ring on lock */
@@ -164,17 +207,20 @@
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.6) 0%, transparent 60%);
+            background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
             pointer-events: none;
         }
 
         @keyframes lockPulse {
-            0%,100% {
-                box-shadow: 0 0 0 3px rgba(245,166,35,0.5), 0 12px 40px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.8);
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.8);
                 transform: translateY(0) scale(1);
             }
+
             50% {
-                box-shadow: 0 0 0 6px rgba(245,166,35,0.25), 0 0 60px rgba(245,166,35,0.4), 0 16px 50px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.8);
+                box-shadow: 0 0 0 6px rgba(245, 166, 35, 0.25), 0 0 60px rgba(245, 166, 35, 0.4), 0 16px 50px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.8);
                 transform: translateY(-4px) scale(1.04);
             }
         }
@@ -193,36 +239,40 @@
             padding: 3px 12px;
             border-radius: 20px;
             margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(245,166,35,0.4);
+            box-shadow: 0 4px 12px rgba(245, 166, 35, 0.4);
         }
-        .pro-badge i { font-size: .6rem; }
+
+        .pro-badge i {
+            font-size: .6rem;
+        }
 
         .page-badge h1 {
-            color: var(--white); 
-            font-size: 1.05rem; 
-            font-weight: 800; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            color: var(--white);
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
             margin-top: 10px;
         }
-        .page-badge p  { 
-            color: rgba(255,255,255,.70); 
-            font-size: .76rem; 
-            margin-top: 4px; 
-            letter-spacing: .8px; 
+
+        .page-badge p {
+            color: rgba(255, 255, 255, .70);
+            font-size: .76rem;
+            margin-top: 4px;
+            letter-spacing: .8px;
         }
 
         /* ── Glassmorphism Auth Card ── */
         .auth-card {
-            background: rgba(255,255,255,0.97);
-            border: 1px solid rgba(245,166,35,0.4);
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid rgba(245, 166, 35, 0.4);
             border-radius: 24px;
             padding: 36px 34px 28px;
-            box-shadow: 
-                0 40px 100px rgba(0,0,0,0.6),
-                0 0 0 1px rgba(255,255,255,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow:
+                0 40px 100px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             animation: fadeUp .7s .1s ease both;
@@ -232,9 +282,11 @@
 
         /* Gold shimmer top bar */
         .auth-card::before {
-            content:'';
+            content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 4px;
             background: linear-gradient(90deg, var(--navy), var(--gold), #ffdd00, var(--gold), var(--navy));
             background-size: 300%;
@@ -245,24 +297,44 @@
         .auth-card::after {
             content: '🔐';
             position: absolute;
-            right: -10px; bottom: -10px;
+            right: -10px;
+            bottom: -10px;
             font-size: 80px;
             opacity: 0.04;
             pointer-events: none;
         }
-        @keyframes shimmer { 0% { background-position:0% 0; } 100% { background-position:300% 0; } }
 
-        .card-header { text-align: center; margin-bottom: 28px; }
-        .card-header h2 { 
-            color: var(--navy); 
-            font-size: 1.6rem; 
-            font-weight: 900; 
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 0;
+            }
+
+            100% {
+                background-position: 300% 0;
+            }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .card-header h2 {
+            color: var(--navy);
+            font-size: 1.6rem;
+            font-weight: 900;
             letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--navy), var(--blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .card-header p  { color: var(--gray); font-size: .85rem; margin-top: 6px; font-weight: 500; }
+
+        .card-header p {
+            color: var(--gray);
+            font-size: .85rem;
+            margin-top: 6px;
+            font-weight: 500;
+        }
 
         /* ── Right Side Promo Cards ── */
         .right-info-panel {
@@ -270,110 +342,246 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-left: 2vw; /* Reduced to provide more flex width for the 4 inline items */
+            padding-left: 2vw;
+            /* Reduced to provide more flex width for the 4 inline items */
             z-index: 10;
         }
+
         @media (max-width: 1024px) {
-            body { flex-direction: column; justify-content: flex-start; padding-top: 50px; }
-            .right-info-panel { padding-left: 0; padding-top: 50px; width: 100%; display: none; /* Hidden on mobile to keep login fast/clean */ }
+            body {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 50px;
+            }
+
+            .right-info-panel {
+                padding-left: 0;
+                padding-top: 50px;
+                width: 100%;
+                display: none;
+                /* Hidden on mobile to keep login fast/clean */
+            }
         }
+
         @media (min-width: 1025px) {
-            body { justify-content: space-between; }
+            body {
+                justify-content: space-between;
+            }
         }
+
         .services-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 boxes strictly in one line */
-            gap: 1cm; /* EXACT 1cm GAP AS REQUESTED */
+            grid-template-columns: repeat(4, 1fr);
+            /* 4 boxes strictly in one line */
+            gap: 1cm;
+            /* EXACT 1cm GAP AS REQUESTED */
             width: 100%;
             max-width: 1000px;
             animation: fadeUp .8s .3s ease both;
         }
+
         .svc-promo-card {
             position: relative;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 14px;
             text-align: center;
-            padding: 40px 6px 20px; /* Reduced paddings since boxes are thinner */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 40px 6px 20px;
+            /* Reduced paddings since boxes are thinner */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             transition: transform 0.3s ease;
-            margin-top: 35px; /* Overhang space for smaller circle */
+            margin-top: 35px;
+            /* Overhang space for smaller circle */
         }
-        .svc-promo-card:hover { transform: translateY(-5px); }
-        
+
+        .svc-promo-card:hover {
+            transform: translateY(-5px);
+        }
+
         .svc-promo-card::before {
-            content: ''; position: absolute;
-            top: 3px; left: 3px; right: 3px; bottom: 3px;
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
             border-radius: 11px;
-            border: 2px solid transparent; 
-            pointer-events: none; z-index: 1;
+            border: 2px solid transparent;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .svc-promo-card .logo-circle {
             position: absolute;
-            top: -35px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 70px; /* Scaled down for thinner box */
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            /* Scaled down for thinner box */
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 2;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .svc-promo-card .logo-circle::after {
-            content: ''; position: absolute;
-            bottom: -7px; left: 50%; transform: translateX(-50%);
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 11px solid; z-index: -1;
-        }
-        .svc-promo-card .logo-inner {
-            width: 48px; height: 48px; /* Scaled down */
-            background: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem; border: 2px solid;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .svc-promo-card h3 { font-size: .8rem; color: #222; margin-bottom: 6px; font-weight: 800; text-transform: uppercase; letter-spacing: .2px; }
-        .svc-promo-card p { font-size: .65rem; color: #555; line-height: 1.4; font-weight: 600; padding: 0 2px; }
+        .svc-promo-card .logo-circle::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 11px solid;
+            z-index: -1;
+        }
+
+        .svc-promo-card .logo-inner {
+            width: 48px;
+            height: 48px;
+            /* Scaled down */
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            border: 2px solid;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .svc-promo-card h3 {
+            font-size: .8rem;
+            color: #222;
+            margin-bottom: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .2px;
+        }
+
+        .svc-promo-card p {
+            font-size: .65rem;
+            color: #555;
+            line-height: 1.4;
+            font-weight: 600;
+            padding: 0 2px;
+        }
 
         .svc-promo-card .card-num {
             position: absolute;
-            bottom: 3px; right: 3px;
-            width: 38px; height: 38px;
-            color: #fff; font-weight: 900; font-size: .85rem;
-            display: flex; align-items: flex-end; justify-content: flex-end;
+            bottom: 3px;
+            right: 3px;
+            width: 38px;
+            height: 38px;
+            color: #fff;
+            font-weight: 900;
+            font-size: .85rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
             padding: 0 7px 5px 0;
             border-radius: 35px 0 11px 0;
             z-index: 2;
         }
 
         /* ----- Color Themes ----- */
-        .svc-promo-card.c1::before { border-color: #cc0000; }
-        .svc-promo-card.c1 .logo-circle { background: #cc0000; }
-        .svc-promo-card.c1 .logo-circle::after { border-top-color: #cc0000; }
-        .svc-promo-card.c1 .logo-inner i { color: #cc0000; }
-        .svc-promo-card.c1 .logo-inner { border-color: #cc0000; }
-        .svc-promo-card.c1 .card-num { background: #cc0000; }
+        .svc-promo-card.c1::before {
+            border-color: #cc0000;
+        }
 
-        .svc-promo-card.c2::before { border-color: #fbbc04; }
-        .svc-promo-card.c2 .logo-circle { background: #fbbc04; }
-        .svc-promo-card.c2 .logo-circle::after { border-top-color: #fbbc04; }
-        .svc-promo-card.c2 .logo-inner i { color: #fbbc04; }
-        .svc-promo-card.c2 .logo-inner { border-color: #fbbc04; }
-        .svc-promo-card.c2 .card-num { background: #fbbc04; }
+        .svc-promo-card.c1 .logo-circle {
+            background: #cc0000;
+        }
 
-        .svc-promo-card.c3::before { border-color: #7cb342; }
-        .svc-promo-card.c3 .logo-circle { background: #7cb342; }
-        .svc-promo-card.c3 .logo-circle::after { border-top-color: #7cb342; }
-        .svc-promo-card.c3 .logo-inner i { color: #7cb342; }
-        .svc-promo-card.c3 .logo-inner { border-color: #7cb342; }
-        .svc-promo-card.c3 .card-num { background: #7cb342; }
+        .svc-promo-card.c1 .logo-circle::after {
+            border-top-color: #cc0000;
+        }
 
-        .svc-promo-card.c4::before { border-color: #039be5; }
-        .svc-promo-card.c4 .logo-circle { background: #039be5; }
-        .svc-promo-card.c4 .logo-circle::after { border-top-color: #039be5; }
-        .svc-promo-card.c4 .logo-inner i { color: #039be5; }
-        .svc-promo-card.c4 .logo-inner { border-color: #039be5; }
-        .svc-promo-card.c4 .card-num { background: #039be5; }
+        .svc-promo-card.c1 .logo-inner i {
+            color: #cc0000;
+        }
+
+        .svc-promo-card.c1 .logo-inner {
+            border-color: #cc0000;
+        }
+
+        .svc-promo-card.c1 .card-num {
+            background: #cc0000;
+        }
+
+        .svc-promo-card.c2::before {
+            border-color: #fbbc04;
+        }
+
+        .svc-promo-card.c2 .logo-circle {
+            background: #fbbc04;
+        }
+
+        .svc-promo-card.c2 .logo-circle::after {
+            border-top-color: #fbbc04;
+        }
+
+        .svc-promo-card.c2 .logo-inner i {
+            color: #fbbc04;
+        }
+
+        .svc-promo-card.c2 .logo-inner {
+            border-color: #fbbc04;
+        }
+
+        .svc-promo-card.c2 .card-num {
+            background: #fbbc04;
+        }
+
+        .svc-promo-card.c3::before {
+            border-color: #7cb342;
+        }
+
+        .svc-promo-card.c3 .logo-circle {
+            background: #7cb342;
+        }
+
+        .svc-promo-card.c3 .logo-circle::after {
+            border-top-color: #7cb342;
+        }
+
+        .svc-promo-card.c3 .logo-inner i {
+            color: #7cb342;
+        }
+
+        .svc-promo-card.c3 .logo-inner {
+            border-color: #7cb342;
+        }
+
+        .svc-promo-card.c3 .card-num {
+            background: #7cb342;
+        }
+
+        .svc-promo-card.c4::before {
+            border-color: #039be5;
+        }
+
+        .svc-promo-card.c4 .logo-circle {
+            background: #039be5;
+        }
+
+        .svc-promo-card.c4 .logo-circle::after {
+            border-top-color: #039be5;
+        }
+
+        .svc-promo-card.c4 .logo-inner i {
+            color: #039be5;
+        }
+
+        .svc-promo-card.c4 .logo-inner {
+            border-color: #039be5;
+        }
+
+        .svc-promo-card.c4 .card-num {
+            background: #039be5;
+        }
 
         /* ── Mode Tabs ── */
         .mode-tabs {
@@ -384,17 +592,26 @@
             margin-bottom: 22px;
             gap: 4px;
         }
+
         .mode-tab {
-            flex: 1; padding: 10px; text-align: center;
-            border-radius: 9px; font-size: .84rem; font-weight: 700;
-            cursor: pointer; transition: all .3s cubic-bezier(.4,0,.2,1);
-            color: var(--gray); border: none; background: transparent;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 9px;
+            font-size: .84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s cubic-bezier(.4, 0, .2, 1);
+            color: var(--gray);
+            border: none;
+            background: transparent;
             font-family: inherit;
         }
+
         .mode-tab.active {
             background: linear-gradient(135deg, var(--navy), var(--midblue));
             color: var(--white);
-            box-shadow: 0 4px 14px rgba(0,51,153,.35);
+            box-shadow: 0 4px 14px rgba(0, 51, 153, .35);
             transform: scale(1.02);
         }
 
@@ -410,46 +627,77 @@
             gap: 8px;
             margin: 6px 0 14px;
         }
-        .section-divider::before, .section-divider::after {
-            content:''; flex:1; height:1px;
-            background: linear-gradient(90deg, transparent, rgba(0,51,153,.18), transparent);
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 51, 153, .18), transparent);
         }
 
         /* ── Input groups ── */
-        .input-group { margin-bottom: 14px; }
-        .input-group label {
-            display: block; font-size: .80rem;
-            font-weight: 700; color: #374151; margin-bottom: 6px;
-            display: flex; align-items: center; gap: 5px;
+        .input-group {
+            margin-bottom: 14px;
         }
-        .input-wrap { position: relative; }
+
+        .input-group label {
+            display: block;
+            font-size: .80rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
         .input-wrap .ico {
-            position: absolute; left: 13px; top: 50%;
-            transform: translateY(-50%); font-size: 15px;
-            color: var(--gray); pointer-events: none;
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 15px;
+            color: var(--gray);
+            pointer-events: none;
             transition: color .25s;
         }
+
         .input-wrap input {
-            width: 100%; padding: 13px 14px 13px 42px;
-            border: 1.5px solid #e2e8f0; border-radius: 12px;
-            font-size: .95rem; font-family: inherit; color: #111827;
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: .95rem;
+            font-family: inherit;
+            color: #111827;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(248, 250, 252, 0.8);
         }
-        .input-wrap input::placeholder { color: #9ca3af; font-weight: 400; }
+
+        .input-wrap input::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
         .input-wrap input:focus {
-            outline: none; 
+            outline: none;
             border-color: var(--gold);
-            box-shadow: 
+            box-shadow:
                 0 0 0 4px rgba(245, 166, 35, 0.15),
                 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             background: var(--white);
             transform: translateY(-1px);
         }
-        .input-wrap input:focus + .ico { 
-            color: var(--gold); 
-            transform: translateY(-50%) scale(1.15); 
-            filter: drop-shadow(0 0 2px rgba(245,166,35,0.4));
+
+        .input-wrap input:focus+.ico {
+            color: var(--gold);
+            transform: translateY(-50%) scale(1.15);
+            filter: drop-shadow(0 0 2px rgba(245, 166, 35, 0.4));
         }
 
         /* Password Toggle */
@@ -464,61 +712,145 @@
             padding: 5px;
             transition: color 0.2s;
         }
-        .pass-toggle:hover { color: var(--navy); }
+
+        .pass-toggle:hover {
+            color: var(--navy);
+        }
 
         /* Extra registration fields shown/hidden */
-        .reg-only { display: none; }
+        .reg-only {
+            display: none;
+        }
 
         /* ── Button ── */
         .submit-btn {
-            width: 100%; padding: 15px;
+            width: 100%;
+            padding: 15px;
             background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 50%, #001f4d 100%);
             background-size: 200% auto;
-            color: var(--white); border: none; border-radius: 12px;
-            font-size: 1rem; font-weight: 800; font-family: inherit;
-            cursor: pointer; letter-spacing: 1px;
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            letter-spacing: 1px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 30px rgba(0,51,153,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+            box-shadow: 0 8px 30px rgba(0, 51, 153, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             margin-top: 15px;
             position: relative;
             z-index: 1;
         }
-        .submit-btn:hover:not(:disabled) { 
+
+        .submit-btn:hover:not(:disabled) {
             background-position: right center;
-            transform: translateY(-2px); 
-            box-shadow: 0 15px 35px rgba(0,51,153,0.45); 
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 51, 153, 0.45);
         }
+
         .submit-btn::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transform: translateX(-100%);
             transition: 0.6s;
             z-index: -1;
         }
-        .submit-btn:hover::before { transform: translateX(100%); }
-        .submit-btn:active:not(:disabled) { transform: translateY(0); }
-        .submit-btn:disabled { background: #9ca3af; box-shadow: none; cursor: not-allowed; }
+
+        .submit-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
 
         /* ── Status ── */
         #statusMsg {
-            display: none; margin-top: 14px;
-            padding: 12px 16px; border-radius: 10px;
-            font-size: .84rem; font-weight: 600; text-align: center;
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: .84rem;
+            font-weight: 600;
+            text-align: center;
             animation: fadeSlideUp .3s ease;
         }
-        @keyframes fadeSlideUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-        #statusMsg.success { background:#dcfce7; color:var(--success); border:1px solid #bbf7d0; }
-        #statusMsg.error   { background:#fee2e2; color:var(--error);   border:1px solid #fecaca; }
-        #statusMsg.info    { background:#dbeafe; color:#1d4ed8;        border:1px solid #bfdbfe; }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #statusMsg.success {
+            background: #dcfce7;
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+
+        #statusMsg.error {
+            background: #fee2e2;
+            color: var(--error);
+            border: 1px solid #fecaca;
+        }
+
+        #statusMsg.info {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
 
         /* ── Toggle hint ── */
-        .card-footer-note { text-align: center; margin-top: 24px; font-size: .8rem; color: var(--gray); border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; }
-        .card-footer-note a { color: var(--blue); text-decoration: none; font-weight: 700; transition: all 0.2s; position: relative; }
-        .card-footer-note a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1.5px; background: var(--blue); transition: width 0.3s; }
-        .card-footer-note a:hover::after { width: 100%; }
-        .card-footer-note a:hover { color: var(--midblue); }
+        .card-footer-note {
+            text-align: center;
+            margin-top: 24px;
+            font-size: .8rem;
+            color: var(--gray);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 20px;
+        }
+
+        .card-footer-note a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .card-footer-note a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--blue);
+            transition: width 0.3s;
+        }
+
+        .card-footer-note a:hover::after {
+            width: 100%;
+        }
+
+        .card-footer-note a:hover {
+            color: var(--midblue);
+        }
 
         /* Auth Divider */
         .auth-divider {
@@ -531,36 +863,63 @@
             font-weight: 700;
             letter-spacing: 1px;
         }
-        .auth-divider::before, .auth-divider::after {
+
+        .auth-divider::before,
+        .auth-divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
+
         .auth-divider span {
             padding: 0 12px;
         }
 
         /* ── Site credit ── */
         .site-credit {
-            margin-top: 20px; color: rgba(255,255,255,.40);
-            font-size: .72rem; text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, .40);
+            font-size: .72rem;
+            text-align: center;
             animation: fadeUp .7s .3s ease both;
         }
 
-        @keyframes fadeDown { from { opacity:0; transform:translateY(-24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeUp   { from { opacity:0; transform:translateY(24px);  } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* ── Back Button ── */
         .back-btn {
             position: absolute;
-            top: 20px; left: 20px;
+            top: 20px;
+            left: 20px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             color: #ffffff;
             padding: 8px 18px;
             border-radius: 10px;
@@ -571,11 +930,12 @@
             z-index: 20;
             letter-spacing: .3px;
         }
+
         .back-btn:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255, 255, 255, 0.25);
             border-color: var(--gold);
             transform: translateX(-5px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             color: var(--gold-light);
         }
 
@@ -587,32 +947,66 @@
             margin-bottom: 18px;
             flex-wrap: wrap;
         }
+
         .sec-badge {
             display: flex;
             align-items: center;
             gap: 5px;
             font-size: .68rem;
             font-weight: 700;
-            color: rgba(255,255,255,.55);
+            color: rgba(255, 255, 255, .55);
             letter-spacing: .5px;
             text-transform: uppercase;
         }
-        .sec-badge i { color: var(--gold); font-size: .75rem; }
+
+        .sec-badge i {
+            color: var(--gold);
+            font-size: .75rem;
+        }
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-            body { justify-content: center; padding: 80px 16px 24px; align-items: flex-start; }
-            .login-wrapper { max-width: 100%; }
-            .back-btn { top: 14px; left: 14px; padding: 7px 13px; font-size: .78rem; }
-            .auth-card { padding: 28px 20px 22px; border-radius: 20px; }
-            .lock-icon { width: 72px; height: 72px; }
+            body {
+                justify-content: center;
+                padding: 80px 16px 24px;
+                align-items: flex-start;
+            }
+
+            .login-wrapper {
+                max-width: 100%;
+            }
+
+            .back-btn {
+                top: 14px;
+                left: 14px;
+                padding: 7px 13px;
+                font-size: .78rem;
+            }
+
+            .auth-card {
+                padding: 28px 20px 22px;
+                border-radius: 20px;
+            }
+
+            .lock-icon {
+                width: 72px;
+                height: 72px;
+            }
         }
+
         @media (max-width: 400px) {
-            .auth-card { padding: 22px 16px 18px; }
-            .mode-tab { font-size: .78rem; padding: 8px; }
+            .auth-card {
+                padding: 22px 16px 18px;
+            }
+
+            .mode-tab {
+                font-size: .78rem;
+                padding: 8px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Particles background -->
@@ -628,7 +1022,7 @@
         <div class="page-badge">
             <div class="lock-outer-ring">
                 <div class="lock-icon">
-                    <i class="fa-solid fa-lock" style="font-size: 42px; color: var(--navy); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"></i>
+                    <img src="../Assets/Logo.png" alt="CSC Logo" style="width: 85%; height: auto; object-fit: contain;">
                 </div>
             </div>
             <div>
@@ -656,10 +1050,10 @@
 
             <!-- Mode Tabs -->
             <div class="mode-tabs">
-                <button class="mode-tab active" id="loginTab"    onclick="setMode('login')">
+                <button class="mode-tab active" id="loginTab" onclick="setMode('login')">
                     <i class="fas fa-key" style="margin-right:6px;font-size:.8rem;"></i>Sign In
                 </button>
-                <button class="mode-tab"        id="registerTab" onclick="setMode('register')">
+                <button class="mode-tab" id="registerTab" onclick="setMode('register')">
                     <i class="fas fa-user-plus" style="margin-right:6px;font-size:.8rem;"></i>Register
                 </button>
             </div>
@@ -671,7 +1065,8 @@
                     <div class="section-divider">Personal Details</div>
 
                     <div class="input-group">
-                        <label for="userName"><i class="fas fa-user" style="color:var(--gold);font-size:.8rem;"></i> Full Name</label>
+                        <label for="userName"><i class="fas fa-user" style="color:var(--gold);font-size:.8rem;"></i>
+                            Full Name</label>
                         <div class="input-wrap">
                             <input type="text" id="userName" placeholder="Enter your full name" autocomplete="name">
                             <i class="fas fa-user ico"></i>
@@ -679,7 +1074,8 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="userAddress"><i class="fas fa-map-marker-alt" style="color:var(--gold);font-size:.8rem;"></i> Address</label>
+                        <label for="userAddress"><i class="fas fa-map-marker-alt"
+                                style="color:var(--gold);font-size:.8rem;"></i> Address</label>
                         <div class="input-wrap">
                             <input type="text" id="userAddress" placeholder="Village / Town, District">
                             <i class="fas fa-home ico"></i>
@@ -687,7 +1083,8 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="userCscId"><i class="fas fa-id-card" style="color:var(--gold);font-size:.8rem;"></i> CSC ID</label>
+                        <label for="userCscId"><i class="fas fa-id-card" style="color:var(--gold);font-size:.8rem;"></i>
+                            CSC ID</label>
                         <div class="input-wrap">
                             <input type="text" id="userCscId" placeholder="e.g. MP100000001CSC">
                             <i class="fas fa-id-badge ico"></i>
@@ -695,7 +1092,8 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="userMob"><i class="fas fa-mobile-alt" style="color:var(--gold);font-size:.8rem;"></i> Mobile Number</label>
+                        <label for="userMob"><i class="fas fa-mobile-alt"
+                                style="color:var(--gold);font-size:.8rem;"></i> Mobile Number</label>
                         <div class="input-wrap">
                             <input type="tel" id="userMob" placeholder="10-digit mobile number" maxlength="10">
                             <i class="fas fa-phone ico"></i>
@@ -707,7 +1105,8 @@
 
                 <!-- EMAIL & PASSWORD (always shown) -->
                 <div class="input-group">
-                    <label for="userEmail"><i class="fas fa-envelope" style="color:var(--gold);font-size:.8rem;"></i> Email Address</label>
+                    <label for="userEmail"><i class="fas fa-envelope" style="color:var(--gold);font-size:.8rem;"></i>
+                        Email Address</label>
                     <div class="input-wrap">
                         <input type="email" id="userEmail" placeholder="you@example.com" required autocomplete="email">
                         <i class="fas fa-envelope ico"></i>
@@ -715,17 +1114,21 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="userPass"><i class="fas fa-lock" style="color:var(--gold);font-size:.8rem;"></i> Password</label>
+                    <label for="userPass"><i class="fas fa-lock" style="color:var(--gold);font-size:.8rem;"></i>
+                        Password</label>
                     <div class="input-wrap">
-                        <input type="password" id="userPass" placeholder="Enter your password" required autocomplete="current-password">
+                        <input type="password" id="userPass" placeholder="Enter your password" required
+                            autocomplete="current-password">
                         <i class="fas fa-lock ico"></i>
                         <i class="fas fa-eye pass-toggle" id="passToggle" onclick="togglePassword()"></i>
                     </div>
                 </div>
 
                 <div class="input-group" style="margin-top: 5px; margin-bottom: 25px;">
-                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.78rem; color: var(--gray);">
-                        <input type="checkbox" id="rememberMe" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--gold); border-radius: 4px;"> 
+                    <label
+                        style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.78rem; color: var(--gray);">
+                        <input type="checkbox" id="rememberMe"
+                            style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--gold); border-radius: 4px;">
                         Remember this device for faster access
                     </label>
                 </div>
@@ -738,10 +1141,11 @@
                         <span>OR</span>
                     </div>
                     <div style="text-align: center;">
-                         <p style="font-size: 0.72rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <i class="fas fa-user-shield" style="color: var(--gold);"></i> 
+                        <p
+                            style="font-size: 0.72rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <i class="fas fa-user-shield" style="color: var(--gold);"></i>
                             Owner Verification Required for Activation
-                         </p>
+                        </p>
                     </div>
                 </div>
             </form>
@@ -750,15 +1154,19 @@
 
             <div class="card-footer-note">
                 <div style="margin-bottom: 8px;">
-                    <a href="#" onclick="showStatus('ℹ️ Please contact the administrator (9937744314) in Whatsapp to reset your password.', 'info'); return false;" style="font-size: 0.75rem; color: var(--gray); font-weight: 500;">Forgot Password?</a>
+                    <a href="#"
+                        onclick="showStatus('ℹ️ Please contact the administrator (9937744314) in Whatsapp to reset your password.', 'info'); return false;"
+                        style="font-size: 0.75rem; color: var(--gray); font-weight: 500;">Forgot Password?</a>
                 </div>
-                <span id="toggleHint">New user? <a href="#" onclick="setMode('register'); return false;">Create a secure account</a></span>
+                <span id="toggleHint">New user? <a href="#" onclick="setMode('register'); return false;">Create a secure
+                        account</a></span>
             </div>
         </div>
-        
+
         <!-- Site Credit -->
         <div class="site-credit">
-            <i class="fas fa-copyright" style="font-size:.65rem; margin-right:3px;"></i> 2026 Graphic Digital Service Portal &nbsp;·&nbsp; All Rights Reserved
+            <i class="fas fa-copyright" style="font-size:.65rem; margin-right:3px;"></i> 2026 Graphic Digital Service
+            Portal &nbsp;·&nbsp; All Rights Reserved
         </div>
     </div>
 
@@ -770,7 +1178,8 @@
                     <div class="logo-inner"><i class="fa-solid fa-globe"></i></div>
                 </div>
                 <h3>Premium Web Portals</h3>
-                <p>Curated directory of top-tier government and educational portals, accessible via a unified secure dashboard.</p>
+                <p>Curated directory of top-tier government and educational portals, accessible via a unified secure
+                    dashboard.</p>
                 <div class="card-num">01</div>
             </div>
 
@@ -779,7 +1188,8 @@
                     <div class="logo-inner"><i class="fa-solid fa-file-pdf"></i></div>
                 </div>
                 <h3>E-Document Hub</h3>
-                <p>Instant access to official PDF forms for utility bills, applications, and government schemes, updated daily.</p>
+                <p>Instant access to official PDF forms for utility bills, applications, and government schemes, updated
+                    daily.</p>
                 <div class="card-num">02</div>
             </div>
 
@@ -788,7 +1198,8 @@
                     <div class="logo-inner"><i class="fa-solid fa-laptop-code"></i></div>
                 </div>
                 <h3>Digital Banking</h3>
-                <p>Comprehensive digital solutions including insurance, utility payments, and secure banking for every citizen.</p>
+                <p>Comprehensive digital solutions including insurance, utility payments, and secure banking for every
+                    citizen.</p>
                 <div class="card-num">03</div>
             </div>
 
@@ -797,7 +1208,8 @@
                     <div class="logo-inner"><i class="fa-solid fa-fingerprint"></i></div>
                 </div>
                 <h3>Smart Governance</h3>
-                <p>Empowering the community with advanced digital literacy and expedited online registration services.</p>
+                <p>Empowering the community with advanced digital literacy and expedited online registration services.
+                </p>
                 <div class="card-num">04</div>
             </div>
         </div>
@@ -805,7 +1217,7 @@
 
     <script>
         /* ── Floating particles ── */
-        (function() {
+        (function () {
             const container = document.getElementById('particles');
             const count = 18;
             for (let i = 0; i < count; i++) {
@@ -826,30 +1238,30 @@
         function setMode(mode) {
             currentMode = mode;
             const regFields = document.getElementById('regFields');
-            const title     = document.getElementById('titleText');
-            const sub       = document.getElementById('subText');
-            const btn       = document.getElementById('actionBtn');
-            const hint      = document.getElementById('toggleHint');
-            const loginTab  = document.getElementById('loginTab');
-            const regTab    = document.getElementById('registerTab');
-            const status    = document.getElementById('statusMsg');
+            const title = document.getElementById('titleText');
+            const sub = document.getElementById('subText');
+            const btn = document.getElementById('actionBtn');
+            const hint = document.getElementById('toggleHint');
+            const loginTab = document.getElementById('loginTab');
+            const regTab = document.getElementById('registerTab');
+            const status = document.getElementById('statusMsg');
 
             status.style.display = 'none';
 
             if (mode === 'register') {
                 regFields.style.display = 'block';
                 title.innerText = 'Create Account';
-                sub.innerText   = 'Register to access all portal features';
-                btn.innerHTML   = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
-                hint.innerHTML  = "Already registered? <a href='#' onclick=\"setMode('login'); return false;\">Sign In</a>";
+                sub.innerText = 'Register to access all portal features';
+                btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
+                hint.innerHTML = "Already registered? <a href='#' onclick=\"setMode('login'); return false;\">Sign In</a>";
                 loginTab.classList.remove('active');
                 regTab.classList.add('active');
             } else {
                 regFields.style.display = 'none';
                 title.innerText = 'Welcome Back';
-                sub.innerText   = 'Sign in to access all portal features';
-                btn.innerHTML   = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
-                hint.innerHTML  = "New user? <a href='#' onclick=\"setMode('register'); return false;\">Create an account</a>";
+                sub.innerText = 'Sign in to access all portal features';
+                btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
+                hint.innerHTML = "New user? <a href='#' onclick=\"setMode('register'); return false;\">Create an account</a>";
                 regTab.classList.remove('active');
                 loginTab.classList.add('active');
             }
@@ -862,12 +1274,12 @@
             el.style.display = 'block';
         }
 
-        document.getElementById('mainAuthForm').addEventListener('submit', function(e) {
+        document.getElementById('mainAuthForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const email = document.getElementById('userEmail').value.trim();
-            const pass  = document.getElementById('userPass').value;
-            const btn   = document.getElementById('actionBtn');
+            const pass = document.getElementById('userPass').value;
+            const btn = document.getElementById('actionBtn');
 
             if (!email || !pass) { showStatus('<i class="fas fa-exclamation-triangle"></i> Please fill in all required fields.', 'error'); return; }
             if (email.indexOf('@') === -1) { showStatus('<i class="fas fa-envelope"></i> Please enter a valid email address.', 'error'); return; }
@@ -875,14 +1287,14 @@
 
             /* ── REGISTRATION ── */
             if (currentMode === 'register') {
-                const name    = document.getElementById('userName').value.trim();
+                const name = document.getElementById('userName').value.trim();
                 const address = document.getElementById('userAddress').value.trim();
-                const cscId   = document.getElementById('userCscId').value.trim();
-                const mob     = document.getElementById('userMob').value.trim();
+                const cscId = document.getElementById('userCscId').value.trim();
+                const mob = document.getElementById('userMob').value.trim();
 
-                if (!name || !address || !cscId || !mob) { 
-                    showStatus('⚠️ Please fill in all registration fields.', 'error'); 
-                    return; 
+                if (!name || !address || !cscId || !mob) {
+                    showStatus('⚠️ Please fill in all registration fields.', 'error');
+                    return;
                 }
 
                 btn.disabled = true;
@@ -903,39 +1315,39 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(res => res.text())
-                .then(text => {
-                    let data;
-                    try { data = JSON.parse(text); } catch(e) { data = { status: 'error' }; } 
-                    
-                    if (data && data.status === "success") {
-                        // Registration data to save locally for session
-                        const profile = { name, address, cscId, mob, email, pass };
-                        
-                        // Sync local fallback database
-                        const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
-                        users[email] = profile;
-                        localStorage.setItem('csc_users', JSON.stringify(users));
-                        
-                        showStatus('✅ Registration successful! Accessing your portal...', 'success');
-                        localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Account Created';
-                        setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
-                    } else {
-                        showStatus('❌ ' + (data.message || 'Registration failed on cloud. Please try again.'), 'error');
+                    .then(res => res.text())
+                    .then(text => {
+                        let data;
+                        try { data = JSON.parse(text); } catch (e) { data = { status: 'error' }; }
+
+                        if (data && data.status === "success") {
+                            // Registration data to save locally for session
+                            const profile = { name, address, cscId, mob, email, pass };
+
+                            // Sync local fallback database
+                            const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
+                            users[email] = profile;
+                            localStorage.setItem('csc_users', JSON.stringify(users));
+
+                            showStatus('✅ Registration successful! Accessing your portal...', 'success');
+                            localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Account Created';
+                            setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
+                        } else {
+                            showStatus('❌ ' + (data.message || 'Registration failed on cloud. Please try again.'), 'error');
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Registration Error:', err);
+                        showStatus('❌ Network error. Please check your internet connection.', 'error');
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
-                    }
-                })
-                .catch(err => {
-                    console.error('Registration Error:', err);
-                    showStatus('❌ Network error. Please check your internet connection.', 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
-                });
+                    });
 
-            /* ── LOGIN ── */
+                /* ── LOGIN ── */
             } else {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Authenticating…';
@@ -949,7 +1361,7 @@
                 }
 
                 const verifyUrl = `${SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`;
-                
+
                 const processLocalLogin = () => {
                     const localUsers = JSON.parse(localStorage.getItem('csc_users') || '{}');
                     if (localUsers[email] && localUsers[email].pass === pass) {
@@ -968,39 +1380,39 @@
                 showStatus('<i class="fas fa-search"></i> Verifying data in Cloud Database...', 'info');
                 fetch(verifyUrl)
 
-                .then(res => res.json())
-                .then(data => {
-                    if (data && data.status === "success") {
-                        const userProfile = {
-                            email: data.user.email || email,
-                            name: data.user.name || email.split('@')[0],
-                            address: data.user.address || 'Verified',
-                            cscId: data.user.cscId || 'VERIFIED',
-                            mob: data.user.mobile || data.user.mob || '–',
-                            pass: pass
-                        };
-                        
-                        // Sync with local fallback database
-                        const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
-                        users[email] = userProfile;
-                        localStorage.setItem('csc_users', JSON.stringify(users));
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.status === "success") {
+                            const userProfile = {
+                                email: data.user.email || email,
+                                name: data.user.name || email.split('@')[0],
+                                address: data.user.address || 'Verified',
+                                cscId: data.user.cscId || 'VERIFIED',
+                                mob: data.user.mobile || data.user.mob || '–',
+                                pass: pass
+                            };
 
-                        localStorage.setItem('csc_loggedIn', JSON.stringify(userProfile));
-                        
-                        showStatus('<i class="fas fa-check-double"></i> Authentication successful! Redirecting...', 'success');
-                        btn.innerHTML = '<i class="fas fa-user-check" style="margin-right:8px;"></i>Access Granted';
-                        btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
-                        setTimeout(() => { window.location.href = 'after_log.html'; }, 1200);
-                    } else {
-                        // Cloud denied, fallback to check local in case of offline mismatch
+                            // Sync with local fallback database
+                            const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
+                            users[email] = userProfile;
+                            localStorage.setItem('csc_users', JSON.stringify(users));
+
+                            localStorage.setItem('csc_loggedIn', JSON.stringify(userProfile));
+
+                            showStatus('<i class="fas fa-check-double"></i> Authentication successful! Redirecting...', 'success');
+                            btn.innerHTML = '<i class="fas fa-user-check" style="margin-right:8px;"></i>Access Granted';
+                            btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+                            setTimeout(() => { window.location.href = 'after_log.html'; }, 1200);
+                        } else {
+                            // Cloud denied, fallback to check local in case of offline mismatch
+                            processLocalLogin();
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Verification Error:', err);
+                        // Network or JSON parsing error -> rely on local auth
                         processLocalLogin();
-                    }
-                })
-                .catch(err => {
-                    console.error('Verification Error:', err);
-                    // Network or JSON parsing error -> rely on local auth
-                    processLocalLogin();
-                });
+                    });
             }
         });
 
@@ -1029,4 +1441,5 @@
     </script>
 
 </body>
+
 </html>
