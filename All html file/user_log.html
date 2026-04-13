@@ -628,7 +628,7 @@
         <div class="page-badge">
             <div class="lock-outer-ring">
                 <div class="lock-icon">
-                    <img src="../Assets/Logo.png" alt="CSC Logo">
+                    <i class="fa-solid fa-lock" style="font-size: 42px; color: var(--navy); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"></i>
                 </div>
             </div>
             <div>
@@ -821,7 +821,7 @@
         })();
 
         let currentMode = 'login';
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzrCl3QzxEIbDNVuVZ_DkVADoxxQ76GsiDoi5-BOUirG7EF1ETPsyoJtt--kOyVtiMXw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQN386ralLrAGaEbG0rRoNBHgpvVIYHwQsY7XlmpC2jBWPkGHdG72ht6dMv0ggRs3jRA/exec";
 
         function setMode(mode) {
             currentMode = mode;
@@ -880,19 +880,16 @@
                 const cscId   = document.getElementById('userCscId').value.trim();
                 const mob     = document.getElementById('userMob').value.trim();
 
-                if (!name) { showStatus('⚠️ Please enter your full name.', 'error'); return; }
-
-                // Save profile locally including password for offline login fallback 
-                const profile = { name, address, cscId, mob, email, pass };
-                const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
-                users[email] = profile;
-                localStorage.setItem('csc_users', JSON.stringify(users));
+                if (!name || !address || !cscId || !mob) { 
+                    showStatus('⚠️ Please fill in all registration fields.', 'error'); 
+                    return; 
+                }
 
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Saving…';
                 showStatus('⏳ Saving registration to cloud…', 'info');
 
-                // Native URL encoding ensures Apps Script gets e.parameter properly
+                // Send registration data to Google Sheet
                 const formData = new URLSearchParams();
                 formData.append('action', 'signup');
                 formData.append('email', email);
@@ -901,10 +898,6 @@
                 formData.append('address', address);
                 formData.append('cscId', cscId);
                 formData.append('mobile', mob);
-                
-                // Fallbacks just in case the Apps Script expects different parameter names
-                formData.append('userName', name);
-                formData.append('fullName', name);
 
                 fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -913,30 +906,33 @@
                 .then(res => res.text())
                 .then(text => {
                     let data;
-                    try { data = JSON.parse(text); } catch(e) { data = { status: 'success' }; } 
+                    try { data = JSON.parse(text); } catch(e) { data = { status: 'error' }; } 
                     
                     if (data && data.status === "success") {
+                        // Registration data to save locally for session
+                        const profile = { name, address, cscId, mob, email, pass };
+                        
+                        // Sync local fallback database
+                        const users = JSON.parse(localStorage.getItem('csc_users') || '{}');
+                        users[email] = profile;
+                        localStorage.setItem('csc_users', JSON.stringify(users));
+                        
                         showStatus('✅ Registration successful! Accessing your portal...', 'success');
                         localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Account Created';
                         setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
                     } else {
-                        const errorMsg = data && data.message ? data.message : 'Cloud registration skipped.';
-                        showStatus('✅ Saved locally! Accessing your portal...', 'success');
-                        localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
+                        showStatus('❌ ' + (data.message || 'Registration failed on cloud. Please try again.'), 'error');
                         btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Local Account Created';
-                        setTimeout(() => { window.location.href = 'after_log.html'; }, 1500);
+                        btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
                     }
                 })
                 .catch(err => {
                     console.error('Registration Error:', err);
-                    showStatus('✅ Account saved locally (Offline mode active). Redirecting...', 'success');
-                    localStorage.setItem('csc_loggedIn', JSON.stringify(profile));
+                    showStatus('❌ Network error. Please check your internet connection.', 'error');
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-check-circle" style="margin-right:8px;"></i>Account Created';
-                    setTimeout(() => { window.location.href = 'after_log.html'; }, 2000);
+                    btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:8px;"></i>Create Account';
                 });
 
             /* ── LOGIN ── */
@@ -963,13 +959,15 @@
                         btn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
                         setTimeout(() => { window.location.href = 'after_log.html'; }, 1200);
                     } else {
-                        showStatus('⚠️ You are not a Registered User or Password Incorrect.', 'error');
+                        showStatus('⚠️ User not found or incorrect credentials.', 'error');
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Sign In';
                     }
                 };
 
+                showStatus('<i class="fas fa-search"></i> Verifying data in Cloud Database...', 'info');
                 fetch(verifyUrl)
+
                 .then(res => res.json())
                 .then(data => {
                     if (data && data.status === "success") {

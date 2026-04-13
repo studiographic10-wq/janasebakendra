@@ -808,14 +808,17 @@
         <div class="sb-row"><span class="sb-ico">📱</span><div class="sb-info"><label>Mobile No.</label><span id="sbMob" class="empty">Not provided</span></div></div>
         <div class="sb-row"><span class="sb-ico">✉️</span><div class="sb-info"><label>Email</label><span id="sbEmailDetail" class="empty">–</span></div></div>
     </div>
-    <button class="sb-logout" onclick="logoutUser()">🚪 Sign Out</button>
+    <button class="sb-logout" onclick="logoutUser()" style="display:flex; align-items:center; justify-content:center; gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Sign Out
+    </button>
 </aside>
 
 <!-- ── HEADER ── -->
 <header>
     <div class="hdr-brand">
         <div class="hdr-lock-outer">
-            <div class="hdr-lock"><img src="../Assets/Logo.png" alt="CSC Logo"></div>
+            <div class="hdr-lock"><i class="fa-solid fa-lock" style="color: var(--blue); font-size: 22px;"></i></div>
         </div>
         <div class="hdr-text">
             <h1>CSC Baliapal Janaseba Kendra</h1>
@@ -839,7 +842,9 @@
             <span class="hdr-user-csc"  id="hdrUserCsc">CSC ID: –</span>
         </div>
         <div class="hdr-user-avatar" onclick="toggleHeaderDropdown(event)" title="View Profile">👤</div>
-        <button class="hdr-logout-ico" onclick="logoutUser()" title="Sign out">🚪</button>
+        <button class="hdr-logout-ico" onclick="logoutUser()" title="Sign out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:3px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
         <div class="hdr-dropdown" id="hdrDropdown" onclick="event.stopPropagation()">
             <div class="hdr-dropdown-item"><label>✉️ Email</label><div class="val" id="ddEmail">–</div></div>
             <div class="hdr-dropdown-item"><label>📱 Mobile No.</label><div class="val" id="ddMob">–</div></div>
@@ -867,7 +872,10 @@
                 <div class="pm-field"><label>🪪 CSC ID</label><div class="val" id="pmCscId">–</div></div>
                 <div class="pm-field full"><label>🏠 Address</label><div class="val" id="pmAddress">–</div></div>
             </div>
-            <button class="pm-logout" onclick="logoutUser()">🚪 Sign Out &amp; Return to Login</button>
+            <button class="pm-logout" onclick="logoutUser()" style="display:flex; align-items:center; justify-content:center; gap:10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sign Out &amp; Return to Login
+            </button>
         </div>
     </div>
 </div>
@@ -1030,7 +1038,7 @@ function closeSidebar() {
     if(sb) sb.classList.remove('open'); if(btn){btn.classList.remove('open');btn.textContent='👤';}
     if(ov) ov.classList.remove('show'); document.body.classList.remove('sb-open');
 }
-function logoutUser() { localStorage.removeItem('csc_loggedIn'); window.location.reload(); }
+function logoutUser() { localStorage.removeItem('csc_loggedIn'); window.location.href = 'user_log.html'; }
 function toggleHeaderDropdown(e) {
     e.stopPropagation();
     document.getElementById('hdrDropdown').classList.toggle('show');

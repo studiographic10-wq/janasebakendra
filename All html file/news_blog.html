@@ -1228,7 +1228,7 @@
             } else { passError.style.display = 'block'; }
         }
         document.getElementById('adminPassword').addEventListener('keypress', function (e) { if (e.key === 'Enter') verifyLogin(); });
-        function logoutAdmin() { isLoggedIn = false; sessionStorage.removeItem('vleAdminActive'); updateNavState(); }
+        function logoutAdmin() { isLoggedIn = false; sessionStorage.removeItem('vleAdminActive'); window.location.href = 'user_log.html'; }
 
         function submitBlog(e) {
             e.preventDefault();

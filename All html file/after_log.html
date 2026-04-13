@@ -1568,7 +1568,7 @@
     <header>
         <div class="hdr-brand">
             <div class="hdr-lock-outer">
-                <div class="hdr-lock"><img src="../Assets/Logo.png" alt="CSC Logo"></div>
+                <div class="hdr-lock"><i class="fa-solid fa-lock" style="color: var(--blue); font-size: 22px;"></i></div>
             </div>
             <div class="hdr-text">
                 <h1>CSC Baliapal Janaseba Kendra</h1>
@@ -2082,7 +2082,7 @@
 
         function logoutUser() {
             localStorage.removeItem('csc_loggedIn');
-            window.location.reload();
+            window.location.href = 'user_log.html';
         }
 
         // Load profile on page load
